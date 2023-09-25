@@ -1,0 +1,142 @@
+<div class="container-xxl">
+
+
+    <div id="content" class="store-main">
+        <div class="tab-menu">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+                        type="button" role="tab">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+                        type="button" role="tab">Ecosystem Vendor Partner</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="integration-tab" data-bs-toggle="tab"
+                        data-bs-target="#integration-tab-pane" type="button" role="tab">Suggest An Integration</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="accessories-tab" data-bs-toggle="tab"
+                        data-bs-target="#accessories-tab-pane" type="button" role="tab">Phones & Accessories</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="developer-tab" data-bs-toggle="tab"
+                        data-bs-target="#developer-tab-pane" type="button" role="tab">
+                        Developer Resources
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                    tabindex="0">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="page-title">
+                                <h1>&nbsp;</h1>
+                            </div>
+                            <aside>
+                                <div class="widget-aside mt-4">
+                                    <h4 class="widget-title bg-light"><span>{{headerTexts.categories}}</span></h4>
+                                    <div class="widget-content">
+                                        <app-categories [categoriesArr]="categoriesArr"></app-categories>
+                                    </div>
+
+                                </div>
+                            </aside>
+                            <aside>
+                                <div class="widget-aside mt-4">
+                                    <h4 class="widget-title bg-light"><span>{{headerTexts.products}}</span></h4>
+                                    <div class="widget-content">
+                                        <app-products [productsArr]="productsArr"></app-products>
+                                    </div>
+                                </div>
+                            </aside>
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-custom-pri">Partner Registration</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="page-title">
+                                <h1>Spotlight Integrations</h1>
+                            </div>
+                            <div class="mt-3 mb-3">
+                                <app-spotlight-apps></app-spotlight-apps>
+                            </div>
+                            <div class="page-title">
+                                <h1>Enabled Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
+                                            href="javascript:void:0" (click)="goToEnabledApps()">(View All)</a></span>
+                                </h1>
+                            </div>
+                            <div class="mt-3 mb-4">
+                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="carouselDataEnable"
+                                    [isEnable]="false"></app-carousel-apps>
+                            </div>
+                            <div class="page-title">
+                                <h1>Available Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
+                                            href="javascript:void:0" (click)="goToAvailApps()">(View All)</a></span>
+                                </h1>
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <app-carousel-apps [customOptions]="customOptions"
+                                    [carouselData]="carouselDataAvailable" [isEnable]="true"></app-carousel-apps>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                    tabindex="0">
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type and scrambled it to make a type specimen book. It has
+                        survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged.
+                    </p>
+                    <p>
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                        Ipsum passages, and more recently with desktop publishing software like Aldus
+                        PageMaker
+                        including versions of Lorem Ipsum.
+                    </p>
+                </div>
+                <div class="tab-pane fade" id="integration-tab-pane" role="tabpanel" aria-labelledby="integration-tab"
+                    tabindex="0">
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type and scrambled it to make a type specimen book. It has
+                        survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged.
+                    </p>
+                </div>
+                <div class="tab-pane fade" id="accessories-tab-pane" role="tabpanel" aria-labelledby="accessories-tab"
+                    tabindex="0">
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type and scrambled it to make a type specimen book. It has
+                        survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged.
+                    </p>
+                </div>
+                <div class="tab-pane fade" id="developer-tab-pane" role="tabpanel" aria-labelledby="developer-tab"
+                    tabindex="0">
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum
+                        has been the industry's standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type and scrambled it to make a type specimen book. It has
+                        survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

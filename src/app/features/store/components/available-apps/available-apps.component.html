@@ -1,0 +1,209 @@
+<div id="content" class="store-main">
+    <div class="container-xxl">
+
+        <div class="row">
+            <div class="col-lg-3">
+                <!-- <div class="page-title">
+                    <h1>&nbsp;</h1>
+                </div> -->
+                <button class="btn btn-light btn-sm" (click)="goBack()"><i class="fa-solid fa-arrow-left-long fa-fw"></i> Back</button>
+                <aside>
+                    <div class="widget-aside widget-aside-details mt-3">
+                        <h4 class="widget-title bg-light"><span>
+                            {{headerTexts.categories}}
+                        </span></h4>
+                        <div class="widget-content">
+                            <app-categories [categoriesArr]="categoriesArr"></app-categories>
+                        </div>
+                       
+                    </div>
+                </aside>
+                <aside>
+                    <div class="widget-aside widget-aside-details mt-4">
+                        <h4 class="widget-title bg-light"><span>{{headerTexts.products}}</span></h4>
+                        <div class="widget-content">
+                            <app-products [productsArr]="productsArr"></app-products>
+                        </div>
+                       
+                    </div>
+                </aside>
+            </div>
+            <div class="col-lg-9">
+                <div class="page-title">
+                    <h1>Available Apps</h1>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/CallCabinet.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+                                <h4 class="preview-item_title">
+                                    Call Cabinet
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/iotum.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+
+                                <h4 class="preview-item_title">
+                                    Iotum
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/Dubber.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+
+                                <h4 class="preview-item_title">
+                                    Dubber
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/TotalCX.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+
+                                <h4 class="preview-item_title">
+                                    TotalCX
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/signalmash.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+
+                                <h4 class="preview-item_title">
+                                    Signalmash
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-item with-logo" (click)="gotoDetails()">
+                            <div class="preview-item_header">
+                                <a href="javascript:void:0">
+                                    <img src="assets/img/availableApps/logos/PromptVoice.png" class="" alt=""
+                                        decoding="async" loading="lazy"></a>
+                            </div>
+                            <div class="preview-item_body">
+
+                                <h4 class="preview-item_title">
+                                    Prompt Voice
+                                </h4>
+                                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                                <div class="rating mb-0">
+                                    <div class="star-rating">
+                                        Ratings:
+                                        <span>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star fa-fw"></i>
+                                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                                            <i class="fa-regular fa-star fa-fw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
