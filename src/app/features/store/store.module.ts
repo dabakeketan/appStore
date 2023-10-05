@@ -10,6 +10,7 @@ import { AppDetailsComponent } from './components/app-details/app-details.compon
 import { SpotlightAppsComponent } from './components/spotlight-apps/spotlight-apps.component';
 import { CreateAppComponent } from './components/create-app/create-app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 @NgModule({
@@ -26,7 +27,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     StoreRoutingModule,
     CarouselModule,
-    SharedModule
+    SharedModule,
+    
+    // SweetAlert2Module.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })

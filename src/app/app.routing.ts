@@ -12,8 +12,8 @@ export const routes: Routes = [
   {
     path: 'store',
     canActivate: [AppAuthGuard],
+    canActivateChild: [AppAuthGuard],
     loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule),
-    canActivateChild: [AppAuthGuard]
   },
   // {
   //   path: 'error',

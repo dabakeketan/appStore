@@ -9,8 +9,12 @@ export class SharedService implements OnDestroy {
 
   destroySubscription = false;
 
-  constructor(private baseService: BaseService) {
+  constructor(private baseService: BaseService, private router: Router) {
     
+  }
+
+  goHome() {
+    this.router.navigateByUrl('store/home');
   }
 
   getRequest(reqUrl: string, urlParams?: any) {

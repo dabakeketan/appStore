@@ -5,6 +5,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavSideBarComponent } from './components/nav-side-bar/nav-side-bar.component';
 import { RouterModule } from '@angular/router';
+import { AlertModule } from '../alert/alert.module';
 
 
 
@@ -17,7 +18,8 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    AlertModule
   ],
   exports:[
     MainLayoutComponent,

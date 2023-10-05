@@ -1,0 +1,132 @@
+<section class="login-wrapper-outer">
+    <section class="login-wrapper">
+        <div class="login-header bg-light">
+            <h5>{{headerTexts.partnerReg}}</h5>
+        </div>
+        <div class="login-body clearfix">
+            <form #partnerRegForm="ngForm">
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <label for="pname" class="form-label">Partner Name</label>
+                        <input type="text" class="form-control form-control-sm" name="pname" id="pname" required
+                            [(ngModel)]="createPartnerModel.description" #pname="ngModel">
+                        <div *ngIf="pname.invalid && (pname.dirty || pname.touched)" class="invalid-feedback">
+                            <div *ngIf="pname.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="shortName" class="form-label">Short Name</label>
+                        <input type="text" class="form-control form-control-sm" name="shortName" id="shortName" required
+                            [(ngModel)]="createPartnerModel.short_name" #shortName="ngModel"
+                            [pattern]="regExPatterns.nonWhiteSpaces">
+                        <div *ngIf="shortName.invalid && (shortName.dirty || shortName.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="shortName.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                            <div *ngIf="shortName.errors?.['pattern']">
+                                {{errorMsgs.invalidFormat}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="clientId" class="form-label">OAuth Client ID</label>
+                        <input type="text" class="form-control form-control-sm" name="clientId" id="clientId" required
+                            [(ngModel)]="createPartnerModel.oauth_client_id" #clientId="ngModel">
+                        <div *ngIf="clientId.invalid && (clientId.dirty || clientId.touched)" class="invalid-feedback">
+                            <div *ngIf="clientId.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="clientSecret" class="form-label">OAuth Client Secret</label>
+                        <input type="text" class="form-control form-control-sm" name="clientSecret" id="clientSecret" required
+                            [(ngModel)]="createPartnerModel.oauth_client_secret" #clientSecret="ngModel">
+                        <div *ngIf="clientSecret.invalid && (clientSecret.dirty || clientSecret.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="clientSecret.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6 mb-3">
+                        <label for="apiEndpoint" class="form-label">API FQDN</label>
+                        <input type="text" class="form-control form-control-sm" name="apiEndpoint" id="apiEndpoint" required
+                            [(ngModel)]="createPartnerModel.api_endpoint" #apiEndpoint="ngModel">
+                        <div *ngIf="apiEndpoint.invalid && (apiEndpoint.dirty || apiEndpoint.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="apiEndpoint.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="portalUrl" class="form-label">Portal URL</label>
+                        <input type="text" class="form-control form-control-sm" name="portalUrl" id="portalUrl" required
+                            [(ngModel)]="createPartnerModel.portal_url" #portalUrl="ngModel">
+                        <div *ngIf="portalUrl.invalid && (portalUrl.dirty || portalUrl.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="portalUrl.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="cName" class="form-label">Contact Name</label>
+                        <input type="text" class="form-control form-control-sm" name="cName" id="cName" required
+                            [(ngModel)]="createPartnerModel.contact_name" #cName="ngModel">
+                        <div *ngIf="cName.invalid && (cName.dirty || cName.touched)" class="invalid-feedback">
+                            <div *ngIf="cName.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="cEmail" class="form-label">Contact Email</label>
+                        <input type="text" class="form-control form-control-sm" name="cEmail" id="cEmail" required
+                            [(ngModel)]="createPartnerModel.contact_email" #cEmail="ngModel"
+                            [pattern]="regExPatterns.email">
+                        <div *ngIf="cEmail.invalid && (cEmail.dirty || cEmail.touched)" class="invalid-feedback">
+                            <div *ngIf="cEmail.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                            <div *ngIf="cEmail.errors?.['pattern']">
+                                {{errorMsgs.invalidFormat}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="cNumber" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control form-control-sm" name="cNumber" id="cNumber" required
+                            [(ngModel)]="createPartnerModel.contact_num" #cNumber="ngModel"
+                            [pattern]="regExPatterns.phoenNumber">
+                        <div *ngIf="cNumber.invalid && (cNumber.dirty || cNumber.touched)" class="invalid-feedback">
+                            <div *ngIf="cNumber.errors?.['required']">
+                                {{errorMsgs.required}}
+                            </div>
+                            <div *ngIf="cNumber.errors?.['pattern']">
+                                {{errorMsgs.invalidFormat}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="cAddress" class="form-label">Contact Address</label>
+                        <input type="text" class="form-control form-control-sm" name="cAddress" id="cAddress"
+                            [(ngModel)]="createPartnerModel.contact_address" #cAddress="ngModel">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-custom-pri" (click)="registerPartner()"
+                        [disabled]="!partnerRegForm.valid">Register</button>
+                    <button class="btn btn-light ms-3" (click)="goHome()">Cancel</button>
+
+                </div>
+            </form>
+        </div>
+    </section>
+</section>

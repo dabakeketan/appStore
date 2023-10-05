@@ -1,1 +1,29 @@
-<p>login works!</p>
+<section class="login-wrapper-outer">
+    <section class="login-wrapper adj">
+        <div class="login-header bg-light">
+            <h5>Login</h5>
+        </div>
+        <div class="login-body clearfix">
+            <form #loginform="ngForm">
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Partner Short Name</label>
+                    <input type="text" class="form-control form-control-sm" name="userName" id="userName" required
+                        [(ngModel)]="loginModel.shortname" #userName="ngModel" [pattern]="regExPatterns.nonWhiteSpaces">
+                    <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="invalid-feedback">
+                        <div *ngIf="userName.errors?.['required']">
+                            {{errorMsgs.required}}
+                        </div>
+                        <div *ngIf="userName.errors?.['pattern']">
+                            {{errorMsgs.invalidFormat}}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-custom-pri" [disabled]="!loginform.valid"
+                    (click)="login()">Submit</button>
+                    <button class="btn btn-light ms-3" (click)="goHome()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>

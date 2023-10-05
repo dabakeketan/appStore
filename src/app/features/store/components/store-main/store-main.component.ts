@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { categoriesArr, headerTexts, productsArr } from 'src/app/constants';
+import { StoreService } from '../../services/store.service';
+import { takeWhile } from 'rxjs';
+import { AppDataModel } from '../../models/storeModel';
 
 @Component({
   selector: 'app-store-main',
   templateUrl: './store-main.component.html',
   styleUrls: ['./store-main.component.scss']
 })
-export class StoreMainComponent implements OnInit {
+export class StoreMainComponent implements OnInit, OnDestroy {
+
+  spotlightApps: Array<AppDataModel> = [];
+
+  allApps: Array<AppDataModel> = [];
 
   carouselDataAvailable: any = [];
 
@@ -22,7 +29,9 @@ export class StoreMainComponent implements OnInit {
   
   productsArr = productsArr;
 
-  constructor(private router: Router) {
+  destroySubscription = false;
+
+  constructor(private router: Router, private storeService: StoreService) {
     this.customOptions = {
       margin: 20,
       autoWidth: true,
@@ -53,7 +62,18 @@ export class StoreMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.storeService.spotlightApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.spotlightApps = response;
+      }
+    });
+    this.storeService.allApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.allApps = response;
+      }
+    });
+    this.storeService.getSpotlightApps();
+    this.storeService.getAllApps();
     // this.carouselData = [
     //   {
     //     id: 1,
@@ -172,6 +192,14 @@ export class StoreMainComponent implements OnInit {
 
   goToAvailApps() {
     this.router.navigateByUrl('store/available');
+  }
+
+  goToCreatePartner() {
+    this.router.navigateByUrl('account/createpartner');
+  }
+
+  ngOnDestroy(): void {
+    this.destroySubscription = true;
   }
 
 }

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+
+  baseAppUrl: 'https://840yo11h7f.execute-api.us-west-2.amazonaws.com/Dev/',
+  loginPortalUrl: 'https://crexnmsdev1.solint.net/portal'
 };
 
 /*

@@ -19,22 +19,22 @@
 
 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark customBg p-0">
-        <div class="container-xxl">
+        <div class="container-xxl" >
             <a class="navbar-brand p-0" href="javascript:void(0)">
                 <div class="logo-wrapper float-star ps-0" (click)="goToHome()">
                     <!-- <a href="javascript:void(0)">Crexendo App Store</a> -->
                     <a href="javascript:void(0)">
-                        <img src="assets/img/Crex_logo_by_NS_White.png" alt="Crexendo Logo Powered By NetSapiens">
+                        <img src="assets/img/logo.png" alt="Crexendo Logo Powered By NetSapiens">
                     </a>
                 </div>
                 
                 <!-- <h3>Marketplace</h3> -->
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            <button *ngIf="isLoggedIn" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="justify-content-end float-end">
+            <div class="justify-content-end float-end" *ngIf="isLoggedIn">
                 <form class="form-inline nav-search">
                     <input class="form-control form-control-sm" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-light btn-sm nav-search-btn" type="submit">Go</button>
@@ -89,8 +89,10 @@
 
                 </div>
             </div>
-            <div *ngIf="!isLoggedIn" class="logginBtn ms-3" title="Login">
-                <span><i class="fa-solid fa-right-to-bracket fa-fw"></i></span>
+            <div *ngIf="!isLoggedIn && !isLoginScreen" class="logginBtn ms-3" title="Login">
+                <a  href="javascript:void(0)" routerLink="/account/login">
+                    <i class="fa-solid fa-right-to-bracket fa-fw"></i>
+                </a>
             </div>
         </div>
     </nav>

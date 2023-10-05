@@ -1,171 +1,196 @@
-
-
-        <div class="row">
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Callcabinet_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-                        <h4 class="preview-item_title">
-                            Callcabinet Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-lg-4 mb-4" *ngFor="let app of spotlightApps">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="{{app.app_image_url}}" 
+                        alt="spotlight app image" decoding="async" loading="lazy"></a>
             </div>
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Dubber_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-
-                        <h4 class="preview-item_title">
-                            Dubber Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Iotum_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-
-                        <h4 class="preview-item_title">
-                            Iotum Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Mondago_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-
-                        <h4 class="preview-item_title">
-                            Mondago Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Ozonetel_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-
-                        <h4 class="preview-item_title">
-                            Ozonetel Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4">
-                <div class="preview-item center-block" (click)="gotoDetails()">
-                    <div class="preview-item_header">
-                        <a href="javascript:void:0">
-                            <img width="270" height="286" src="assets/img/spotlightTiles/Teammate_Spotlight.png" class="" alt=""
-                                decoding="async" loading="lazy"></a>
-                    </div>
-                    <div class="preview-item_body">
-
-                        <h4 class="preview-item_title">
-                            Teammate Spotlight
-                        </h4>
-                        <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
-                        <div class="rating mb-0">
-                            <div class="star-rating">
-                                Ratings:
-                                <span>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star fa-fw"></i>
-                                    <i class="fa-solid fa-star-half-stroke fa-fw"></i>
-                                    <i class="fa-regular fa-star fa-fw"></i>
-                                </span>
-                            </div>
-                        </div>
+            <div class="preview-item_body">
+                <h4 class="preview-item_title">
+                   {{app.app_name}}
+                </h4>
+                <p class="mb-2">{{app.description}}</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Callcabinet_Spotlight.png" class=""
+                        alt="" decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+                <h4 class="preview-item_title">
+                    Callcabinet Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Dubber_Spotlight.png" class="" alt=""
+                        decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+
+                <h4 class="preview-item_title">
+                    Dubber Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Iotum_Spotlight.png" class="" alt=""
+                        decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+
+                <h4 class="preview-item_title">
+                    Iotum Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Mondago_Spotlight.png" class="" alt=""
+                        decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+
+                <h4 class="preview-item_title">
+                    Mondago Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Ozonetel_Spotlight.png" class="" alt=""
+                        decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+
+                <h4 class="preview-item_title">
+                    Ozonetel Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="preview-item center-block" (click)="gotoDetails()">
+            <div class="preview-item_header">
+                <a href="javascript:void:0">
+                    <img width="270" height="286" src="assets/img/spotlightTiles/Teammate_Spotlight.png" class="" alt=""
+                        decoding="async" loading="lazy"></a>
+            </div>
+            <div class="preview-item_body">
+
+                <h4 class="preview-item_title">
+                    Teammate Spotlight
+                </h4>
+                <p class="mb-2">Lorem Ispum Text Lorem Ispum TextLorem Ispum Text</p>
+                <div class="rating mb-0">
+                    <div class="star-rating">
+                        Ratings:
+                        <span>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star fa-fw"></i>
+                            <i class="fa-solid fa-star-half-stroke fa-fw"></i>
+                            <i class="fa-regular fa-star fa-fw"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>

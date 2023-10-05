@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppDataModel } from '../../models/storeModel';
 
 @Component({
   selector: 'app-spotlight-apps',
@@ -7,6 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./spotlight-apps.component.scss']
 })
 export class SpotlightAppsComponent implements OnInit {
+
+  @Input() spotlightApps: Array<AppDataModel> = [];
 
   constructor(private router: Router) { }
 

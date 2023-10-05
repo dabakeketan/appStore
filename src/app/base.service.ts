@@ -24,23 +24,13 @@ export class BaseService {
 
   getData(url: string): Observable<any> {
     // this.spinner.show();
-    return this.http.get<any>(url, { observe: 'response' }).pipe(
-      tap({
-        next: x => {
-          // this.spinner.hide();
-          // console.log(x); 
-        },
-        error: err => {
-          // this.spinner.hide(); 
-          // console.error(err);
-          if (err.error.message) {
-            //  alert(err.error.message);
-          } else if (err.message) {
-            //    alert(err.message);
-          }
-        }
-      })
-    );
+    return this.http.get<any>(url, { observe: 'response' });
+  }
+
+  getDataText(url: string): Observable<any> {
+    // this.spinner.show();
+    const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+    return this.http.get(url,{ headers, responseType: 'text'});
   }
 
   getDataA(url: string): Observable<any> {

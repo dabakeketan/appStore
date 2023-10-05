@@ -1,6 +1,17 @@
 import { environment } from "src/environments/environment";
 
-// export const baseUrl = environment.baseUrl;
+
+export const baseUrl = environment.baseAppUrl;
+
+export const APIUrls = {
+    baseUrl: baseUrl,
+    spotLightApps: baseUrl + 'app/apps?promoted=true',
+    listApps: baseUrl + 'app/apps',
+    appDetails: baseUrl + 'app/',
+    createPartner: baseUrl + 'partner',
+    authorisePartner: baseUrl + 'oauth/partner/',
+    logoutPartner: baseUrl + 'oauth/partner?short-name='
+}
 
 
 export const CommonTexts = {
@@ -9,21 +20,29 @@ export const CommonTexts = {
 
 export const headerTexts = {
     categories: 'CATEGORIES',
-    products: 'PRODUCTS'
+    products: 'PRODUCTS',
+    partnerReg: 'Partner Registration'
+}
+
+export const errorMsgs = {
+    required: 'Required',
+    invalidFormat: 'Invalid format'
 }
 
 export const categoriesArr = [
     'Messaging', 'Analytics', 'CRM', 'Automation', 'Recording', 'Auto Dealers'
 ]
 
-export const productsArr = [
-    'Contact Center', 'Add-ins', 'Crexendo Labs', 'Softphone', 'Bots', 'Cloud Fax'
-]
-
 export const RegExPatterns = {
     urlWithoutHTTP: '^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$',
     email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+    nonWhiteSpaces: /^\S*$/,
+    phoenNumber: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/, // (123) 456-789 (123)456-7890 123-456-7890 123.456.7890 1234567890 +31636363634 075-63546725
 }
+
+export const productsArr = [
+    'Contact Center', 'Add-ins', 'Crexendo Labs', 'Softphone', 'Bots', 'Cloud Fax'
+]
 
 export const FontAwsIcons = {
     create: 'fa-solid fa-plus fa-fw',

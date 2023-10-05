@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainLayoutComponent implements OnInit {
 
-  isLoggedIn = true;
+  isLoggedIn = false;
 
   constructor() { }
 
