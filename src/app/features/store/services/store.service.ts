@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, takeWhile } from 'rxjs';
 import { BaseService } from 'src/app/base.service';
 import { APIUrls } from 'src/app/constants';
@@ -12,20 +13,24 @@ export class StoreService {
 
   allApps = new Subject();
 
+  enabledApps = new Subject();
+
+  availApps = new Subject();
+
   appDetailsSubject = new Subject();
 
   destroySubscription = false;
 
   imagePath:any;
 
-  constructor(private baseService: BaseService) { }
+  constructor(private baseService: BaseService, private router: Router) { }
 
   getSpotlightApps() {
     this.getRequest(APIUrls.spotLightApps)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('spotlight apps', response.body);
+            console.log('at login main spotlight apps', response.body);
             this.spotlightApps.next(response.body);
           }
         }
@@ -37,15 +42,39 @@ export class StoreService {
     .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         if (response && response.status === 200) {
-          console.log('all apps', response.body);
+          console.log('at login main all apps', response.body);
           this.allApps.next(response.body);
         }
       }
     });
   }
 
-  getAppDetails() {
-    this.getRequest(APIUrls.appDetails + 'Hka2LSxWj5RJQUE6Up6h3R')
+  getEnabledApps(partner_id: string) {
+    this.getRequest(APIUrls.partnerApps + partner_id + '/apps?enabled=true')
+    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        if (response && response.status === 200) {
+          console.log('at login main partner enabled apps', response.body);
+          this.enabledApps.next(response.body);
+        }
+      }
+    });
+  }
+
+  getAvailApps(partner_id: string) {
+    this.getRequest(APIUrls.partnerApps + partner_id + '/apps?enabled=false')
+    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        if (response && response.status === 200) {
+          console.log('at login main partner avail apps', response.body);
+          this.availApps.next(response.body);
+        }
+      }
+    }); 
+  }
+
+  getAppDetails(app_Id: any) {
+    this.getRequest(APIUrls.appDetails + app_Id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -59,6 +88,28 @@ export class StoreService {
       });
   }
 
+  disableApp(partner_id: any, app_Id: any) {
+    this.deleteRequest(APIUrls.partnerApps + partner_id + '/app/' + app_Id)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.goHome();
+          }
+        }
+      });
+  }
+
+  enableApp(partner_id: any, app_Id: any) {
+    this.postRequest('', APIUrls.partnerApps + partner_id + '/app/' + app_Id)
+    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        if (response && response.status === 200) {
+         this.goHome();
+        }
+      }
+    });
+  }
+
   getRequest(reqUrl: string, urlParams?: any) {
     let urlData = '';
     if (urlParams && urlParams.length) {
@@ -67,5 +118,29 @@ export class StoreService {
       });
     }
     return this.baseService.getData(reqUrl + (urlData ? urlData : ''));
+  }
+
+  postRequest(reqObj: any, reqUrl: string, urlParams?: any) {
+    let urlData = '';
+    if (urlParams && urlParams.length) {
+      urlParams.forEach((val: any) => {
+        urlData += '&' + val.paramLabel + '=' + val.paramValue
+      });
+    }
+    return this.baseService.postData(reqObj, reqUrl + (urlData ? urlData : ''));
+  }
+
+  deleteRequest(deleteUrl: string, urlParams?: any, empId?: any) {
+    let urlData = '';
+    if (urlParams && urlParams.length) {
+      urlParams.forEach((val: any) => {
+        urlData += '&' + val.paramLabel + '=' + val.paramValue
+      });
+    }
+    return this.baseService.deleteRequest(deleteUrl + (urlData ? urlData : ''));
+  }
+
+  goHome() {
+    this.router.navigateByUrl('store/home');
   }
 }

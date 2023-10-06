@@ -20,7 +20,7 @@ export class AlertMainComponent implements OnInit, OnDestroy {
     this.alertService.alertSubject.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         if (response) {
-          console.log('yeesss');
+          // console.log('yeesss');
           if(response.type && response.type === 'error') {
             this.error(response.type, response.text);
           } else if(response.type && response.type === 'success') {

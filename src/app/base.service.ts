@@ -30,7 +30,7 @@ export class BaseService {
   getDataText(url: string): Observable<any> {
     // this.spinner.show();
     const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
-    return this.http.get(url,{ headers, responseType: 'text'});
+    return this.http.get(url,{ headers, responseType: 'text', observe: 'response'});
   }
 
   getDataA(url: string): Observable<any> {

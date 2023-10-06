@@ -19,7 +19,7 @@
 
 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark customBg p-0">
-        <div class="container-xxl" >
+        <div class="container-xxl">
             <a class="navbar-brand p-0" href="javascript:void(0)">
                 <div class="logo-wrapper float-star ps-0" (click)="goToHome()">
                     <!-- <a href="javascript:void(0)">Crexendo App Store</a> -->
@@ -27,11 +27,12 @@
                         <img src="assets/img/logo.png" alt="Crexendo Logo Powered By NetSapiens">
                     </a>
                 </div>
-                
+
                 <!-- <h3>Marketplace</h3> -->
             </a>
-            <button *ngIf="isLoggedIn" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button *ngIf="isLoggedIn" class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="justify-content-end float-end" *ngIf="isLoggedIn">
@@ -40,7 +41,7 @@
                     <button class="btn btn-light btn-sm nav-search-btn" type="submit">Go</button>
                 </form>
             </div>
-            <div *ngIf="isLoggedIn" >
+            <div *ngIf="isLoggedIn">
 
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
@@ -70,15 +71,23 @@
                 </div>
             </li> -->
                         <li class="nav-item dropdown user-profile">
-                            <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)" id="navbarDropdownMenuLink"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="assets/img/profile.jpeg">
+                            <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)"
+                                id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" *ngIf="user && user.logo_url">
+                                <!-- <img src="assets/img/profile.jpeg"> -->
+                                <img src="{{user.logo_url}}" alt="" >
+                            </a>
+                            <a class="nav-link dropdown-toggle dummy-user pe-0" href="javascript:void(0)"
+                                id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" *ngIf="!user || !user.logo_url">
+                                <!-- <img src="assets/img/profile.jpeg"> -->
+                                <img src="assets/img/dummy_user.png" alt="User">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-left-end pullDown "
                                 aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="javascript:void(0)">Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0)">Settings</a>
-                                <a class="dropdown-item" href="javascript:void(0)">Logout</a>
+                                <!-- <a class="dropdown-item" href="javascript:void(0)">Profile</a>
+                                <a class="dropdown-item" href="javascript:void(0)">Settings</a> -->
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a>
                             </div>
                         </li>
                         <!-- <li class="nav-item">
@@ -90,7 +99,7 @@
                 </div>
             </div>
             <div *ngIf="!isLoggedIn && !isLoginScreen" class="logginBtn ms-3" title="Login">
-                <a  href="javascript:void(0)" routerLink="/account/login">
+                <a href="javascript:void(0)" routerLink="/account/login">
                     <i class="fa-solid fa-right-to-bracket fa-fw"></i>
                 </a>
             </div>

@@ -20,12 +20,8 @@ export class CarouselAppsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  goToDetails() {
-    if(this.isEnable) {
-      this.router.navigateByUrl('store/available');
-    } else {
-      this.router.navigateByUrl('store/user');
-    }
+  goToDetails(app_id: any) {
+      this.router.navigateByUrl('/store/app/' + app_id);
   }
 
 }

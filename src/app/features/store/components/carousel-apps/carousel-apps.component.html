@@ -3,15 +3,15 @@
         <owl-carousel-o [options]="customOptions">
 
             <ng-container *ngFor="let slide of carouselData">
-                <ng-template carouselSlide [id]="slide.id">
-                    <div class="preview-item-small" (click)="goToDetails()">
+                <ng-template carouselSlide [id]="slide.app_id">
+                    <div class="preview-item-small" (click)="goToDetails(slide.app_id)">
                         <div class="preview-item-header">
-                            <a >
-                            <img [src]="slide.img" alt="" decoding="async" loading="">
-                        </a>
+                            <a>
+                                <img [src]="slide.app_image_url" alt="">
+                            </a>
                         </div>
                         <div class="preview-item-body">
-                            <p class="mb-0 mt-2">{{slide.name}}:&nbsp;{{slide.desc}}</p>
+                            <p class="mb-0 mt-2">{{slide.app_name}}:&nbsp;{{slide.description}}</p>
                             <div class="rating mb-0">
                                 <div class="star-rating">
                                     <span>

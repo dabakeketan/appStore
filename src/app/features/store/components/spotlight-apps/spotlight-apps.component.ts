@@ -16,7 +16,7 @@ export class SpotlightAppsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  gotoDetails() {
-    this.router.navigateByUrl('store/details');
+  gotoDetails(app_id: any) {
+    this.router.navigateByUrl('/store/app/' + app_id);
   }
 }

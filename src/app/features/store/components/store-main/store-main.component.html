@@ -44,15 +44,16 @@
                                 </div>
                             </aside>
                             <aside>
-                                <div class="widget-aside mt-4">
+                                <div class="widget-aside mt-4 mb-4">
                                     <h4 class="widget-title bg-light"><span>{{headerTexts.products}}</span></h4>
                                     <div class="widget-content">
                                         <app-products [productsArr]="productsArr"></app-products>
                                     </div>
                                 </div>
                             </aside>
-                            <div class="d-grid mt-4">
-                                <button class="btn btn-custom-pri" (click)="goToCreatePartner()">Partner Registration</button>
+                            <div class="d-grid mb-4" *ngIf="!isLoggedIn">
+                                <button class="btn btn-custom-pri" (click)="goToCreatePartner()">Partner
+                                    Registration</button>
                             </div>
                         </div>
                         <div class="col-lg-9">
@@ -62,6 +63,7 @@
                             <div class="mt-3 mb-3" *ngIf="spotlightApps && spotlightApps.length">
                                 <app-spotlight-apps [spotlightApps]="spotlightApps"></app-spotlight-apps>
                             </div>
+
                             <div class="page-title" *ngIf="allApps && allApps.length">
                                 <h1>Apps</h1>
                             </div>
@@ -69,24 +71,25 @@
                                 <app-carousel-apps [customOptions]="customOptions" [carouselData]="allApps"
                                     [isEnable]="false"></app-carousel-apps>
                             </div>
-                            <div class="page-title">
+
+                            <div class="page-title" *ngIf="enabledApps && enabledApps.length">
                                 <h1>Enabled Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
                                             href="javascript:void:0" (click)="goToEnabledApps()">(View All)</a></span>
                                 </h1>
                             </div>
-                            <div class="mt-3 mb-4">
-                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="carouselDataEnable"
+                            <div class="mt-3 mb-4" *ngIf="enabledApps && enabledApps.length">
+                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="enabledApps"
                                     [isEnable]="false"></app-carousel-apps>
                             </div>
-                            <div class="page-title">
+
+                            <div class="page-title" *ngIf="availApps && availApps.length">
                                 <h1>Available Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
                                             href="javascript:void:0" (click)="goToAvailApps()">(View All)</a></span>
                                 </h1>
                             </div>
-
-                            <div class="mt-3 mb-3">
-                                <app-carousel-apps [customOptions]="customOptions"
-                                    [carouselData]="carouselDataAvailable" [isEnable]="true"></app-carousel-apps>
+                            <div class="mt-3 mb-3" *ngIf="availApps && availApps.length">
+                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="availApps"
+                                    [isEnable]="true"></app-carousel-apps>
                             </div>
                         </div>
                     </div>

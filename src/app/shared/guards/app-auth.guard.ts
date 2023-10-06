@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AccountService } from 'src/app/account/services/account.service';
 
 @Injectable()
 export class AppAuthGuard implements CanActivate, CanActivateChild {
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private accountService: AccountService) {
 
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const token = 'abcd';
-        // const token = this.tokenStorageService.getAuthToken();
+        const isAuthenticated = this.accountService.isAuthenticated();
         // console.log('token at guard', token);
-        if (token) {
+        if (isAuthenticated) {
             return true;
         } else {
-           this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+           this.router.navigate(['/store/home']);
             return false;
         }
     }

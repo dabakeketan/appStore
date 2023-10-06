@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { categoriesArr, headerTexts, productsArr } from 'src/app/constants';
 import { StoreService } from '../../services/store.service';
-import { takeWhile } from 'rxjs';
+import { filter, takeWhile } from 'rxjs';
 import { AppDataModel } from '../../models/storeModel';
+import { AccountService } from 'src/app/account/services/account.service';
+import { PartnerDataModel } from 'src/app/account/models/accountModel';
 
 @Component({
   selector: 'app-store-main',
@@ -13,25 +15,62 @@ import { AppDataModel } from '../../models/storeModel';
 })
 export class StoreMainComponent implements OnInit, OnDestroy {
 
+  isLoggedIn = false;
+
+  user: PartnerDataModel;
+
   spotlightApps: Array<AppDataModel> = [];
 
   allApps: Array<AppDataModel> = [];
 
+  enabledApps: Array<AppDataModel> = [];
+
+  availApps: Array<AppDataModel> = [];
+
   carouselDataAvailable: any = [];
 
-  carouselDataEnable:any = [];
+  carouselDataEnable: any = [];
 
   customOptions: OwlOptions = {};
 
   headerTexts = headerTexts;
 
   categoriesArr = categoriesArr;
-  
+
   productsArr = productsArr;
 
   destroySubscription = false;
 
-  constructor(private router: Router, private storeService: StoreService) {
+  routerSubscription: any;
+
+  constructor(private router: Router, private storeService: StoreService,
+    private accountService: AccountService) {
+    this.subscriptions();
+    setTimeout(() => {
+      const isAuthenticated = this.accountService.isAuthenticated();
+      if (isAuthenticated) {
+        this.preInit();
+      } else {
+        this.appInit();
+      }  
+    });
+    
+    this.accountService.isLoggedIn.pipe(takeWhile(() => !this.destroySubscription))
+      .subscribe((response: any) => {
+        if (response) {
+          this.preInit();
+        } else {
+          this.isLoggedIn = false;
+          this.appInit();
+        }
+      });
+    this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        // console.log('event', event);
+        if (event && event.url && event.url.indexOf('&state=') > -1) {
+          this.accountService.authenticate(event.url);
+        }
+      });
     this.customOptions = {
       margin: 20,
       autoWidth: true,
@@ -62,6 +101,26 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  
+  preInit() {
+    this.isLoggedIn = true;
+    this.user = this.accountService.getUser();
+    this.appInit();
+  }
+
+  appInit() {
+    this.storeService.getSpotlightApps();
+    if (this.isLoggedIn && this.user) {
+      this.storeService.getEnabledApps(this.user.partner_id);
+      this.storeService.getAvailApps(this.user.partner_id);
+    } else {
+      this.storeService.getAllApps();
+    }
+  }
+
+  subscriptions() {
     this.storeService.spotlightApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.spotlightApps = response;
@@ -72,122 +131,22 @@ export class StoreMainComponent implements OnInit, OnDestroy {
         this.allApps = response;
       }
     });
-    this.storeService.getSpotlightApps();
-    this.storeService.getAllApps();
-    // this.carouselData = [
-    //   {
-    //     id: 1,
-    //     img: "assets/img/270-180/app1.jpg",
-    //     name: 'Application A'
-    //   },
-    //   {
-    //     id: 2,
-    //     img: "assets/img/270-180/app2.jpg",
-    //     name: 'Application B'
-    //   },
-    //   {
-    //     id: 3,
-    //     img: "assets/img/270-180/app3.jpg",
-    //     name: 'Application C'
-    //   },
-    //   {
-    //     id: 4,
-    //     img: "assets/img/270-180/app4.jpg",
-    //     name: 'Application D'
-    //   },
-    //   {
-    //     id: 5,
-    //     img: "assets/img/270-180/app5.jpg",
-    //     name: 'Application E'
-    //   },
-    //   {
-    //     id: 6,
-    //     img: "assets/img/270-180/app6.jpg",
-    //     name: 'Application F'
-    //   },
-    // ];
 
-    this.carouselDataAvailable = [
-      {
-        id: 1,
-        img: "assets/img/availableApps/logos/CallCabinet.png",
-        name: 'CallCabinet',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 2,
-        img: "assets/img/availableApps/logos/iotum.png",
-        name: 'Iotum',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 3,
-        img: "assets/img/availableApps/logos/Dubber.png",
-        name: 'Dubber',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 4,
-        img: "assets/img/availableApps/logos/TotalCX.png",
-        name: 'TotalCX',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 5,
-        img: "assets/img/availableApps/logos/signalmash.png",
-        name: 'Signalmash',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 6,
-        img: "assets/img/availableApps/logos/PromptVoice.png",
-        name: 'Prompt Voice',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-    ];
+    this.storeService.enabledApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.enabledApps = response;
+      }
+    });
 
-    this.carouselDataEnable = [
-      {
-        id: 1,
-        img: "assets/img/enabledApps/logos/TransNexus.png",
-        name: 'Trans Nexus',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 2,
-        img: "assets/img/enabledApps/logos/Bandwidth.png",
-        name: 'Bandwidth',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 3,
-        img: "assets/img/enabledApps/logos/Go_Integrator_NAVA.png",
-        name: 'Go Integrator NAVA',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 4,
-        img: "assets/img/enabledApps/logos/Ozonetel.png",
-        name: 'Ozonetel',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 5,
-        img: "assets/img/enabledApps/logos/Pangea.png",
-        name: 'Pangea',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-      {
-        id: 6,
-        img: "assets/img/enabledApps/logos/TeamMate_Technology.png",
-        name: 'TeamMate Technology',
-        desc: 'Lorem Ipsum Text Emar'
-      },
-    ];
+    this.storeService.availApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.availApps = response;
+      }
+    });
   }
 
   goToEnabledApps() {
-    this.router.navigateByUrl('store/user');
+    this.router.navigateByUrl('store/enabled');
   }
 
   goToAvailApps() {

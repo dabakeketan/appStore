@@ -15,7 +15,6 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private alertService: AlertService,
     private spinner: NgxSpinnerService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('inside interceptr');
     this.service_count++;
     let authReq = req;
     let token;
@@ -39,20 +38,23 @@ export class AuthInterceptor implements HttpInterceptor {
             console.log('interc response success', evt);
 
             if(evt && evt.ok && evt.status === 204) {
-              const location = evt.headers.get('Location');
+              // const location = evt.headers.get('Location');
+              // console.log('headers all', evt.headers);
+              const location = evt.headers.get('X-Location') || evt.headers.get('x-location') 
+              || evt.headers.get('X-location');
               if(location) {
                 window.location.href = location;
               }
-              console.log('204', evt, location);
+              // console.log('200', evt, location);
             }
 
-            if (evt.status === 200 && evt.body && evt.body.message) {
-              const obj = {
-                type: 'success',
-                text: evt.body.message
-              }
-              this.alertService.alertSubject.next(obj);
-            }
+            // if (evt.status === 200 && evt.body && evt.body.message) {
+            //   const obj = {
+            //     type: 'success',
+            //     text: evt.body.message
+            //   }
+            //   this.alertService.alertSubject.next(obj);
+            // }
           }
         },
         error: (error: HttpErrorResponse) => {
