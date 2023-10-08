@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppDataModel } from '../../models/storeModel';
+import { AccountService } from 'src/app/account/services/account.service';
 
 @Component({
   selector: 'app-spotlight-apps',
@@ -11,12 +11,12 @@ export class SpotlightAppsComponent implements OnInit {
 
   @Input() spotlightApps: Array<AppDataModel> = [];
 
-  constructor(private router: Router) { }
+  constructor(private accountService: AccountService) { }
 
   ngOnInit(): void {
   }
 
   gotoDetails(app_id: any) {
-    this.router.navigateByUrl('/store/app/' + app_id);
+    this.accountService.goAppDetails(app_id);
   }
 }

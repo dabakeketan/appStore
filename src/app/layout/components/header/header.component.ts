@@ -23,9 +23,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         // console.log('event', event);
-        if (event && (event.url.indexOf('account/login') > -1)) {
+        if (event && (event.url.indexOf('dashboard/login') > -1)) {
           this.isLoginScreen = true;
-        } else if(event && (event.url.indexOf('account/login') === -1)) {
+        } else if(event && (event.url.indexOf('dashboard/login') === -1)) {
           this.isLoginScreen = false;
         }
       });
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goToHome() {
-    this.router.navigateByUrl('store/home');
+    this.accountServie.goHome();
   }
 
   logout() {

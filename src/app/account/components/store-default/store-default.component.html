@@ -52,7 +52,7 @@
                                 </div>
                             </aside>
                             <div class="d-grid mb-4" *ngIf="!isLoggedIn">
-                                <button class="btn btn-custom-pri">Partner
+                                <button class="btn btn-custom-pri" (click)="goToCreatePartner()">Partner
                                     Registration</button>
                             </div>
                         </div>
@@ -64,24 +64,12 @@
                                 <app-spotlight-apps [spotlightApps]="spotlightApps"></app-spotlight-apps>
                             </div>
 
-                            <div class="page-title" *ngIf="enabledApps && enabledApps.length">
-                                <h1>Enabled Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
-                                            href="javascript:void:0" (click)="goToEnabledApps()">(View All)</a></span>
-                                </h1>
+                            <div class="page-title" *ngIf="allApps && allApps.length">
+                                <h1>Apps</h1>
                             </div>
-                            <div class="mt-3 mb-4" *ngIf="enabledApps && enabledApps.length">
-                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="enabledApps"
-                                    [isEnable]="false"></app-carousel-apps>
-                            </div>
-
-                            <div class="page-title" *ngIf="availApps && availApps.length">
-                                <h1>Available Apps&nbsp;<span class="view-all-link" style="font-size: 14px;"><a
-                                            href="javascript:void:0" (click)="goToAvailApps()">(View All)</a></span>
-                                </h1>
-                            </div>
-                            <div class="mt-3 mb-3" *ngIf="availApps && availApps.length">
-                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="availApps"
-                                    [isEnable]="true"></app-carousel-apps>
+                            <div class="mt-3 mb-4" *ngIf="allApps && allApps.length">
+                                <app-carousel-apps [customOptions]="customOptions" [carouselData]="allApps"
+                                ></app-carousel-apps>
                             </div>
                         </div>
                     </div>

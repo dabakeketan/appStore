@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { PartnerDataModel } from 'src/app/account/models/accountModel';
+import { AccountService } from 'src/app/account/services/account.service';
 
 @Component({
   selector: 'app-carousel-apps',
@@ -15,13 +17,16 @@ export class CarouselAppsComponent implements OnInit {
 
   @Input() isEnable: Boolean = false;
 
-  constructor(private router: Router) { }
+  user: PartnerDataModel;
+
+  constructor(private router: Router, private accountService: AccountService) { }
 
   ngOnInit(): void {
+    this.user = this.accountService.getUser();
   }
 
   goToDetails(app_id: any) {
-      this.router.navigateByUrl('/store/app/' + app_id);
+    this.accountService.goAppDetails(app_id);
   }
 
 }

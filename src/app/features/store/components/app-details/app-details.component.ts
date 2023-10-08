@@ -72,7 +72,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.storeService.goHome()
+    this.accountService.goHome();
   }
 
   ngOnDestroy(): void {

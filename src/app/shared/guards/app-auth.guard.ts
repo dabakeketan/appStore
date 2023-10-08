@@ -11,12 +11,13 @@ export class AppAuthGuard implements CanActivate, CanActivateChild {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const isAuthenticated = this.accountService.isAuthenticated();
+        // const isAuthenticated = this.accountService.isAuthenticated();
         // console.log('token at guard', token);
-        if (isAuthenticated) {
+        const user = this.accountService.getUser();
+        if (user) {
             return true;
         } else {
-           this.router.navigate(['/store/home']);
+           this.router.navigate(['/dashboard/main']);
             return false;
         }
     }

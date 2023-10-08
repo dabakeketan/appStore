@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeWhile } from 'rxjs';
+import { AccountService } from 'src/app/account/services/account.service';
 import { BaseService } from 'src/app/base.service';
 import { APIUrls } from 'src/app/constants';
 
@@ -23,7 +24,8 @@ export class StoreService {
 
   imagePath:any;
 
-  constructor(private baseService: BaseService, private router: Router) { }
+  constructor(private baseService: BaseService, private router: Router,
+    private accountService: AccountService) { }
 
   getSpotlightApps() {
     this.getRequest(APIUrls.spotLightApps)
@@ -93,7 +95,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            this.goHome();
+            this.accountService.goHome();
           }
         }
       });
@@ -104,7 +106,7 @@ export class StoreService {
     .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         if (response && response.status === 200) {
-         this.goHome();
+         this.accountService.goHome();
         }
       }
     });
@@ -140,7 +142,7 @@ export class StoreService {
     return this.baseService.deleteRequest(deleteUrl + (urlData ? urlData : ''));
   }
 
-  goHome() {
-    this.router.navigateByUrl('store/home');
-  }
+  // goHome() {
+  //   this.router.navigateByUrl('store/home');
+  // }
 }

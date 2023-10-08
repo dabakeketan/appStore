@@ -41,12 +41,11 @@ export class EnabledAppsComponent implements OnInit, OnDestroy {
   }
 
   gotoDetails(app_id: any) {
-    this.router.navigateByUrl('/store/app/' + app_id);
+    this.accountService.goAppDetails(app_id);
   }
 
   goBack() {
-    this.router.navigateByUrl('store/home');
-
+    this.accountService.goHome();
   }
 
   ngOnDestroy(): void {

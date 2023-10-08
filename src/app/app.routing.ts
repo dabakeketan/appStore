@@ -5,12 +5,23 @@ import { ModuleWithProviders } from "@angular/core";
 import { AppAuthGuard } from './shared/guards/app-auth.guard';
 
 export const routes: Routes = [
+  // {
+  //   path: '',
+  //   redirectTo: 'dashboard/main',
+  //   // pathMatch: 'full'
+  // },
   {
-    path: 'account',
+    path: 'dashboard',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
   },
+  // {
+  //   path: 'store',
+  //   // canActivate: [AppAuthGuard],
+  //   // canActivateChild: [AppAuthGuard],
+  //   loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule)
+  // },
   {
-    path: 'store',
+    path: ':partner_id/store',
     // canActivate: [AppAuthGuard],
     // canActivateChild: [AppAuthGuard],
     loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule)
@@ -21,8 +32,8 @@ export const routes: Routes = [
   //   data: { pageTitle: 'Error' },
   // },
 
-  // { path: '**', redirectTo: 'account/login' }
-  {path: '**', redirectTo: 'store'}
+  { path: '**', redirectTo: 'dashboard/main' }
+  // {path: '**', redirectTo: 'store'}
 
 ];
 

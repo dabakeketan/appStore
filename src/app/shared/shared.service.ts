@@ -13,9 +13,9 @@ export class SharedService implements OnDestroy {
     
   }
 
-  goHome() {
-    this.router.navigateByUrl('store/home');
-  }
+  // goHome() {
+  //   this.router.navigateByUrl('dashboard/main');
+  // }
 
   getRequest(reqUrl: string, urlParams?: any) {
     let urlData = '';

@@ -46,31 +46,13 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private storeService: StoreService,
     private accountService: AccountService) {
     this.subscriptions();
-    setTimeout(() => {
-      const isAuthenticated = this.accountService.isAuthenticated();
-      if (isAuthenticated) {
-        this.preInit();
-      } else {
-        this.appInit();
-      }  
-    });
-    
-    this.accountService.isLoggedIn.pipe(takeWhile(() => !this.destroySubscription))
-      .subscribe((response: any) => {
-        if (response) {
-          this.preInit();
-        } else {
-          this.isLoggedIn = false;
-          this.appInit();
-        }
-      });
-    this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        // console.log('event', event);
-        if (event && event.url && event.url.indexOf('&state=') > -1) {
-          this.accountService.authenticate(event.url);
-        }
-      });
+    this.user = this.accountService.getUser();
+    if (this.user) {
+      this.isLoggedIn = true;
+      this.appInit();
+    }
+
+
     this.customOptions = {
       margin: 20,
       autoWidth: true,
@@ -103,7 +85,7 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  
+
   preInit() {
     this.isLoggedIn = true;
     this.user = this.accountService.getUser();
@@ -112,23 +94,14 @@ export class StoreMainComponent implements OnInit, OnDestroy {
 
   appInit() {
     this.storeService.getSpotlightApps();
-    if (this.isLoggedIn && this.user) {
-      this.storeService.getEnabledApps(this.user.partner_id);
-      this.storeService.getAvailApps(this.user.partner_id);
-    } else {
-      this.storeService.getAllApps();
-    }
+    this.storeService.getEnabledApps(this.user.partner_id);
+    this.storeService.getAvailApps(this.user.partner_id);
   }
 
   subscriptions() {
     this.storeService.spotlightApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.spotlightApps = response;
-      }
-    });
-    this.storeService.allApps.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        this.allApps = response;
       }
     });
 
@@ -146,15 +119,13 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   }
 
   goToEnabledApps() {
-    this.router.navigateByUrl('store/enabled');
+    const link = [`${this.user.short_name}/store/enabled`];
+    this.router.navigate(link);
   }
 
   goToAvailApps() {
-    this.router.navigateByUrl('store/available');
-  }
-
-  goToCreatePartner() {
-    this.router.navigateByUrl('account/createpartner');
+    const link = [`${this.user.short_name}/store/available`];
+    this.router.navigate(link);
   }
 
   ngOnDestroy(): void {

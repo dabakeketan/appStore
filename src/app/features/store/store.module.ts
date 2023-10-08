@@ -31,6 +31,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     
     // SweetAlert2Module.forRoot()
   ],
+  exports: [CarouselAppsComponent, SpotlightAppsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class StoreModule { }

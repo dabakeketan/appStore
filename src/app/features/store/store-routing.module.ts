@@ -9,15 +9,15 @@ import { AppAuthGuard } from 'src/app/shared/guards/app-auth.guard';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: '/store/home',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: '',
+  //   redirectTo: ':partner_id/store/home',
+  //   pathMatch: 'full'
+  // },
   {
     path: 'home',
     component: StoreMainComponent,
-    // canActivate: [AppAuthGuard]
+    canActivate: [AppAuthGuard]
   },
   {
     path: 'enabled',

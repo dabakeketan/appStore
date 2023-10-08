@@ -5,14 +5,14 @@ export const baseUrl = environment.baseAppUrl;
 
 export const APIUrls = {
     baseUrl: baseUrl,
-    authorisePartnerURL: baseUrl + 'oauth/callback/',
+    createPartner: baseUrl + 'partner',
+    authenticatePartner: baseUrl + 'oauth/partner/',
+    loginPartner: baseUrl + 'oauth/partner?short-name=',
+    authorisation: baseUrl + 'oauth/authorisation',
     spotLightApps: baseUrl + 'app/apps?promoted=true',
     listApps: baseUrl + 'app/apps',
-    appDetails: baseUrl + 'app/',
-    createPartner: baseUrl + 'partner',
     partnerApps: baseUrl + 'partner/',
-    authenticatePartner: baseUrl + 'oauth/partner/',
-    logoutPartner: baseUrl + 'oauth/partner?short-name='
+    appDetails: baseUrl + 'app/',
 }
 
 

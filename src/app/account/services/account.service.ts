@@ -4,6 +4,8 @@ import { APIUrls } from 'src/app/constants';
 import { SharedService } from 'src/app/shared/shared.service';
 import { CreatePartnerModel, PartnerDataModel } from '../models/accountModel';
 import { BaseService } from 'src/app/base.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 const USER_KEY = 'user-details-auth';
 
 @Injectable({
@@ -17,7 +19,8 @@ export class AccountService implements OnDestroy {
 
   isLoggedIn = new Subject();
 
-  constructor(private sharedService: SharedService, private baseService: BaseService) {
+  constructor(private sharedService: SharedService, private baseService: BaseService,
+    private http: HttpClient, private router: Router) {
     this.partnerDataModel = {} as PartnerDataModel;
   }
 
@@ -47,31 +50,8 @@ export class AccountService implements OnDestroy {
     return false;
   }
 
-  authenticate(url: string) {
-    // const userIdA = url.substring(url.indexOf('&state=') + 1);
-    // const userId = userIdA.substring(userIdA.indexOf('=') + 1);
-    const subUrl = url.substring(url.indexOf('/') + 1);
-    // console.log('userid', userId);
-    // console.log('userid', subUrl);
-    let finalUrl = '';
-    finalUrl = APIUrls.authorisePartnerURL + subUrl;
-    this.baseService.getData(finalUrl)
-      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-        next: (response: any) => {
-          if (response && response.status === 200) {
-            console.log('at login main', response.body);
-            this.partnerDataModel = response.body;
-            this.saveUser(this.partnerDataModel);
-            this.isLoggedIn.next(true);
-          }
-        }
-      });
-  }
-
   login(shortname: string) {
-    // fetch(APIUrls.logoutPartner + shortname)
-    //   .then(console.log);
-    this.baseService.getDataText(APIUrls.logoutPartner + shortname)
+    this.baseService.getDataText(APIUrls.loginPartner + shortname)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -87,13 +67,13 @@ export class AccountService implements OnDestroy {
         next: (response: any) => {
           if (response && response.status === 200) {
             // console.log('at register', response.body);
-            this.authorisePartner(response.body.partner_id);
+            this.authenticatePartner(response.body.partner_id);
           }
         }
       });
   }
 
-  authorisePartner(partner_id: any) {
+  authenticatePartner(partner_id: any) {
     this.baseService.getDataText(APIUrls.authenticatePartner + partner_id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
@@ -105,7 +85,21 @@ export class AccountService implements OnDestroy {
   }
 
   goHome() {
-    this.sharedService.goHome();
+    const user = this.getUser();
+    if(user) {
+      const link = [`${user.short_name}/store/home/`];
+      this.router.navigate(link);
+    } else {
+      this.router.navigateByUrl('dashboard/main');
+    }
+  }
+
+  goAppDetails(app_id: any) {
+    const user = this.getUser();
+    if(user) {
+      const link = [`${user.short_name}/store/app/${app_id}`];
+      this.router.navigate(link);
+    }
   }
 
   ngOnDestroy(): void {
