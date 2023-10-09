@@ -70,8 +70,7 @@ export class BaseService {
           } else if (err.error.data) {
             //   console.log(err.error.data);
             // this.errorData = err.error.data;
-            // this.setErrorData(this.errorData);
-            // this.router.navigate(['/error']);
+            // this.setErrorData(this.errorData);s
             // console.log('multiple', err.error.data);
           }
         }

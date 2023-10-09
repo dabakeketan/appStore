@@ -6,16 +6,18 @@ import { EnabledAppsComponent } from './components/enabled-apps/enabled-apps.com
 import { AppDetailsComponent } from './components/app-details/app-details.component';
 import { CreateAppComponent } from './components/create-app/create-app.component';
 import { AppAuthGuard } from 'src/app/shared/guards/app-auth.guard';
+import { StoreWrapperComponent } from './components/store-wrapper/store-wrapper.component';
 
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: ':partner_id/store/home',
-  //   pathMatch: 'full'
-  // },
   {
-    path: 'home',
+    path: '',
+    component: StoreWrapperComponent
+    // redirectTo: ':partner_name/store',
+    // pathMatch: 'full'
+  },
+  {
+    path: 'store',
     component: StoreMainComponent,
     canActivate: [AppAuthGuard]
   },

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeWhile } from 'rxjs';
+import { PartnerDataModel } from 'src/app/account/models/accountModel';
 import { AccountService } from 'src/app/account/services/account.service';
 import { BaseService } from 'src/app/base.service';
-import { APIUrls } from 'src/app/constants';
+import { APIUrls, UserRoles } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -22,10 +23,11 @@ export class StoreService {
 
   destroySubscription = false;
 
-  imagePath:any;
+  imagePath: any;
 
   constructor(private baseService: BaseService, private router: Router,
-    private accountService: AccountService) { }
+    private accountService: AccountService) {
+  }
 
   getSpotlightApps() {
     this.getRequest(APIUrls.spotLightApps)
@@ -41,38 +43,51 @@ export class StoreService {
 
   getAllApps() {
     this.getRequest(APIUrls.listApps)
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-          console.log('at login main all apps', response.body);
-          this.allApps.next(response.body);
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            console.log('at login main all apps', response.body);
+            this.allApps.next(response.body);
+          }
         }
-      }
-    });
+      });
   }
 
-  getEnabledApps(partner_id: string) {
-    this.getRequest(APIUrls.partnerApps + partner_id + '/apps?enabled=true')
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-          console.log('at login main partner enabled apps', response.body);
-          this.enabledApps.next(response.body);
+  getEnabledApps(isCustomerUser: boolean, partner_id: any, customer_name: any) {
+    let finalURL = '';
+    let xyz = APIUrls.partnerApps + partner_id;
+    if (isCustomerUser) {
+      finalURL = xyz + '/customer/' + customer_name + '/apps?enabled=true';
+    } else {
+      finalURL = xyz + '/apps?enabled=true';
+    }
+    this.getRequest(finalURL)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            console.log('at login main partner enabled apps', response.body);
+            this.enabledApps.next(response.body);
+          }
         }
-      }
-    });
+      });
   }
 
-  getAvailApps(partner_id: string) {
-    this.getRequest(APIUrls.partnerApps + partner_id + '/apps?enabled=false')
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-          console.log('at login main partner avail apps', response.body);
-          this.availApps.next(response.body);
+  getAvailApps(isCustomerUser: boolean, partner_id: any, customer_name: any) {
+    let finalURL = APIUrls.partnerApps + partner_id;
+    if (isCustomerUser) {
+      finalURL = finalURL + '/customer/' + customer_name + '/apps?enabled=false';
+    } else {
+      finalURL = finalURL + '/apps?enabled=false';
+    }
+    this.getRequest(finalURL)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            console.log('at login main partner avail apps', response.body);
+            this.availApps.next(response.body);
+          }
         }
-      }
-    }); 
+      });
   }
 
   getAppDetails(app_Id: any) {
@@ -87,11 +102,18 @@ export class StoreService {
         error: (err: any) => {
           // this.orgListDataSub.next(null);
         }
-      });
+    });
   }
 
-  disableApp(partner_id: any, app_Id: any) {
-    this.deleteRequest(APIUrls.partnerApps + partner_id + '/app/' + app_Id)
+  disableApp(isCustomerUser:boolean, app_Id: any, user: PartnerDataModel) {
+    let finalURL = '';
+    if (isCustomerUser) {
+      finalURL = APIUrls.customerApps + 'app?customer-name=' + user.customer_name
+        + '&partner-id=' + user.partner_id + '&app-id=' + app_Id;
+    } else {
+      finalURL = APIUrls.partnerApps + user.partner_id + '/app/' + app_Id;
+    }
+    this.deleteRequest(finalURL)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -101,15 +123,29 @@ export class StoreService {
       });
   }
 
-  enableApp(partner_id: any, app_Id: any) {
-    this.postRequest('', APIUrls.partnerApps + partner_id + '/app/' + app_Id)
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-         this.accountService.goHome();
-        }
+  enableApp(isCustomerUser:boolean, app_Id: any, user: PartnerDataModel) {
+    let finalURL = '';
+    let reqObj: any = '';
+    if (isCustomerUser) {
+      finalURL = APIUrls.customerApps + 'app';
+      reqObj = {
+        customer_name: user.customer_name,
+        partner_id: user.partner_id,
+        app_id: app_Id,
+        user_id: user.user_id,
+        user_role: UserRoles.basic
       }
-    });
+    } else {
+      finalURL = APIUrls.partnerApps + user.partner_id + '/app/' + app_Id;
+    }
+    this.postRequest(reqObj ? reqObj : '', finalURL)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.accountService.goHome();
+          }
+        }
+      });
   }
 
   getRequest(reqUrl: string, urlParams?: any) {
@@ -141,8 +177,4 @@ export class StoreService {
     }
     return this.baseService.deleteRequest(deleteUrl + (urlData ? urlData : ''));
   }
-
-  // goHome() {
-  //   this.router.navigateByUrl('store/home');
-  // }
 }

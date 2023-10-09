@@ -26,9 +26,18 @@ export class EnabledAppsComponent implements OnInit, OnDestroy {
 
   user: PartnerDataModel;
 
+  isCustomerUser = false;
+
   constructor(private router: Router, private storeService: StoreService,
     private accountService: AccountService) {
     this.user = this.accountService.getUser();
+    if (this.user) {
+      if (this.user.customer_name) {
+        this.isCustomerUser = true;
+      } else {
+        this.isCustomerUser = false;
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -37,7 +46,7 @@ export class EnabledAppsComponent implements OnInit, OnDestroy {
         this.enabledApps = response;
       }
     });
-    this.storeService.getEnabledApps(this.user.partner_id);
+    this.storeService.getEnabledApps(this.isCustomerUser, this.user.partner_id, this.user.customer_name);
   }
 
   gotoDetails(app_id: any) {

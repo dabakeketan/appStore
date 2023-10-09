@@ -13,8 +13,12 @@ export const APIUrls = {
     listApps: baseUrl + 'app/apps',
     partnerApps: baseUrl + 'partner/',
     appDetails: baseUrl + 'app/',
+    customerApps: baseUrl + 'customer/'
 }
 
+export const UserRoles = {
+    basic: 'Basic'
+}
 
 export const CommonTexts = {
 

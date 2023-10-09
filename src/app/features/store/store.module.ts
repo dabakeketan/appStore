@@ -11,6 +11,7 @@ import { SpotlightAppsComponent } from './components/spotlight-apps/spotlight-ap
 import { CreateAppComponent } from './components/create-app/create-app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { StoreWrapperComponent } from './components/store-wrapper/store-wrapper.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     CarouselAppsComponent,
     AppDetailsComponent,
     SpotlightAppsComponent,
-    CreateAppComponent
+    CreateAppComponent,
+    StoreWrapperComponent
   ],
   imports: [
     CommonModule,

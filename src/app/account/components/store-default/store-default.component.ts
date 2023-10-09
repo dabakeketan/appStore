@@ -48,7 +48,7 @@ export class StoreDefaultComponent implements OnInit, OnDestroy {
     if (user) {
       // const route = user.short_name + '/store/home/';
       this.user = user;
-      const link = [`${user.short_name}/store/home/`];
+      const link = [`${user.short_name}/store/`];
       this.router.navigate(link);
     }
     this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
@@ -58,26 +58,41 @@ export class StoreDefaultComponent implements OnInit, OnDestroy {
           const subUrl = event.url.substring(event.url.indexOf('/') + 1);
           let finalUrl = '';
           finalUrl = APIUrls.authorisation + subUrl;
-          let promise = new Promise<boolean>((resolve, reject) => {
-            this.http.get(finalUrl)
-              .toPromise()
-              .then(
-                (res: any) => { // Success
-                  console.log('at login res', res);
-                  this.user = res;
+          this.storeService.getRequest(finalUrl)
+            .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+              next: (response: any) => {
+                if (response && response.status === 200) {
+                  console.log('at login res', response.body);
+                  this.user = response.body;
                   this.accountService.saveUser(this.user);
                   this.accountService.isLoggedIn.next(true);
-                  const link = [`${user.short_name}/store/home/`];
+                  const link = [`${response.body.short_name}/store/`];
                   this.router.navigate(link);
-                  resolve(true);
                 }
-              );
-          });
+              }
+            });
+          // let promise = new Promise<boolean>((resolve, reject) => {
+          //   const that = this;
+          //   this.http.get(finalUrl)
+          //     .toPromise()
+          //     .then(
+          //       (res: any) => { // Success
+          //         console.log('at login res', res);
+          //         this.user = res;
+          //         this.accountService.saveUser(this.user);
+          //         this.accountService.isLoggedIn.next(true);
+          //         const link = [`${res.short_name}/store/`];
+          //         that.router.navigate(link);
+          //         // this.router.navigateByUrl(res.short_name + '/store/');
+          //         resolve(true);
+          //       }
+          //     );
+          // });
           // promise.then(() => {
           //   console.log('at login promise');
           // });
         } else {
-          if(!this.user) {
+          if (!this.user) {
             console.log('login main counitng');
             this.appInit();
           }

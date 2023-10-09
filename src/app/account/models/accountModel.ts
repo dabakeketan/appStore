@@ -25,4 +25,7 @@ export interface LoginModel {
     portal_url: string;
     registration_status: string;
     short_name: string;
+    customer_name: string;
+    user_name: string;
+    user_id: string;
   }

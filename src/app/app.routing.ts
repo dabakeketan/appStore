@@ -2,7 +2,6 @@
 
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from "@angular/core";
-import { AppAuthGuard } from './shared/guards/app-auth.guard';
 
 export const routes: Routes = [
   // {
@@ -14,17 +13,12 @@ export const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
   },
-  // {
-  //   path: 'store',
-  //   // canActivate: [AppAuthGuard],
-  //   // canActivateChild: [AppAuthGuard],
-  //   loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule)
-  // },
   {
-    path: ':partner_id/store',
+    path: ':partner_name',
     // canActivate: [AppAuthGuard],
     // canActivateChild: [AppAuthGuard],
-    loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule)
+    loadChildren: () => import('./features/store/store.module').then(m => m.StoreModule),
+    // component: StoreWrapperComponent
   },
   // {
   //   path: 'error',

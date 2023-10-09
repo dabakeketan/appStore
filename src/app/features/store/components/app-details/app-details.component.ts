@@ -29,10 +29,19 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
   user: PartnerDataModel;
 
+  isCustomerUser = false;
+
   constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService,
     private accountService: AccountService) {
     this.app_Id = String(this.route.snapshot.paramMap.get('id'));
     this.user = this.accountService.getUser();
+    if (this.user) {
+      if (this.user.customer_name) {
+        this.isCustomerUser = true;
+      } else {
+        this.isCustomerUser = false;
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -41,8 +50,14 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
   appInit() {
     const response = this.storeService.getRequest(APIUrls.appDetails + this.app_Id);
-    const responseA = this.storeService.getRequest(APIUrls.partnerApps + this.user.partner_id + '/app/'
-      + this.app_Id + '/check-enabled');
+    let checkEnableUrl = APIUrls.partnerApps + this.user.partner_id;
+    if(this.isCustomerUser) {
+      checkEnableUrl = checkEnableUrl + '/customer/' + this.user.customer_name +
+      '/app/' + this.app_Id + '/check-enabled';
+    } else {
+      checkEnableUrl = checkEnableUrl + '/app/' + this.app_Id + '/check-enabled'
+    }
+    const responseA = this.storeService.getRequest(checkEnableUrl);
     forkJoin([response, responseA])
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
         if (forkResponse && forkResponse.length) {
@@ -64,11 +79,11 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   disableApp() {
-    this.storeService.disableApp(this.user.partner_id, this.app_Id);
+    this.storeService.disableApp(this.isCustomerUser, this.app_Id, this.user);
   }
 
   enableApp() {
-    this.storeService.enableApp(this.user.partner_id, this.app_Id);
+    this.storeService.enableApp(this.isCustomerUser, this.app_Id, this.user);
   }
 
   goBack() {

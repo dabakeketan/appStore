@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { categoriesArr, headerTexts, productsArr } from 'src/app/constants';
 import { StoreService } from '../../services/store.service';
@@ -43,11 +43,19 @@ export class StoreMainComponent implements OnInit, OnDestroy {
 
   routerSubscription: any;
 
+  isCustomerUser = false;
+
   constructor(private router: Router, private storeService: StoreService,
     private accountService: AccountService) {
     this.subscriptions();
     this.user = this.accountService.getUser();
     if (this.user) {
+      if (this.user.customer_name) {
+        this.isCustomerUser = true;
+      } else {
+        this.isCustomerUser = false;
+      }
+      console.log('login main direct partner call check true');
       this.isLoggedIn = true;
       this.appInit();
     }
@@ -85,17 +93,10 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-
-  preInit() {
-    this.isLoggedIn = true;
-    this.user = this.accountService.getUser();
-    this.appInit();
-  }
-
   appInit() {
     this.storeService.getSpotlightApps();
-    this.storeService.getEnabledApps(this.user.partner_id);
-    this.storeService.getAvailApps(this.user.partner_id);
+    this.storeService.getEnabledApps(this.isCustomerUser, this.user.partner_id, this.user.customer_name);
+    this.storeService.getAvailApps(this.isCustomerUser, this.user.partner_id, this.user.customer_name);
   }
 
   subscriptions() {
@@ -119,12 +120,12 @@ export class StoreMainComponent implements OnInit, OnDestroy {
   }
 
   goToEnabledApps() {
-    const link = [`${this.user.short_name}/store/enabled`];
+    const link = [`${this.user.short_name}/enabled`];
     this.router.navigate(link);
   }
 
   goToAvailApps() {
-    const link = [`${this.user.short_name}/store/available`];
+    const link = [`${this.user.short_name}/available`];
     this.router.navigate(link);
   }
 
