@@ -19,6 +19,8 @@ export class AccountService implements OnDestroy {
 
   isLoggedIn = new Subject();
 
+  user = new Subject();
+
   constructor(private sharedService: SharedService, private baseService: BaseService,
     private http: HttpClient, private router: Router) {
     this.partnerDataModel = {} as PartnerDataModel;

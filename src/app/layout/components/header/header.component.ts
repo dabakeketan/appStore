@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, takeWhile } from 'rxjs';
 import { PartnerDataModel } from 'src/app/account/models/accountModel';
 import { AccountService } from 'src/app/account/services/account.service';
 
@@ -13,11 +13,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @Input() isLoggedIn: boolean = false;
 
-  @Input() user: PartnerDataModel;
+  user: PartnerDataModel;
+
+  isCustomerUser = false;
 
   isLoginScreen = false;
 
   routerSubscription: any;
+
+  destroySubscription = false;
 
   constructor(private renderer: Renderer2, private router: Router, private accountServie: AccountService) {
     this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
@@ -25,14 +29,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // console.log('event', event);
         if (event && (event.url.indexOf('dashboard/login') > -1)) {
           this.isLoginScreen = true;
-        } else if(event && (event.url.indexOf('dashboard/login') === -1)) {
+        } else if (event && (event.url.indexOf('dashboard/login') === -1)) {
           this.isLoginScreen = false;
+        }
+      });
+
+    this.user = this.accountServie.getUser() ? this.accountServie.getUser() : null;
+    if (this.user && this.user.customer_name) {
+      this.isCustomerUser = true;
+    }
+    this.accountServie.user.pipe(takeWhile(() => !this.destroySubscription))
+      .subscribe((response: any) => {
+        if (response) {
+          this.user = response;
+          if (this.user && this.user.customer_name) {
+            this.isCustomerUser = true;
+          }
         }
       });
   }
 
   ngOnInit(): void {
-    // console.log('isLoggedIn', this.isLoggedIn);
   }
 
   toggleMenu() {
@@ -54,5 +71,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routerSubscription.unsubscribe();
+    this.destroySubscription = true;
   }
 }

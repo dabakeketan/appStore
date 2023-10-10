@@ -71,17 +71,17 @@
                 </div>
             </li> -->
                         <li class="nav-item dropdown user-profile">
-                            <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)"
+                            <!-- <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)"
                                 id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" *ngIf="user && user.logo_url">
-                                <!-- <img src="assets/img/profile.jpeg"> -->
                                 <img src="{{user.logo_url}}" alt="" >
-                            </a>
-                            <a class="nav-link dropdown-toggle dummy-user pe-0" href="javascript:void(0)"
+                            </a> -->
+                            <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)"
                                 id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" *ngIf="!user || !user.logo_url">
+                                aria-expanded="false">
                                 <!-- <img src="assets/img/profile.jpeg"> -->
-                                <img src="assets/img/dummy_user.png" alt="User">
+                                <img src="assets/img/Partner_avatar.png" alt="User" *ngIf="!isCustomerUser">
+                                <img src="assets/img/Customer_avatar.png" alt="User" *ngIf="isCustomerUser">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-left-end pullDown "
                                 aria-labelledby="navbarDropdownMenuLink">

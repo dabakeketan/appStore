@@ -65,6 +65,7 @@ export class StoreDefaultComponent implements OnInit, OnDestroy {
                   console.log('at login res', response.body);
                   this.user = response.body;
                   this.accountService.saveUser(this.user);
+                  this.accountService.user.next(this.user);
                   this.accountService.isLoggedIn.next(true);
                   const link = [`${response.body.short_name}/store/`];
                   this.router.navigate(link);
