@@ -701,6 +701,9 @@ ul.parameters {
         height: 52px;
         overflow: hidden;
         padding: 0;
+        img {
+            border-radius: 10px !important;
+        }
         &::after {
             border: 0;
         }
