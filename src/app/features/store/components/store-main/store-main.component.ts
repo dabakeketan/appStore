@@ -63,7 +63,7 @@ export class StoreMainComponent implements OnInit, OnDestroy {
 
     this.customOptions = {
       margin: 20,
-      autoWidth: true,
+      // autoWidth: true,
       autoplay: true,
       rewind: true,
       loop: true,
