@@ -10,5 +10,6 @@ export interface AppDataModel {
     promoted_app: Boolean;
     vendor_app_fqdn: string;
     vendor_id: string;
-    vendor_name: string;   
+    vendor_name: string;
+    short_description: string;
 }

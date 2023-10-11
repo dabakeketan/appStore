@@ -5,7 +5,7 @@
                 <div class="row" *ngIf="appDetailsData">
                     <div class="col-lg-3">
                         <div class="preview-item center-block">
-                            <div class="preview-item_header">
+                            <div class="preview-item_header details">
                                 <a href="javascript:void:0">
                                     <img width="270" height="286" src="{{appDetailsData.app_image_url}}"
                                         alt="{{appDetailsData.app_name}}">
@@ -45,7 +45,9 @@
                             </div>
                             <p class="whiteClr">by {{appDetailsData.vendor_name}}</p>
                             <p class="whiteClr mb-0">
-                                {{appDetailsData.description}}
+                
+                                {{appDetailsData.short_description}}
+                                
                             </p>
                             <!-- <p class="whiteClr mb-0">Lorem Ispum Text Lorem Ipsum Text Lorem Ispum Text Lorem Ipsum Text
                             </p> -->
@@ -84,33 +86,7 @@
                                             aria-labelledby="ex1-tab-1">
                                             <p class="text-uc">Product Description</p>
                                             <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem
-                                                Ipsum
-                                                has been the industry's standard dummy text ever since the 1500s, when
-                                                an unknown
-                                                printer took a galley of type and scrambled it to make a type specimen
-                                                book. It has
-                                                survived not only five centuries, but also the leap into electronic
-                                                typesetting,
-                                                remaining essentially unchanged.
-                                            </p>
-                                            <p>
-                                                It was popularised in the 1960s with the release of Letraset sheets
-                                                containing Lorem
-                                                Ipsum passages, and more recently with desktop publishing software like
-                                                Aldus
-                                                PageMaker
-                                                including versions of Lorem Ipsum.
-                                            </p>
-                                            <p>
-                                                It is a long established fact that a reader will be distracted by the
-                                                readable
-                                                content
-                                                of a page when looking at its layout. The point of using Lorem Ipsum is
-                                                that it has
-                                                a
-                                                more-or-less normal distribution of letters,
+                                                {{appDetailsData.description}}
                                             </p>
                                         </div>
                                         <div class="tab-pane fade show" id="ex1-tabs-2" role="tabpanel"

@@ -274,6 +274,10 @@ textarea {
         position: relative;
         overflow: hidden;
 
+        &.details {
+            height: 200px;
+        }
+        
         img {
             transition: all .3s ease-out;
             height: auto;
