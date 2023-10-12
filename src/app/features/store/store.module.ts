@@ -33,7 +33,7 @@ import { StoreWrapperComponent } from './components/store-wrapper/store-wrapper.
     
     // SweetAlert2Module.forRoot()
   ],
-  exports: [CarouselAppsComponent, SpotlightAppsComponent],
+  exports: [CarouselAppsComponent, SpotlightAppsComponent, AppDetailsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class StoreModule { }

@@ -45,15 +45,20 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appInit();
+    if (this.user) {
+      this.appInit();
+    } else {
+      this.appInitA();
+    }
+
   }
 
   appInit() {
     const response = this.storeService.getRequest(APIUrls.appDetails + this.app_Id);
     let checkEnableUrl = APIUrls.partnerApps + this.user.partner_id;
-    if(this.isCustomerUser) {
+    if (this.isCustomerUser) {
       checkEnableUrl = checkEnableUrl + '/customer/' + this.user.customer_name +
-      '/app/' + this.app_Id + '/check-enabled';
+        '/app/' + this.app_Id + '/check-enabled';
     } else {
       checkEnableUrl = checkEnableUrl + '/app/' + this.app_Id + '/check-enabled'
     }
@@ -69,10 +74,22 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
             const res = forkResponse[1].body;
             if (res && res.message && res.message === 'False') {
               this.isAppEnabled = false;
-            } else if(res && res.message && res.message === 'True') {
+            } else if (res && res.message && res.message === 'True') {
               this.isAppEnabled = true;
             }
 
+          }
+        }
+      });
+  }
+
+  appInitA() {
+    this.storeService.getRequest(APIUrls.appDetails + this.app_Id)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            console.log('app details', response.body);
+            this.appDetailsData = response.body;
           }
         }
       });

@@ -88,7 +88,7 @@ export class AccountService implements OnDestroy {
 
   goHome() {
     const user = this.getUser();
-    if(user) {
+    if (user) {
       const link = [`${user.short_name}/store/`];
       this.router.navigate(link);
     } else {
@@ -98,8 +98,11 @@ export class AccountService implements OnDestroy {
 
   goAppDetails(app_id: any) {
     const user = this.getUser();
-    if(user) {
+    if (user) {
       const link = [`${user.short_name}/app/${app_id}`];
+      this.router.navigate(link);
+    } else {
+      const link = [`dashboard/app/${app_id}`];
       this.router.navigate(link);
     }
   }
