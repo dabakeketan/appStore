@@ -1,18 +1,22 @@
 <section id="sidebar" class="sidebar">
     <div>
         <ul class="list-group">
+            <!-- <li class="list-group-item">
+                <a href="#">
+                    <i class="fa-solid fa-house fa-fw" style="color: #007bc2;"></i>
+                    Dashboard</a>
+            </li> -->
             <li class="list-group-item">
-                <a class="heading">Store</a>
+                <a routerLink="/manage/partner" routerLinkActive="active">
+                    <i class="fa-solid fa-handshake fa-fw" style="color: #007bc2;"></i>
+                    Partner Management</a>
             </li>
             <li class="list-group-item">
-                <a routerLink="/store/home" routerLinkActive="active">Overview</a>
+                <a routerLink="/manage/app" routerLinkActive="active">
+                    <i class="fa-brands fa-app-store-ios fa-fw"  style="color: #007bc2; font-weight: bold;"></i>
+                    App Management</a>
             </li>
-            <li class="list-group-item">
-                <a routerLink="/store/user" routerLinkActive="active">Enabled Apps</a>
-            </li>
-            <li class="list-group-item">
-                <a routerLink="/store/available" routerLinkActive="active">Available Apps</a>
-            </li>
+            
         </ul>
     </div>
 </section>

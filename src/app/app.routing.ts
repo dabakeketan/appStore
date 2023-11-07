@@ -10,6 +10,10 @@ export const routes: Routes = [
   //   // pathMatch: 'full'
   // },
   {
+    path: 'manage',
+    loadChildren: () => import('./management/management.module').then(m => m.ManagementModule)
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
   },
