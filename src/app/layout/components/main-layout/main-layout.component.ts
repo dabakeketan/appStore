@@ -26,7 +26,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     .subscribe((event: any) => {
       // console.log('event', event);
       if (event && ((event.url.indexOf('manage/main') > -1)
-      || (event.url.indexOf('manage/partner') > -1))) {
+      || (event.url.indexOf('manage/partner') > -1)
+    || (event.url.indexOf('manage/app') > -1)
+    )) {
         this.isNavBarVisible = true;
       } else {
         this.isNavBarVisible = false;

@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <div id="content">
+
+        <!-- <button class="btn btn-custom-pri">Create Application</button> -->
+        <div class="tileMenu">
+            <div class="row">
+                <div class="col-md-3" (click)="openPopup()">
+                    <div class="tileMenuBox">
+                        <div class="menuIcon"><i class="fa-brands fa-app-store-ios fa-fw"></i></div>
+                        <p class="menuName">Create Application</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="createAppModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Application</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <app-create-app></app-create-app>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-custom-pri">Create</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

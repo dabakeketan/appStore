@@ -29,11 +29,11 @@ img {
     max-width: 100%;
 }
 
-.form-control {
+.form-control, .form-select {
     border-radius: 0;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
     box-shadow: none;
 }
 
@@ -819,6 +819,36 @@ ul.parameters {
             padding: 15px;
             font-size: 13px;
         }
+    }
+}
+
+.tileMenuBox {
+    background: #fff;
+    height: 200px;
+    box-shadow: 1px 3px 5px 2px #ccc;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 14px;
+    border: solid #007bc2 1px;
+    cursor: pointer;
+
+    
+    .menuIcon {
+        color: $crexClrPrimary;
+        font-size: 35px;
+        height: 100px;
+        padding-top: 45px;
+    }
+
+    .menuName {
+        color: #4c555a;
+        font-weight: 500;
+    }
+}
+
+.small-labels {
+    .form-label {
+        font-size: 13px;
     }
 }
 

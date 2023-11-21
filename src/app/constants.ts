@@ -3,6 +3,8 @@ import { environment } from "src/environments/environment";
 
 export const baseUrl = environment.baseAppUrl;
 
+export const mngAppBaseUrl = environment.mngAppBaseUrl;
+
 export const APIUrls = {
     baseUrl: baseUrl,
     createPartner: baseUrl + 'partner',
@@ -14,6 +16,12 @@ export const APIUrls = {
     partnerApps: baseUrl + 'partner/',
     appDetails: baseUrl + 'app/',
     customerApps: baseUrl + 'customer/'
+}
+
+export const MNGUrls = {
+    baseUrl: mngAppBaseUrl,
+    mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login',
+    mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token'
 }
 
 export const UserRoles = {

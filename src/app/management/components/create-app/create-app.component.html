@@ -1,0 +1,97 @@
+<form #createAppForm="ngForm" class="small-labels">
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+            <label for="appName" class="form-label">Application Name</label>
+            <input type="text" class="form-control form-control-sm" name="appName" id="appName" required
+                [(ngModel)]="createAppDataModel.app_name" #appName="ngModel">
+            <div *ngIf="appName.invalid && (appName.dirty || appName.touched)" class="invalid-feedback">
+                <div *ngIf="appName.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="appSecret" class="form-label">App Secret</label>
+            <input type="text" class="form-control form-control-sm" name="appSecret" id="appSecret" required
+                [(ngModel)]="createAppDataModel.app_secret" #appSecret="ngModel">
+            <div *ngIf="appSecret.invalid && (appSecret.dirty || appSecret.touched)" class="invalid-feedback">
+                <div *ngIf="appSecret.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control form-control-sm" name="description" id="description" required
+                [(ngModel)]="createAppDataModel.description" #description="ngModel">
+            <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
+                <div *ngIf="description.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="vendorId" class="form-label">Vendor Id</label>
+            <input type="text" class="form-control form-control-sm" name="vendorId" id="vendorId" required
+                [(ngModel)]="createAppDataModel.vendor_id" #vendorId="ngModel">
+            <div *ngIf="vendorId.invalid && (vendorId.dirty || vendorId.touched)" class="invalid-feedback">
+                <div *ngIf="vendorId.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3">
+            <label for="vendorName" class="form-label">Vendor Name</label>
+            <input type="text" class="form-control form-control-sm" name="vendorName" id="vendorName" required
+                [(ngModel)]="createAppDataModel.vendor_name" #vendorName="ngModel">
+            <div *ngIf="vendorName.invalid && (vendorName.dirty || vendorName.touched)" class="invalid-feedback">
+                <div *ngIf="vendorName.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="vendorAppfqdn" class="form-label">Vendor App FQDN</label>
+            <input type="text" class="form-control form-control-sm" name="vendorAppfqdn" id="vendorAppfqdn" required
+                [(ngModel)]="createAppDataModel.vendor_app_fqdn" #vendorAppfqdn="ngModel">
+            <div *ngIf="vendorAppfqdn.invalid && (vendorAppfqdn.dirty || vendorAppfqdn.touched)"
+                class="invalid-feedback">
+                <div *ngIf="vendorAppfqdn.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="userTier" class="form-label">User Tiers</label>
+            <select class="form-select form-select-sm" name="userTier" id="userTier" required
+                [(ngModel)]="createAppDataModel.userTier" #userTier="ngModel">
+                <option *ngFor="let tier of userTiers">
+                    {{tier.value}}
+                </option>
+            </select>
+            <div *ngIf="userTier.invalid && (userTier.dirty || userTier.touched)" class="invalid-feedback">
+                <div *ngIf="userTier.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="uploadFile" class="form-label">Upload File</label>
+            <div class="input-group">
+                <input type="file" class="form-control form-control-sm" id="uploadFile" aria-label="Upload">
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="text" class="form-control form-control-sm" name="price" id="price" required
+                [(ngModel)]="createAppDataModel.price" #price="ngModel">
+            <div *ngIf="price.invalid && (price.dirty || price.touched)" class="invalid-feedback">
+                <div *ngIf="price.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

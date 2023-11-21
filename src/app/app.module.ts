@@ -11,6 +11,7 @@ import { LayoutModule } from './layout/layout.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MngAppAuthGuard } from './shared/guards/mng-app-auth.guard';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  providers: [AppAuthGuard, authInterceptorProviders,
+  providers: [AppAuthGuard, authInterceptorProviders, MngAppAuthGuard
     // {
     //   provide: ROUTES,
     //   useFactory: () => {
