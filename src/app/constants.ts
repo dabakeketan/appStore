@@ -5,6 +5,8 @@ export const baseUrl = environment.baseAppUrl;
 
 export const mngAppBaseUrl = environment.mngAppBaseUrl;
 
+export const mngAPIUrlAppender = '/mngAPIUrl';
+
 export const APIUrls = {
     baseUrl: baseUrl,
     createPartner: baseUrl + 'partner',
@@ -20,8 +22,8 @@ export const APIUrls = {
 
 export const MNGUrls = {
     baseUrl: mngAppBaseUrl,
-    mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login',
-    mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token'
+    mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login' + mngAPIUrlAppender,
+    mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token' + mngAPIUrlAppender
 }
 
 export const UserRoles = {

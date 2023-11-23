@@ -59,7 +59,7 @@ export class ManageComponent implements OnInit, OnDestroy {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           console.log('respoonse', response);
-          this.managementService.saveMngToken(response);
+          this.managementService.saveMngToken(response.body);
           // this.tokenStorageService.isLoggedIn.next(true);
 
           this.router.navigate(['/manage/partner']);

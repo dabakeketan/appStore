@@ -5,6 +5,8 @@ import { catchError, NEVER, Observable, of, tap } from 'rxjs';
 import { AlertService } from 'src/app/alert/services/alert.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from 'src/environments/environment';
+import { ManagementService } from 'src/app/management/services/management.service';
+import { mngAPIUrlAppender } from 'src/app/constants';
 const TOKEN_HEADER_KEY = 'Authorization';
 
 @Injectable()
@@ -13,13 +15,28 @@ export class AuthInterceptor implements HttpInterceptor {
   service_count = 0;
 
   constructor(private alertService: AlertService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService, private managementService: ManagementService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.service_count++;
     let authReq = req;
+    const mngToken = this.managementService.getMngToken() ? this.managementService.getMngToken().access_token : null;
+    // const appToken = this.tokenStorageService.getToken();
     let token;
-    let headers;
+    if (authReq.url.search(mngAPIUrlAppender) > 0) {
+      authReq = authReq.clone({ url: req.url.replace(mngAPIUrlAppender, '') });
+      token = mngToken;
+    } else {
+      // token = appToken;
+    }
+
     this.spinner.show();
+
+    let headers;
+    headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token,
+      // 'Content-Type': 'application/json',
+      // 'ns-dest-server': serverProfile.url
+    });
     if (token != null) {
       authReq = req.clone({ headers });
     }
@@ -33,16 +50,16 @@ export class AuthInterceptor implements HttpInterceptor {
             if (this.service_count === 0) {
               this.spinner.hide();
             }
-            
+
 
             console.log('interc response success', evt);
 
-            if(evt && evt.ok && evt.status === 204) {
+            if (evt && evt.ok && evt.status === 204) {
               // const location = evt.headers.get('Location');
               // console.log('headers all', evt.headers);
-              const location = evt.headers.get('X-Location') || evt.headers.get('x-location') 
-              || evt.headers.get('X-location');
-              if(location) {
+              const location = evt.headers.get('X-Location') || evt.headers.get('x-location')
+                || evt.headers.get('X-location');
+              if (location) {
                 window.location.href = location;
               }
               // console.log('200', evt, location);
