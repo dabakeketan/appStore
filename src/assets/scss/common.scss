@@ -391,6 +391,12 @@ textarea {
     color: $crexWhiteClr;
 }
 
+.btn-custom-danger:disabled {
+    background-color: $crexBgDanger;
+    color: $crexWhiteClr;
+    opacity: 0.65;
+}
+
 .btn-custom-info,
 .btn-custom-info:hover,
 .btn-custom-info:focus {

@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { CreateAppComponent } from './components/create-app/create-app.component';
 import { AppManageMainComponent } from './components/app-manage-main/app-manage-main.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 
@@ -16,7 +17,8 @@ import { AppManageMainComponent } from './components/app-manage-main/app-manage-
     CommonModule,
     ManagementRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    SweetAlert2Module.forRoot()
   ]
 })
 export class ManagementModule { }

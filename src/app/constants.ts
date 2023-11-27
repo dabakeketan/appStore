@@ -23,7 +23,11 @@ export const APIUrls = {
 export const MNGUrls = {
     baseUrl: mngAppBaseUrl,
     mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login' + mngAPIUrlAppender,
-    mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token' + mngAPIUrlAppender
+    mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token' + mngAPIUrlAppender,
+    createPartnerInvite: mngAppBaseUrl + 'manage/invite-code' + mngAPIUrlAppender,
+    validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=' + mngAPIUrlAppender,
+    partnerBase: mngAppBaseUrl + 'manage/partner/' + mngAPIUrlAppender,
+    getPartnersList: mngAppBaseUrl + 'manage/partner/partners' + mngAPIUrlAppender,
 }
 
 export const UserRoles = {
@@ -43,6 +47,10 @@ export const headerTexts = {
 export const errorMsgs = {
     required: 'Required',
     invalidFormat: 'Invalid format'
+}
+
+export const successMsgs = {
+    codeSentTo: 'Invite code sent to'
 }
 
 export const categoriesArr = [
@@ -72,4 +80,7 @@ export const FontAwsIcons = {
     crossCircle: 'fas fa-times-circle fa-fw'
 }
 
+export const AlertTypes = {
+    success: 'success'
+}
 

@@ -34,14 +34,16 @@ export class AlertMainComponent implements OnInit, OnDestroy {
   error(type: any, text: any) {
     Swal.fire({
       icon: 'error',
-      text: text
+      text: text,
+      confirmButtonColor: '#2dce89'
     })
   }
 
   success(type: any, text: any) {
     Swal.fire({
       icon: 'success',
-      text: text
+      text: text,
+      confirmButtonColor: '#2dce89'
     })
   }
 

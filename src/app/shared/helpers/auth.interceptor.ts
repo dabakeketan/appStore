@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // const appToken = this.tokenStorageService.getToken();
     let token;
     if (authReq.url.search(mngAPIUrlAppender) > 0) {
-      authReq = authReq.clone({ url: req.url.replace(mngAPIUrlAppender, '') });
+      authReq = authReq.clone({ url: authReq.url.replace(mngAPIUrlAppender, '') });
       token = mngToken;
     } else {
       // token = appToken;
@@ -34,11 +34,11 @@ export class AuthInterceptor implements HttpInterceptor {
     let headers;
     headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token,
-      // 'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
       // 'ns-dest-server': serverProfile.url
     });
     if (token != null) {
-      authReq = req.clone({ headers });
+      authReq = authReq.clone({ headers });
     }
 
     // return next.handle(authReq);

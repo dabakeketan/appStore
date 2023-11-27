@@ -2,12 +2,14 @@
     <div id="content">
         <div class="page-title clearfix">
             <h1 class="float-start">Partners</h1>
-            <button class="btn btn-sm btn-custom-danger float-end">Delete</button>
-            <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openInviteCodePopup()">Add</button>
+            <button class="btn btn-sm btn-custom-danger float-end"
+                [disabled]="!selectedPartnersData.length" (click)="deletePartners()">Delete</button>
+            <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openCreatePartnerPopup()">Create</button>
         </div>
-        <div class="row" *ngIf="dummyData">
+        <div class="row" *ngIf="partnersListData">
             <div class="col-lg-12">
-                <app-partner-list [tableData]="dummyData"></app-partner-list>
+                <app-partner-list [rowData]="partnersListData"
+                    (rowSelectedEvent)="receivePartnersData($event)"></app-partner-list>
             </div>
         </div>
         <div class="modal" id="addPertnerModal" tabindex="-1">
@@ -15,18 +17,21 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Partner</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
                         <form #addPartnerForm="ngForm">
                             <div class="mb-3">
-                                <label class="form-label">Invitation Code</label>
-                                <input type="text" class="form-control" [(ngModel)]="inviteCode" id="codeTextBox"
-                                    name="codeTextBox" required #codeTextBox="ngModel">
+                                <label class="form-label">Email Address</label>
+                                <input type="text" class="form-control" [(ngModel)]="inviteEmailAddr" id="codeTextBox"
+                                    name="codeTextBox" required #codeTextBox="ngModel" [pattern]="regExPatterns.email">
                                 <div *ngIf="codeTextBox.invalid && (codeTextBox.dirty || codeTextBox.touched)"
                                     class="invalid-feedback">
                                     <div *ngIf="codeTextBox.errors?.['required']">
                                         {{errorMsgs.required}}
+                                    </div>
+                                    <div *ngIf="codeTextBox.errors?.['pattern']">
+                                        {{errorMsgs.invalidFormat}}
                                     </div>
                                 </div>
 
@@ -34,8 +39,10 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-custom-pri" [disabled]="addPartnerForm.invalid">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-custom-pri" [disabled]="addPartnerForm.invalid"
+                            (click)="createPartner()">Submit</button>
+                        <button type="button" class="btn btn-secondary" (click)="addPartnerForm.reset()"
+                            data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

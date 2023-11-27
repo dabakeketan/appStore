@@ -17,3 +17,14 @@ export const UserTiers = [
   {id: 2, value: 'Gold'},
   {id: 3, value: 'Platinum'}
 ]
+
+export interface PartnerListDataModel {
+  partner_id: string;
+  partner_name: string;
+  description: string;
+  short_name: string;
+  api_endpoint: string;
+  portal_url: string;
+  registration_status: string;
+  created_datetime_utc: string;
+}

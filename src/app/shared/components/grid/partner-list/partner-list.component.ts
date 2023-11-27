@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, DomLayoutType, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { RegStatusRendererComponent } from '../../cell-renderers/reg-status-renderer/reg-status-renderer.component';
 
 @Component({
   selector: 'app-partner-list',
@@ -9,16 +10,49 @@ import { ColDef, DomLayoutType, GridApi, GridReadyEvent } from 'ag-grid-communit
 })
 export class PartnerListComponent implements OnInit {
 
-  @Input() tableData: any;
+  @Input() rowData: any;
 
-  rowData: any;
+  // rowData: any;
 
   gridApi: GridApi;
 
+  public frameworkComponents: any;
+
+  @Output() rowSelectedEvent = new EventEmitter();
+
+  @Output() rowEditedEvent = new EventEmitter();
+
+  gridOptions: GridOptions;
+
+ rowSelection: "single" | "multiple" = "single";
+
+  selectedRows: any;
+
   public columnDefs: ColDef[] = [
-    { 
-      headerName: 'Partner Name', field: 'name',
-      minWidth: 100
+    {
+      headerName: 'Name',
+      field: 'partner_name',
+    },
+    {
+      headerName: 'Short Name',
+      field: 'short_name',
+    },
+    {
+      headerName: 'Description',
+      field: 'description',
+    },
+    {
+      headerName: 'API Endpoint',
+      field: 'api_endpoint',
+    },
+    {
+      headerName: 'Portal URL',
+      field: 'portal_url',
+    },
+    {
+      headerName: 'Registration Status',
+      field: 'registration_status',
+      cellRenderer: 'regStatusRenderer'
     }
   ];
 
@@ -40,14 +74,38 @@ export class PartnerListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.frameworkComponents = {
+      regStatusRenderer: RegStatusRendererComponent,
+    }
+
+    // this.gridOptions = {
+    //   rowMultiSelectWithClick: true,
+      
+    //   // rowDeselection: true,
+    //   context: { componentParent: this }
+    // }
   }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    this.rowData = this.tableData;
+    // this.rowData = this.tableData;
     setTimeout(() => {
-    params.api.sizeColumnsToFit();
+      params.api.sizeColumnsToFit();
     }, 500);
+  }
+
+  onRowSelected(event: any) {
+    this.getSelectedRows();
+  }
+
+  getSelectedRows() {
+    const selectedNodes = this.gridApi.getSelectedNodes();
+    this.selectedRows = selectedNodes.map(node => node.data);
+    this.rowSelectedEvent.emit(this.selectedRows);
+  }
+
+  onRowDoubleClicked(event: any) {
+    // this.rowEditedEvent.emit(event.data);
   }
 
   onResize(event: any) {
