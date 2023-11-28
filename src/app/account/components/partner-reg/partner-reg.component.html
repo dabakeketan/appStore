@@ -1,4 +1,33 @@
-<section class="login-wrapper-outer">
+<section class="login-wrapper-outer" *ngIf="!isRegisterScreen">
+    <section class="login-wrapper adj">
+        <div class="login-header bg-light">
+            <h5>{{headerTexts.partnerReg}}</h5>
+        </div>
+        <div class="login-body clearfix">
+            <form #validateCodeForm="ngForm">
+                <div class="mb-3">
+                    <label for="inviteCode" class="form-label">Enter Invitation Code</label>
+                    <input type="text" class="form-control form-control-sm" name="inviteCode" id="inviteCode" required
+                        [(ngModel)]="inviteCodeStr" #inviteCode="ngModel" [pattern]="regExPatterns.nonWhiteSpaces">
+                    <div *ngIf="inviteCode.invalid && (inviteCode.dirty || inviteCode.touched)" class="invalid-feedback">
+                        <div *ngIf="inviteCode.errors?.['required']">
+                            {{errorMsgs.required}}
+                        </div>
+                        <div *ngIf="inviteCode.errors?.['pattern']">
+                            {{errorMsgs.invalidFormat}}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-custom-pri" [disabled]="!validateCodeForm.valid"
+                    (click)="validateInviteCode()">Validate</button>
+                    <button class="btn btn-light ms-3" (click)="goHome()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
+<section class="login-wrapper-outer" *ngIf="isRegisterScreen">
     <section class="login-wrapper">
         <div class="login-header bg-light">
             <h5>{{headerTexts.partnerReg}}</h5>

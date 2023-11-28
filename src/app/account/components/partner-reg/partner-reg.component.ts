@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { RegExPatterns, categoriesArr, errorMsgs, headerTexts, productsArr } from 'src/app/constants';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MNGUrls, RegExPatterns, categoriesArr, errorMsgs, headerTexts, productsArr } from 'src/app/constants';
 import { CreatePartnerModel } from '../../models/accountModel';
 import { AccountService } from '../../services/account.service';
+import { SharedService } from 'src/app/shared/shared.service';
+import { takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-partner-reg',
   templateUrl: './partner-reg.component.html',
   styleUrls: ['./partner-reg.component.scss']
 })
-export class PartnerRegComponent implements OnInit {
+export class PartnerRegComponent implements OnInit, OnDestroy {
 
   headerTexts = headerTexts;
 
@@ -22,7 +24,13 @@ export class PartnerRegComponent implements OnInit {
 
   regExPatterns = RegExPatterns;
 
-  constructor(private accountService: AccountService) {
+  isRegisterScreen = false;
+
+  inviteCodeStr = '';
+
+  destroySubscription = false;
+
+  constructor(private accountService: AccountService, private sharedService: SharedService) {
     this.createPartnerModel = {
       api_endpoint: '',
       description: '',
@@ -31,7 +39,7 @@ export class PartnerRegComponent implements OnInit {
       portal_url: '',
       short_name: '',
       contact_name: '',
-      contact_email:'',
+      contact_email: '',
       contact_num: '',
       contact_address: ''
     }
@@ -45,8 +53,23 @@ export class PartnerRegComponent implements OnInit {
     this.accountService.goHome();
   }
 
+  validateInviteCode() {
+    this.sharedService.getRequest(MNGUrls.validateInviteCode + this.inviteCodeStr)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.isRegisterScreen = true;
+          }
+        }
+      });
+  }
+
   registerPartner() {
     this.accountService.registerPartner(this.createPartnerModel);
+  }
+
+  ngOnDestroy(): void {
+    this.destroySubscription = true;
   }
 
 }

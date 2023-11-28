@@ -25,7 +25,7 @@ export const MNGUrls = {
     mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login' + mngAPIUrlAppender,
     mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token' + mngAPIUrlAppender,
     createPartnerInvite: mngAppBaseUrl + 'manage/invite-code' + mngAPIUrlAppender,
-    validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=' + mngAPIUrlAppender,
+    validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=',
     partnerBase: mngAppBaseUrl + 'manage/partner/' + mngAPIUrlAppender,
     getPartnersList: mngAppBaseUrl + 'manage/partner/partners' + mngAPIUrlAppender,
 }
