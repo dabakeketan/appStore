@@ -1,7 +1,25 @@
 <div class="container-fluid">
     <div id="content">
+        <div class="page-title clearfix">
+            <h1 class="float-start">Vendors</h1>
+            <!-- <button class="btn btn-sm btn-custom-danger float-end"
+                [disabled]="!selectedPartnersData.length" (click)="deletePartners()">Delete</button>
+            <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openCreatePartnerPopup()">Create</button> -->
+        </div>
+        <div class="row" *ngIf="vendorsListData">
+            <div class="col-lg-12">
+                <app-vendors-list [rowData]="vendorsListData"
+                    (rowSelectedEvent)="receiveVendorsData($event)"
+                    (rowEditedEvent)="receiveVendorsEditedData($event)"></app-vendors-list>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- <button class="btn btn-custom-pri">Create Application</button> -->
+
+<!-- <div class="container-fluid">
+    <div id="content">
+
         <div class="tileMenu">
             <div class="row">
                 <div class="col-md-3" (click)="openPopup()">
@@ -30,4 +48,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

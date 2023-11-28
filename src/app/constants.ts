@@ -28,6 +28,8 @@ export const MNGUrls = {
     validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=',
     partnerBase: mngAppBaseUrl + 'manage/partner/' + mngAPIUrlAppender,
     getPartnersList: mngAppBaseUrl + 'manage/partner/partners' + mngAPIUrlAppender,
+    getVendorsList: mngAppBaseUrl + 'manage/vendor/vendors' + mngAPIUrlAppender,
+    getVendorAppsList: mngAppBaseUrl + 'manage/app/apps' + mngAPIUrlAppender
 }
 
 export const UserRoles = {

@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
-import { RegStatusRendererComponent } from '../../cell-renderers/reg-status-renderer/reg-status-renderer.component';
+import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
+import { VendorAppPromotedRendererComponent } from '../../cell-renderers/vendor-app-promoted-renderer/vendor-app-promoted-renderer.component';
 
 @Component({
-  selector: 'app-partner-list',
-  templateUrl: './partner-list.component.html',
-  styleUrls: ['./partner-list.component.scss']
+  selector: 'app-vendor-app-list',
+  templateUrl: './vendor-app-list.component.html',
+  styleUrls: ['./vendor-app-list.component.scss']
 })
-export class PartnerListComponent implements OnInit {
+export class VendorAppListComponent implements OnInit {
 
   @Input() rowData: any;
 
@@ -24,35 +24,23 @@ export class PartnerListComponent implements OnInit {
 
   gridOptions: GridOptions;
 
- rowSelection: "single" | "multiple" = "single";
+  rowSelection: "single" | "multiple" = "single";
 
   selectedRows: any;
 
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'partner_name',
-    },
-    {
-      headerName: 'Short Name',
-      field: 'short_name',
+      field: 'app_name',
     },
     {
       headerName: 'Description',
-      field: 'description',
+      field: 'short_description',
     },
     {
-      headerName: 'API Endpoint',
-      field: 'api_endpoint',
-    },
-    {
-      headerName: 'Portal URL',
-      field: 'portal_url',
-    },
-    {
-      headerName: 'Registration Status',
-      field: 'registration_status',
-      cellRenderer: 'regStatusRenderer',
+      headerName: 'Promoted Status',
+      field: 'promoted_app',
+      cellRenderer: 'vendorAppPromotedRenderer',
       headerClass: 'header-label-center'
     }
   ];
@@ -76,12 +64,12 @@ export class PartnerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.frameworkComponents = {
-      regStatusRenderer: RegStatusRendererComponent,
+      vendorAppPromotedRenderer: VendorAppPromotedRendererComponent,
     }
 
     // this.gridOptions = {
     //   rowMultiSelectWithClick: true,
-      
+
     //   // rowDeselection: true,
     //   context: { componentParent: this }
     // }
@@ -106,7 +94,7 @@ export class PartnerListComponent implements OnInit {
   }
 
   onRowDoubleClicked(event: any) {
-    // this.rowEditedEvent.emit(event.data);
+    this.rowEditedEvent.emit(event.data);
   }
 
   onResize(event: any) {
@@ -114,5 +102,6 @@ export class PartnerListComponent implements OnInit {
       this.gridApi.sizeColumnsToFit();
     }
   }
+
 
 }

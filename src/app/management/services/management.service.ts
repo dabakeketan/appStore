@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, takeWhile } from 'rxjs';
 import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
@@ -19,7 +20,12 @@ export class ManagementService implements OnDestroy {
 
   partnersListDataSub = new Subject();
 
-  constructor(private baseService: BaseService, private alertService: AlertService) { }
+  vendorsListDataSub = new Subject();
+
+  vendorAppsListDataSub = new Subject();
+
+  constructor(private baseService: BaseService, private alertService: AlertService,
+    private router: Router) { }
 
   mngAuthLogin() {
     window.location.href = JSON.parse(JSON.stringify(MNGUrls.mngAppAuthUrl));
@@ -127,6 +133,34 @@ export class ManagementService implements OnDestroy {
       });
   }
 
+  getVendorsList() {
+    this.getRequest(MNGUrls.getVendorsList)
+    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        if (response && response.status === 200) {
+          this.vendorsListDataSub.next(response.body);
+        }
+      },
+      error: (err: any) => {
+        this.vendorsListDataSub.next(null);
+      }
+    });
+  }
+
+  getVendorAppsList() {
+    this.getRequest(MNGUrls.getVendorAppsList)
+    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        if (response && response.status === 200) {
+          this.vendorAppsListDataSub.next(response.body);
+        }
+      },
+      error: (err: any) => {
+        this.vendorAppsListDataSub.next(null);
+      }
+    });
+  }
+
   getRequest(reqUrl: string, urlParams?: any) {
     let urlData = '';
     if (urlParams && urlParams.length) {
@@ -155,6 +189,10 @@ export class ManagementService implements OnDestroy {
       });
     }
     return this.baseService.deleteRequest(deleteUrl + (urlData ? urlData : ''));
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
   }
 
   ngOnDestroy(): void {

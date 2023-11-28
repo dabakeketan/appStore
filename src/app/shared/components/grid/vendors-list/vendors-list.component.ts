@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
 import { RegStatusRendererComponent } from '../../cell-renderers/reg-status-renderer/reg-status-renderer.component';
 
 @Component({
-  selector: 'app-partner-list',
-  templateUrl: './partner-list.component.html',
-  styleUrls: ['./partner-list.component.scss']
+  selector: 'app-vendors-list',
+  templateUrl: './vendors-list.component.html',
+  styleUrls: ['./vendors-list.component.scss']
 })
-export class PartnerListComponent implements OnInit {
+export class VendorsListComponent implements OnInit {
 
   @Input() rowData: any;
 
@@ -31,29 +31,19 @@ export class PartnerListComponent implements OnInit {
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'partner_name',
+      field: 'vendor_name',
     },
     {
-      headerName: 'Short Name',
-      field: 'short_name',
+      headerName: 'Contact Name',
+      field: 'contact_name',
     },
     {
-      headerName: 'Description',
-      field: 'description',
+      headerName: 'Contact Email',
+      field: 'contact_email',
     },
     {
-      headerName: 'API Endpoint',
-      field: 'api_endpoint',
-    },
-    {
-      headerName: 'Portal URL',
-      field: 'portal_url',
-    },
-    {
-      headerName: 'Registration Status',
-      field: 'registration_status',
-      cellRenderer: 'regStatusRenderer',
-      headerClass: 'header-label-center'
+      headerName: 'Contact Num',
+      field: 'contact_num',
     }
   ];
 
@@ -76,7 +66,7 @@ export class PartnerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.frameworkComponents = {
-      regStatusRenderer: RegStatusRendererComponent,
+      // regStatusRenderer: RegStatusRendererComponent,
     }
 
     // this.gridOptions = {
@@ -106,7 +96,7 @@ export class PartnerListComponent implements OnInit {
   }
 
   onRowDoubleClicked(event: any) {
-    // this.rowEditedEvent.emit(event.data);
+    this.rowEditedEvent.emit(event.data);
   }
 
   onResize(event: any) {

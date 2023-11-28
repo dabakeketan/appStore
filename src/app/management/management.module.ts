@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { CreateAppComponent } from './components/create-app/create-app.component';
 import { AppManageMainComponent } from './components/app-manage-main/app-manage-main.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { VendorDetailsComponent } from './components/vendor-details/vendor-details.component';
 
 
 
 @NgModule({
-  declarations: [ManageComponent, ManagePartnerComponent, CreateAppComponent, AppManageMainComponent],
+  declarations: [ManageComponent, ManagePartnerComponent, CreateAppComponent, AppManageMainComponent, VendorDetailsComponent],
   imports: [
     CommonModule,
     ManagementRoutingModule,

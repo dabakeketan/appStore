@@ -4,6 +4,7 @@ import { ManageComponent } from './components/manage/manage.component';
 import { ManagePartnerComponent } from './components/manage-partner/manage-partner.component';
 import { AppManageMainComponent } from './components/app-manage-main/app-manage-main.component';
 import { MngAppAuthGuard } from '../shared/guards/mng-app-auth.guard';
+import { VendorDetailsComponent } from './components/vendor-details/vendor-details.component';
 
 
 const routes: Routes = [
@@ -22,8 +23,13 @@ const routes: Routes = [
     canActivate: [MngAppAuthGuard]
   },
   {
-    path: 'app',
+    path: 'vendor',
     component: AppManageMainComponent,
+    canActivate: [MngAppAuthGuard]
+  },
+  {
+    path: 'vendor/:id',
+    component: VendorDetailsComponent,
     canActivate: [MngAppAuthGuard]
   }
 ];
