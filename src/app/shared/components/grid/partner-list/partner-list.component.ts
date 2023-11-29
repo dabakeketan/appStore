@@ -106,7 +106,7 @@ export class PartnerListComponent implements OnInit {
   }
 
   onRowDoubleClicked(event: any) {
-    // this.rowEditedEvent.emit(event.data);
+    this.rowEditedEvent.emit(event.data);
   }
 
   onResize(event: any) {

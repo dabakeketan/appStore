@@ -38,11 +38,15 @@ export class VendorAppListComponent implements OnInit {
       field: 'short_description',
     },
     {
+      headerName: 'Application Status',
+      headerClass: 'header-label-center'
+    },
+    {
       headerName: 'Promoted Status',
       field: 'promoted_app',
       cellRenderer: 'vendorAppPromotedRenderer',
       headerClass: 'header-label-center'
-    }
+    },
   ];
 
   public defaultColDef: ColDef = {

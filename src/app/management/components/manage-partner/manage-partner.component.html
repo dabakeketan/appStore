@@ -2,14 +2,14 @@
     <div id="content">
         <div class="page-title clearfix">
             <h1 class="float-start">Partners</h1>
-            <button class="btn btn-sm btn-custom-danger float-end"
-                [disabled]="!selectedPartnersData.length" (click)="deletePartners()">Delete</button>
+            <button class="btn btn-sm btn-custom-danger float-end" [disabled]="!selectedPartnersData.length"
+                (click)="deletePartners()">Delete</button>
             <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openCreatePartnerPopup()">Create</button>
         </div>
         <div class="row" *ngIf="partnersListData">
             <div class="col-lg-12">
-                <app-partner-list [rowData]="partnersListData"
-                    (rowSelectedEvent)="receivePartnersData($event)"></app-partner-list>
+                <app-partner-list [rowData]="partnersListData" (rowSelectedEvent)="receivePartnersData($event)"
+                    (rowEditedEvent)="receivePartnerEditedData($event)"></app-partner-list>
             </div>
         </div>
         <div class="modal" id="addPertnerModal" tabindex="-1">
@@ -20,10 +20,10 @@
                         <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body">
-                        <form #addPartnerForm="ngForm">
+                        <form #addPartnerForm="ngForm" class="small-labels">
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
-                                <input type="text" class="form-control" [(ngModel)]="inviteEmailAddr" id="codeTextBox"
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="inviteEmailAddr" id="codeTextBox"
                                     name="codeTextBox" required #codeTextBox="ngModel" [pattern]="regExPatterns.email">
                                 <div *ngIf="codeTextBox.invalid && (codeTextBox.dirty || codeTextBox.touched)"
                                     class="invalid-feedback">
@@ -42,6 +42,97 @@
                         <button class="btn btn-custom-pri" [disabled]="addPartnerForm.invalid"
                             (click)="createPartner()">Submit</button>
                         <button type="button" class="btn btn-secondary" (click)="addPartnerForm.reset()"
+                            data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="updatePartnerModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <span>Update Partner</span>
+                        </h5>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                        <form #updatePartnerForm="ngForm" class="small-labels">
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
+                                    <label for="partner_name" class="form-label">Partner Name</label>
+                                    <input type="text" class="form-control form-control-sm" name="partner_name"
+                                        id="partner_name" required [(ngModel)]="updatePartnerDataModel.partner_name"
+                                        #partner_name="ngModel">
+                                    <div *ngIf="partner_name.invalid && (partner_name.dirty || partner_name.touched)"
+                                        class="invalid-feedback">
+                                        <div *ngIf="partner_name.errors?.['required']">
+                                            {{errorMsgs.required}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-3">
+                                    <label for="short_name" class="form-label">Short Name</label>
+                                    <input type="text" class="form-control form-control-sm" name="short_name"
+                                        id="short_name" required [(ngModel)]="updatePartnerDataModel.short_name"
+                                        #short_name="ngModel">
+                                    <div *ngIf="short_name.invalid && (short_name.dirty || short_name.touched)"
+                                        class="invalid-feedback">
+                                        <div *ngIf="short_name.errors?.['required']">
+                                            {{errorMsgs.required}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Description</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [(ngModel)]="updatePartnerDataModel.description" id="description"
+                                        name="description" required #description="ngModel">
+                                    <div *ngIf="description.invalid && (description.dirty || description.touched)"
+                                        class="invalid-feedback">
+                                        <div *ngIf="description.errors?.['required']">
+                                            {{errorMsgs.required}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">API Endpoint</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [(ngModel)]="updatePartnerDataModel.api_endpoint" id="api_endpoint"
+                                        name="api_endpoint" required #api_endpoint="ngModel">
+                                    <div *ngIf="api_endpoint.invalid && (api_endpoint.dirty || api_endpoint.touched)"
+                                        class="invalid-feedback">
+                                        <div *ngIf="api_endpoint.errors?.['required']">
+                                            {{errorMsgs.required}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Portal URL</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [(ngModel)]="updatePartnerDataModel.portal_url" id="portal_url" name="portal_url"
+                                        required #portal_url="ngModel">
+                                    <div *ngIf="portal_url.invalid && (portal_url.dirty || portal_url.touched)"
+                                        class="invalid-feedback">
+                                        <div *ngIf="portal_url.errors?.['required']">
+                                            {{errorMsgs.required}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-custom-pri" [disabled]="updatePartnerForm.invalid"
+                            (click)="updatePartner()">
+                            <span>Update</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="updatePartnerForm.reset()"
                             data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>

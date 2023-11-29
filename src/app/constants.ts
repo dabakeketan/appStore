@@ -29,7 +29,8 @@ export const MNGUrls = {
     partnerBase: mngAppBaseUrl + 'manage/partner/' + mngAPIUrlAppender,
     getPartnersList: mngAppBaseUrl + 'manage/partner/partners' + mngAPIUrlAppender,
     getVendorsList: mngAppBaseUrl + 'manage/vendor/vendors' + mngAPIUrlAppender,
-    getVendorAppsList: mngAppBaseUrl + 'manage/app/apps' + mngAPIUrlAppender
+    getVendorAppsList: mngAppBaseUrl + 'manage/app/apps' + mngAPIUrlAppender,
+    vendorBase: mngAppBaseUrl + 'manage/vendor' + mngAPIUrlAppender
 }
 
 export const UserRoles = {

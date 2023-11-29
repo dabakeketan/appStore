@@ -8,6 +8,7 @@ import { RegStatusRendererComponent } from './components/cell-renderers/reg-stat
 import { VendorsListComponent } from './components/grid/vendors-list/vendors-list.component';
 import { VendorAppListComponent } from './components/grid/vendor-app-list/vendor-app-list.component';
 import { VendorAppPromotedRendererComponent } from './components/cell-renderers/vendor-app-promoted-renderer/vendor-app-promoted-renderer.component';
+import { EditButtonRendererComponent } from './components/cell-renderers/edit-button-renderer/edit-button-renderer.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { VendorAppPromotedRendererComponent } from './components/cell-renderers/
        RegStatusRendererComponent,
        VendorsListComponent,
        VendorAppListComponent,
-       VendorAppPromotedRendererComponent
+       VendorAppPromotedRendererComponent,
+       EditButtonRendererComponent
   ],
   imports: [
     CommonModule,

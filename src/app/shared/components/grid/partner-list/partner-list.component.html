@@ -5,6 +5,6 @@
         [rowData]="rowData" [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
         [components]="frameworkComponents" [paginationPageSize]="paginationPageSize"
         [alwaysShowHorizontalScroll]="false" [domLayout]="domLayout" (rowSelected)="onRowSelected($event)"
-         [gridOptions]="gridOptions"
+         [gridOptions]="gridOptions" (rowDoubleClicked)="onRowDoubleClicked($event)"
         [pagination]="true" ></ag-grid-angular>
 </div>

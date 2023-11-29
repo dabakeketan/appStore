@@ -3,12 +3,15 @@ export interface CreateAppDataModel {
   app_name: string;
   app_secret: string;
   description: string;
-  vendor_id: string;
-  vendor_name: string;
+  // vendor_id: string;
+  // vendor_name: string;
   vendor_app_fqdn: string;
   userTier: string,
   file: string,
-  price: string;
+  // price: string;
+  type: string;
+  authType: string;
+  geospec: string;
 }
 
 
@@ -53,4 +56,12 @@ export interface AppListDataModel {
   vendor_app_fqdn: string;
   vendor_id: string;
   vendor_name: string;
+}
+
+export interface CreateVendorDataModel {
+  vendor_name: string;
+  contact_email: string;
+  contact_num: string;
+  contact_name: string;
+  vendor_id: string;
 }

@@ -5,8 +5,11 @@ import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
 import { AlertTypes, MNGUrls, successMsgs } from 'src/app/constants';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { CreateVendorDataModel } from '../models/managementModel';
 const MNG_USER_KEY = 'mng-user-details-auth';
 const MNG_TOKEN_KEY = 'mng-app-token';
+
+declare let bootstrap: any;
 
 
 @Injectable({
@@ -23,6 +26,8 @@ export class ManagementService implements OnDestroy {
   vendorsListDataSub = new Subject();
 
   vendorAppsListDataSub = new Subject();
+
+  createVendorDataSub = new Subject();
 
   constructor(private baseService: BaseService, private alertService: AlertService,
     private router: Router) { }
@@ -133,32 +138,50 @@ export class ManagementService implements OnDestroy {
       });
   }
 
+  createVendor(createVendorDataModel: CreateVendorDataModel, isUpdateVendor: boolean) {
+
+    this.postRequest(createVendorDataModel, MNGUrls.vendorBase)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            const obj = {
+              type: AlertTypes.success,
+              text: 'Success'
+            }
+            this.getVendorsList();
+            this.alertService.alertSubject.next(obj);
+            this.createVendorDataSub.next(true);
+          }
+        }
+      });
+  }
+
   getVendorsList() {
     this.getRequest(MNGUrls.getVendorsList)
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-          this.vendorsListDataSub.next(response.body);
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.vendorsListDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.vendorsListDataSub.next(null);
         }
-      },
-      error: (err: any) => {
-        this.vendorsListDataSub.next(null);
-      }
-    });
+      });
   }
 
   getVendorAppsList() {
     this.getRequest(MNGUrls.getVendorAppsList)
-    .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-      next: (response: any) => {
-        if (response && response.status === 200) {
-          this.vendorAppsListDataSub.next(response.body);
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.vendorAppsListDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.vendorAppsListDataSub.next(null);
         }
-      },
-      error: (err: any) => {
-        this.vendorAppsListDataSub.next(null);
-      }
-    });
+      });
   }
 
   getRequest(reqUrl: string, urlParams?: any) {

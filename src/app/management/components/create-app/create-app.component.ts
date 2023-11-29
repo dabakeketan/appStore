@@ -24,10 +24,10 @@ export class CreateAppComponent implements OnInit {
       app_name: '',
       app_secret: '',
       description: '',
-      price: '',
       vendor_app_fqdn: '',
-      vendor_id: '',
-      vendor_name: '',
+      type: '',
+      authType: '',
+      geospec: '',
       userTier: 'Gold',
       file: ''
     }

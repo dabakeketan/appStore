@@ -2,15 +2,102 @@
     <div id="content">
         <div class="page-title clearfix">
             <h1 class="float-start">Vendors</h1>
-            <!-- <button class="btn btn-sm btn-custom-danger float-end"
-                [disabled]="!selectedPartnersData.length" (click)="deletePartners()">Delete</button>
-            <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openCreatePartnerPopup()">Create</button> -->
+            <button class="btn btn-sm btn-custom-danger float-end" [disabled]="!selectedVendorsData.length"
+                (click)="deleteVendor()">Delete</button>
+            <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="isUpdateVendor = false; openCreateVendorPopup()">Create</button>
         </div>
         <div class="row" *ngIf="vendorsListData">
             <div class="col-lg-12">
-                <app-vendors-list [rowData]="vendorsListData"
-                    (rowSelectedEvent)="receiveVendorsData($event)"
-                    (rowEditedEvent)="receiveVendorsEditedData($event)"></app-vendors-list>
+                <app-vendors-list [rowData]="vendorsListData" (rowSelectedEvent)="receiveVendorsData($event)"
+                    (rowEditedEvent)="receiveVendorsEditedData($event)"
+                    (rowActionEvent)="rowAction($event)"></app-vendors-list>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="createVendorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="!isUpdateVendor">Create Vendor</span>
+                        <span *ngIf="isUpdateVendor">Update Vendor</span>
+                    </h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <form #createVendorForm="ngForm" class="small-labels">
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <label for="vendor_name" class="form-label">Vendor Name</label>
+                                <input type="text" class="form-control form-control-sm" name="vendor_name"
+                                    id="vendor_name" required [(ngModel)]="createVendorDataModel.vendor_name"
+                                    #vendor_name="ngModel">
+                                <div *ngIf="vendor_name.invalid && (vendor_name.dirty || vendor_name.touched)"
+                                    class="invalid-feedback">
+                                    <div *ngIf="vendor_name.errors?.['required']">
+                                        {{errorMsgs.required}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label for="contact_name" class="form-label">Contact Name</label>
+                                <input type="text" class="form-control form-control-sm" name="contact_name"
+                                    id="contact_name" required [(ngModel)]="createVendorDataModel.contact_name"
+                                    #contact_name="ngModel">
+                                <div *ngIf="contact_name.invalid && (contact_name.dirty || contact_name.touched)"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contact_name.errors?.['required']">
+                                        {{errorMsgs.required}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label class="form-label">Contact Email</label>
+                                <input type="text" class="form-control form-control-sm"
+                                    [(ngModel)]="createVendorDataModel.contact_email" id="codeTextBox"
+                                    name="codeTextBox" required #codeTextBox="ngModel" [pattern]="regExPatterns.email">
+                                <div *ngIf="codeTextBox.invalid && (codeTextBox.dirty || codeTextBox.touched)"
+                                    class="invalid-feedback">
+                                    <div *ngIf="codeTextBox.errors?.['required']">
+                                        {{errorMsgs.required}}
+                                    </div>
+                                    <div *ngIf="codeTextBox.errors?.['pattern']">
+                                        {{errorMsgs.invalidFormat}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label for="contact_num" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control form-control-sm" name="contact_num"
+                                    id="contact_num" required [(ngModel)]="createVendorDataModel.contact_num"
+                                    #contact_num="ngModel" [pattern]="regExPatterns.phoenNumber">
+                                <div *ngIf="contact_num.invalid && (contact_num.dirty || contact_num.touched)"
+                                    class="invalid-feedback">
+                                    <div *ngIf="contact_num.errors?.['required']">
+                                        {{errorMsgs.required}}
+                                    </div>
+                                    <div *ngIf="contact_num.errors?.['pattern']">
+                                        {{errorMsgs.invalidFormat}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-custom-pri" [disabled]="createVendorForm.invalid"
+                        (click)="createVendor()">
+                        <span *ngIf="!isUpdateVendor">Create</span>
+                        <span *ngIf="isUpdateVendor">Update</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="createVendorForm.reset()"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </div>
     </div>

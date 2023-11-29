@@ -30,28 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
-            <label for="vendorId" class="form-label">Vendor Id</label>
-            <input type="text" class="form-control form-control-sm" name="vendorId" id="vendorId" required
-                [(ngModel)]="createAppDataModel.vendor_id" #vendorId="ngModel">
-            <div *ngIf="vendorId.invalid && (vendorId.dirty || vendorId.touched)" class="invalid-feedback">
-                <div *ngIf="vendorId.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
-            </div>
-        </div>
 
-
-        <div class="col-lg-6 mb-3">
-            <label for="vendorName" class="form-label">Vendor Name</label>
-            <input type="text" class="form-control form-control-sm" name="vendorName" id="vendorName" required
-                [(ngModel)]="createAppDataModel.vendor_name" #vendorName="ngModel">
-            <div *ngIf="vendorName.invalid && (vendorName.dirty || vendorName.touched)" class="invalid-feedback">
-                <div *ngIf="vendorName.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
-            </div>
-        </div>
         <div class="col-lg-6 mb-3">
             <label for="vendorAppfqdn" class="form-label">Vendor App FQDN</label>
             <input type="text" class="form-control form-control-sm" name="vendorAppfqdn" id="vendorAppfqdn" required
@@ -63,6 +42,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-6 mb-3">
+            <label for="appType" class="form-label">Type</label>
+            <input type="text" class="form-control form-control-sm" name="appType" id="appType" required
+                [(ngModel)]="createAppDataModel.type" #appType="ngModel">
+            <div *ngIf="appType.invalid && (appType.dirty || appType.touched)" class="invalid-feedback">
+                <div *ngIf="appType.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 mb-3">
+            <label for="authType" class="form-label">Auth Type</label>
+            <input type="text" class="form-control form-control-sm" name="authType" id="authType" required
+                [(ngModel)]="createAppDataModel.authType" #authType="ngModel">
+            <div *ngIf="authType.invalid && (authType.dirty || authType.touched)" class="invalid-feedback">
+                <div *ngIf="authType.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-3">
+            <label for="geospec" class="form-label">Geo Spec</label>
+            <input type="text" class="form-control form-control-sm" name="geospec" id="geospec" required
+                [(ngModel)]="createAppDataModel.geospec" #geospec="ngModel">
+            <div *ngIf="geospec.invalid && (geospec.dirty || geospec.touched)" class="invalid-feedback">
+                <div *ngIf="geospec.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+        
         <div class="col-lg-6 mb-3">
             <label for="userTier" class="form-label">User Tiers</label>
             <select class="form-select form-select-sm" name="userTier" id="userTier" required
@@ -77,21 +91,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
+        <!-- <div class="col-lg-6 mb-3">
             <label for="uploadFile" class="form-label">Upload File</label>
             <div class="input-group">
                 <input type="file" class="form-control form-control-sm" id="uploadFile" aria-label="Upload">
             </div>
-        </div>
-        <div class="col-lg-6 mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input type="text" class="form-control form-control-sm" name="price" id="price" required
-                [(ngModel)]="createAppDataModel.price" #price="ngModel">
-            <div *ngIf="price.invalid && (price.dirty || price.touched)" class="invalid-feedback">
-                <div *ngIf="price.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
-            </div>
-        </div>
+        </div> -->
+       
     </div>
 </form>

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { AgGridAngular } from 'ag-grid-angular';
 import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
 import { RegStatusRendererComponent } from '../../cell-renderers/reg-status-renderer/reg-status-renderer.component';
+import { EditButtonRendererComponent } from '../../cell-renderers/edit-button-renderer/edit-button-renderer.component';
 
 @Component({
   selector: 'app-vendors-list',
@@ -21,6 +22,8 @@ export class VendorsListComponent implements OnInit {
   @Output() rowSelectedEvent = new EventEmitter();
 
   @Output() rowEditedEvent = new EventEmitter();
+
+  @Output() rowActionEvent = new EventEmitter();
 
   gridOptions: GridOptions;
 
@@ -44,6 +47,19 @@ export class VendorsListComponent implements OnInit {
     {
       headerName: 'Contact Num',
       field: 'contact_num',
+    },
+    {
+      headerName: 'Action',
+      headerClass: 'header-label-center',
+      cellRenderer: 'editButtonRenderer',
+      cellRendererParams: {
+        clicked: (params: any) => {
+          const obj = {
+            action: 'edit'
+          }
+          this.rowActionEvent.emit(obj);
+        }
+      }
     }
   ];
 
@@ -66,6 +82,7 @@ export class VendorsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.frameworkComponents = {
+      editButtonRenderer: EditButtonRendererComponent
       // regStatusRenderer: RegStatusRendererComponent,
     }
 
