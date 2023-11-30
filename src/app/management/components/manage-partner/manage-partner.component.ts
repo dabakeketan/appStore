@@ -33,6 +33,9 @@ export class ManagePartnerComponent implements OnInit, OnDestroy {
 
   @ViewChild('addPartnerForm') public addPartnerForm: NgForm;
 
+  @ViewChild('updatePartnerForm') public updatePartnerForm: NgForm;
+
+
   selectedPartnersData = [];
 
   constructor(private managementService: ManagementService) { }
@@ -52,17 +55,57 @@ export class ManagePartnerComponent implements OnInit, OnDestroy {
       portal_url: '',
       registration_status: '',
       short_name: '',
+      contact_address: '',
+      contact_email: '',
+      contact_name: '',
+      contact_num: '',
+      oauth_client_id: '',
+      oauth_client_secret: ''
     }
     this.managementService.partnersListDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.partnersListData = response;
       }
     });
+
+    this.managementService.singlePartnerDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.updatePartnerDataModel = {
+          api_endpoint: response.api_endpoint ? response.api_endpoint : '',
+          created_datetime_utc: response.created_datetime_utc ? response.created_datetime_utc : '',
+          description: response.description ? response.description : '',
+          partner_id: response.partner_id ? response.partner_id : '',
+          partner_name: response.partner_name ? response.partner_name : '',
+          portal_url: response.portal_url ? response.portal_url : '',
+          registration_status: response.registration_status ? response.registration_status : '',
+          short_name: response.short_name ? response.short_name : '',
+          contact_address: response.contact_address ? response.contact_address : '',
+          contact_email: response.contact_email ? response.contact_email : '',
+          contact_name: response.contact_name ? response.contact_name : '',
+          contact_num: response.contact_num ? response.contact_num : '',
+          oauth_client_id: response.oauth_client_id ? response.oauth_client_id : '',
+          oauth_client_secret: response.oauth_client_secret ? response.oauth_client_secret : '',
+        }
+        this.openUpdatePartnerPopup();
+        this.updatePartnerForm.form.markAllAsTouched();
+      }
+    });
+
     this.managementService.inviteCodePopupSubject.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.addPartnerForm.reset();
         setTimeout(() => {
           this.inviteCodePopup.hide();
+        });
+      }
+    });
+
+    this.managementService.updatePartnerDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.managementService.getPartnersList()
+        this.updatePartnerForm.reset();
+        setTimeout(() => {
+          this.updatePartnerPopup.hide();
         });
       }
     });
@@ -88,17 +131,7 @@ export class ManagePartnerComponent implements OnInit, OnDestroy {
   }
 
   receivePartnerEditedData(event: any) {
-    this.updatePartnerDataModel = {
-      api_endpoint: event.api_endpoint ? event.api_endpoint : '',
-      created_datetime_utc: event.created_datetime_utc ? event.created_datetime_utc : '',
-      description: event.description ? event.description : '',
-      partner_id: event.partner_id ? event.partner_id : '',
-      partner_name: event.partner_name ? event.partner_name : '',
-      portal_url: event.portal_url ? event.portal_url : '',
-      registration_status: event.registration_status ? event.registration_status : '',
-      short_name: event.short_name ? event.short_name : '',
-    }
-    this.openUpdatePartnerPopup();
+    this.managementService.getPartner(event.partner_id);
   }
 
   deletePartners() {
@@ -106,7 +139,7 @@ export class ManagePartnerComponent implements OnInit, OnDestroy {
   }
 
   updatePartner() {
-
+    this.managementService.updatePartner(this.updatePartnerDataModel);
   }
 
   ngOnDestroy(): void {

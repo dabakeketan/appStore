@@ -30,6 +30,12 @@ export interface PartnerListDataModel {
   portal_url: string;
   registration_status: string;
   created_datetime_utc: string;
+  oauth_client_id: string;
+  oauth_client_secret: string;
+  contact_name: string;
+  contact_email: string;
+  contact_num: string;
+  contact_address: string;
 }
 
 export interface VendorsListDataModel {

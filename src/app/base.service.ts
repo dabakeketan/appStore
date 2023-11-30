@@ -59,19 +59,10 @@ export class BaseService {
     return this.http.post<any>(url, reqObj, { observe: 'response' }).pipe(
       tap({
         next: x => {
-          // this.spinner.hide();
-          // console.log('Post Method');
         },
         error: err => {
-          // this.spinner.hide(); 
-          // console.error(err);
           if (err.error.message) {
-            //  alert(err.error.message);
           } else if (err.error.data) {
-            //   console.log(err.error.data);
-            // this.errorData = err.error.data;
-            // this.setErrorData(this.errorData);s
-            // console.log('multiple', err.error.data);
           }
         }
       })

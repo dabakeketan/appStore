@@ -5,7 +5,7 @@ import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
 import { AlertTypes, MNGUrls, successMsgs } from 'src/app/constants';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-import { CreateVendorDataModel } from '../models/managementModel';
+import { CreateVendorDataModel, PartnerListDataModel } from '../models/managementModel';
 const MNG_USER_KEY = 'mng-user-details-auth';
 const MNG_TOKEN_KEY = 'mng-app-token';
 
@@ -23,11 +23,17 @@ export class ManagementService implements OnDestroy {
 
   partnersListDataSub = new Subject();
 
+  singlePartnerDataSub = new Subject();
+
+  updatePartnerDataSub = new Subject();
+
   vendorsListDataSub = new Subject();
 
   vendorAppsListDataSub = new Subject();
 
   createVendorDataSub = new Subject();
+
+  
 
   constructor(private baseService: BaseService, private alertService: AlertService,
     private router: Router) { }
@@ -84,6 +90,45 @@ export class ManagementService implements OnDestroy {
           this.partnersListDataSub.next(null);
         }
       });
+  }
+
+  getPartner(partner_id:string) {
+    this.getRequest(MNGUrls.partnerBase + partner_id)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.singlePartnerDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.singlePartnerDataSub.next(null);
+        }
+      });
+  }
+
+  updatePartner(updatePartnerDataModel: any) {
+    console.log(updatePartnerDataModel);
+    Object.keys(updatePartnerDataModel).forEach(key => {
+      if (updatePartnerDataModel[key] === '') {
+        delete updatePartnerDataModel[key];
+      }
+    });
+    console.log(updatePartnerDataModel);
+    
+    this.putRequest(updatePartnerDataModel, MNGUrls.partnerBaseA)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            const obj = {
+              type: AlertTypes.success,
+              text: 'scuccess'
+            }
+            this.alertService.alertSubject.next(obj);
+
+            this.updatePartnerDataSub.next(obj);
+          }
+        }
+      }); 
   }
 
   deletePartners(selectedPartnersData: any) {
@@ -212,6 +257,16 @@ export class ManagementService implements OnDestroy {
       });
     }
     return this.baseService.deleteRequest(deleteUrl + (urlData ? urlData : ''));
+  }
+
+  putRequest(reqObj: any, reqUrl: string, urlParams?: any) {
+    let urlData = '';
+    if (urlParams && urlParams.length) {
+      urlParams.forEach((val: any) => {
+        urlData += '&' + val.paramLabel + '=' + val.paramValue
+      });
+    }
+    return this.baseService.putData(reqObj, reqUrl + (urlData ? urlData : ''));
   }
 
   navigateTo(path: string) {
