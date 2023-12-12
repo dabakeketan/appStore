@@ -97,9 +97,9 @@ export class VendorsListComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     // this.rowData = this.tableData;
-    setTimeout(() => {
+    // setTimeout(() => {
       params.api.sizeColumnsToFit();
-    }, 500);
+    // }, 500);
   }
 
   onRowSelected(event: any) {
