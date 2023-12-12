@@ -5,7 +5,7 @@ import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
 import { AlertTypes, MNGUrls, successMsgs } from 'src/app/constants';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-import { CreateVendorDataModel, PartnerListDataModel } from '../models/managementModel';
+import { CreateAppDataModel, CreateVendorDataModel, PartnerListDataModel } from '../models/managementModel';
 const MNG_USER_KEY = 'mng-user-details-auth';
 const MNG_TOKEN_KEY = 'mng-app-token';
 
@@ -29,11 +29,18 @@ export class ManagementService implements OnDestroy {
 
   vendorsListDataSub = new Subject();
 
-  vendorAppsListDataSub = new Subject();
-
   createVendorDataSub = new Subject();
 
-  
+  singleVendorDataSub = new Subject();
+
+  vendorAppsListDataSub = new Subject();
+
+  createVendorAppDataSub = new Subject();
+
+  singleVendorAppDataSub = new Subject();
+
+
+
 
   constructor(private baseService: BaseService, private alertService: AlertService,
     private router: Router) { }
@@ -92,7 +99,7 @@ export class ManagementService implements OnDestroy {
       });
   }
 
-  getPartner(partner_id:string) {
+  getPartner(partner_id: string) {
     this.getRequest(MNGUrls.partnerBase + partner_id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
@@ -114,7 +121,7 @@ export class ManagementService implements OnDestroy {
       }
     });
     console.log(updatePartnerDataModel);
-    
+
     this.putRequest(updatePartnerDataModel, MNGUrls.partnerBaseA)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
@@ -128,7 +135,7 @@ export class ManagementService implements OnDestroy {
             this.updatePartnerDataSub.next(obj);
           }
         }
-      }); 
+      });
   }
 
   deletePartners(selectedPartnersData: any) {
@@ -184,21 +191,37 @@ export class ManagementService implements OnDestroy {
   }
 
   createVendor(createVendorDataModel: CreateVendorDataModel, isUpdateVendor: boolean) {
-
-    this.postRequest(createVendorDataModel, MNGUrls.vendorBase)
-      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-        next: (response: any) => {
-          if (response && response.status === 200) {
-            const obj = {
-              type: AlertTypes.success,
-              text: 'Success'
+    if (isUpdateVendor) {
+      this.putRequest(createVendorDataModel, MNGUrls.vendorBase)
+        .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+          next: (response: any) => {
+            if (response && response.status === 200) {
+              const obj = {
+                type: AlertTypes.success,
+                text: 'Success'
+              }
+              this.getVendorsList();
+              this.alertService.alertSubject.next(obj);
+              this.createVendorDataSub.next(true);
             }
-            this.getVendorsList();
-            this.alertService.alertSubject.next(obj);
-            this.createVendorDataSub.next(true);
           }
-        }
-      });
+        });
+    } else {
+      this.postRequest(createVendorDataModel, MNGUrls.vendorBase)
+        .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+          next: (response: any) => {
+            if (response && response.status === 200) {
+              const obj = {
+                type: AlertTypes.success,
+                text: 'Success'
+              }
+              this.getVendorsList();
+              this.alertService.alertSubject.next(obj);
+              this.createVendorDataSub.next(true);
+            }
+          }
+        });
+    }
   }
 
   getVendorsList() {
@@ -215,8 +238,54 @@ export class ManagementService implements OnDestroy {
       });
   }
 
+  getVendor(vendor_name: string) {
+    const url = MNGUrls.vendorBase + '?vendor-name=' + vendor_name;
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.singleVendorDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.singleVendorDataSub.next(null);
+        }
+      });
+  }
+
+  deleteVendor(selectedVendorsData: any) {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#2dce89",
+      cancelButtonColor: "#f5365c",
+      confirmButtonText: "Yes"
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.deleteRequest(MNGUrls.vendorBase + '/' + selectedVendorsData.vendor_id)
+          .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+            next: (response: any) => {
+              if (response && response.status === 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  icon: "success",
+                  timer: 1000
+                });
+                this.getVendorsList();
+              }
+            },
+            error: (err: any) => {
+
+            }
+          });
+      }
+    });
+  }
+
   getVendorAppsList() {
-    this.getRequest(MNGUrls.getVendorAppsList)
+    this.getRequest(MNGUrls.vendorAppBase + '/apps')
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -227,6 +296,83 @@ export class ManagementService implements OnDestroy {
           this.vendorAppsListDataSub.next(null);
         }
       });
+  }
+
+  getVendorAppDetails(app_id: string) {
+    this.getRequest(MNGUrls.vendorAppBase + '/' + app_id)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.singleVendorAppDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.singleVendorAppDataSub.next(null);
+        }
+      });
+  }
+
+  createVendorApp(createAppDataModel: CreateAppDataModel, isCreateApp: boolean) {
+    if (isCreateApp) {
+      this.postRequest(createAppDataModel, MNGUrls.vendorAppBase)
+        .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+          next: (response: any) => {
+            if (response && response.status === 200) {
+              this.createVendorAppPosAction();
+            }
+          }
+        });
+    } else {
+      this.putRequest(createAppDataModel, MNGUrls.vendorAppBase)
+        .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+          next: (response: any) => {
+            if (response && response.status === 200) {
+              this.createVendorAppPosAction();
+            }
+          }
+        });
+    }
+  }
+
+  createVendorAppPosAction() {
+    const obj = {
+      type: AlertTypes.success,
+      text: 'Success'
+    }
+    this.getVendorAppsList();
+    this.alertService.alertSubject.next(obj);
+    this.createVendorAppDataSub.next(true);
+  }
+
+  deleteVendorApp(selectedVendorAppsData: any) {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#2dce89",
+      cancelButtonColor: "#f5365c",
+      confirmButtonText: "Yes"
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.deleteRequest(MNGUrls.vendorAppBase + '/' + selectedVendorAppsData.app_id)
+          .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+            next: (response: any) => {
+              if (response && response.status === 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  icon: "success",
+                  timer: 1000
+                });
+                this.getVendorAppsList();
+              }
+            },
+            error: (err: any) => {
+
+            }
+          });
+      }
+    });
   }
 
   getRequest(reqUrl: string, urlParams?: any) {

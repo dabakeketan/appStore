@@ -2,30 +2,37 @@
     <div id="content">
         <div class="page-title clearfix">
             <h1 class="float-start">Applications</h1>
-            <button class="btn btn-sm btn-custom-danger float-end"
-                [disabled]="!selectedVendorAppsData.length" (click)="deleteApps()">Delete</button>
+            <button class="btn btn-sm btn-custom-danger float-end" [disabled]="!selectedVendorAppsData.length"
+                (click)="deleteApps()">Delete</button>
             <button class="btn btn-sm btn-custom-pri float-end me-2" (click)="openCreateAppPopup()">Create</button>
         </div>
         <div class="row" *ngIf="appsListData">
             <div class="col-lg-12">
-                <app-vendor-app-list [rowData]="appsListData"
-                    (rowSelectedEvent)="receiveAppsData($event)"
+                <app-vendor-app-list [rowData]="appsListData" (rowSelectedEvent)="receiveAppsData($event)"
                     (rowEditedEvent)="receiveAppsEditedData($event)"></app-vendor-app-list>
             </div>
         </div>
 
         <div class="modal" id="createAppModal" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Create Application</h5>
+                        <h5 class="modal-title">
+                            <span *ngIf="isCreateApp">Create</span>
+                            <span *ngIf="!isCreateApp">Update</span> Application
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <app-create-app></app-create-app>
+                        <app-create-app [createAppDataModel]="createAppDataModel"
+                            (onFormChange)="onCreateAppFormChange($event)"></app-create-app>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-custom-pri">Create</button>
+                        <button class="btn btn-custom-pri"
+                            [disabled]="createAppForm && (createAppForm.invalid || !createAppForm.dirty)"
+                            (click)="createVendorApp()">
+                            <span *ngIf="isCreateApp">Create</span>
+                            <span *ngIf="!isCreateApp">Update</span></button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>

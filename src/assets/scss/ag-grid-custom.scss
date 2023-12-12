@@ -5,3 +5,15 @@
 .header-label-center .ag-cell-label-container .ag-header-cell-label {
     justify-content: center;
 }
+
+.ag-theme-alpine.large {
+    --ag-grid-size: 10px;
+    --ag-list-item-height: 40px;
+    --ag-font-size: 32px;
+  }
+
+.ag-theme-alpine.compact {
+    --ag-grid-size: 4px;
+    --ag-list-item-height: 15px;
+    --ag-font-size: 13px;
+  }

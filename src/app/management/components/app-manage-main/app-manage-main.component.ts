@@ -59,6 +59,21 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
         this.createVendorPopup.hide();
       }
     })
+
+    this.managementService.singleVendorDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.createVendorDataModel = {
+          contact_email: response.contact_email ? response.contact_email : '',
+          contact_name: response.contact_name ? response.contact_name : '',
+          contact_num: response.contact_num ? response.contact_num : '',
+          vendor_name: response.vendor_name ? response.vendor_name : '',
+          vendor_id: response.vendor_id ? response.vendor_id : ''
+        }
+        this.isUpdateVendor = true;
+        this.openCreateVendorPopup();
+        this.createVendorForm.form.markAllAsTouched();
+      }
+    });
   }
 
   receiveVendorsData(event: any) {
@@ -68,16 +83,7 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
 
   receiveVendorsEditedData(event: any) {
     console.log('abcd d', event);
-    // this.managementService.navigateTo('/dashboard/main');
-    this.createVendorDataModel = {
-      contact_email: event.contact_email ? event.contact_email : '',
-      contact_name: event.contact_name ? event.contact_name : '',
-      contact_num: event.contact_num ? event.contact_num : '',
-      vendor_name: event.vendor_name ? event.vendor_name : '',
-      vendor_id: event.vendor_id ? event.vendor_id : ''
-    }
-    this.isUpdateVendor = true;
-    this.openCreateVendorPopup();
+    this.managementService.getVendor(event.vendor_name);
   }
 
   rowAction(event: any) {
@@ -98,7 +104,7 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
   }
 
   deleteVendor() {
-
+    this.managementService.deleteVendor(this.selectedVendorsData[0]);
   }
 
   ngOnDestroy(): void {

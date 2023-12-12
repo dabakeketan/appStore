@@ -29,11 +29,13 @@ img {
     max-width: 100%;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
     border-radius: 0;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     box-shadow: none;
 }
 
@@ -59,6 +61,7 @@ textarea {
         .fa-fw {
             color: $crexWhiteClr;
         }
+
         font-size: 20px;
     }
 }
@@ -284,7 +287,7 @@ textarea {
         &.details {
             height: 200px;
         }
-        
+
         img {
             transition: all .3s ease-out;
             height: auto;
@@ -402,6 +405,17 @@ textarea {
 .btn-custom-info:focus {
     background-color: $crexClrInfo;
     color: $crexWhiteClr;
+}
+
+.btn-brdr-transparent {
+    .btn {
+        border-color: var(--bs-border-color);
+
+        &:disabled {
+            border-color: var(--bs-border-color);
+            opacity: 1;
+        }
+    }
 }
 
 // .store-top {
@@ -718,9 +732,11 @@ ul.parameters {
         height: 52px;
         overflow: hidden;
         padding: 0;
+
         img {
             border-radius: 10px !important;
         }
+
         &::after {
             border: 0;
         }
@@ -792,18 +808,21 @@ ul.parameters {
 
 .login-wrapper-outer {
     background-color: hsl(216, 15%, 94%);
-    padding-top: 50px; 
+    padding-top: 50px;
     height: 100%;
+
     .login-wrapper {
-        
+
         max-width: 600px;
         margin: 0 auto;
         box-shadow: 1px 1px 5px 2px #ccc;
+
         // border: solid  #dee2e6 1px;
         &.adj {
             max-width: 300px;
             margin: 80px auto;
         }
+
         .login-header {
             height: 50px;
             // background: $crexBgPrimary;
@@ -811,6 +830,7 @@ ul.parameters {
             font-weight: normal;
             // background: #f7f8f9;
             border-bottom: solid #dfdfdf 1px;
+
             h5 {
                 margin-bottom: 0;
                 line-height: 50px;
@@ -818,7 +838,7 @@ ul.parameters {
                 font-weight: normal;
             }
         }
-    
+
         .login-body {
             background: #fff;
             // border-radius: 0 0 10px 10px;
@@ -838,7 +858,7 @@ ul.parameters {
     border: solid #007bc2 1px;
     cursor: pointer;
 
-    
+
     .menuIcon {
         color: $crexClrPrimary;
         font-size: 35px;
@@ -853,7 +873,9 @@ ul.parameters {
 }
 
 .small-labels {
-    .form-label {
+
+    .form-label,
+    .form-check-label {
         font-size: 13px;
     }
 }
@@ -867,4 +889,13 @@ ul.parameters {
 
 .custom-ag-table-a {
     height: 450px;
+}
+
+
+.app-icon-url {
+    width: 80px;
+    height: 80px;
+    border: solid #ccc 1px;
+    border-radius: 50%;
+    overflow: hidden;
 }

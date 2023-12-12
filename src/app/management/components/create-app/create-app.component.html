@@ -1,6 +1,7 @@
 <form #createAppForm="ngForm" class="small-labels">
-    <div class="row">
-        <div class="col-lg-6 mb-3">
+    <div class="row" *ngIf="createAppDataModel">
+
+        <div class="col-lg-4 mb-3">
             <label for="appName" class="form-label">Application Name</label>
             <input type="text" class="form-control form-control-sm" name="appName" id="appName" required
                 [(ngModel)]="createAppDataModel.app_name" #appName="ngModel">
@@ -10,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
+        <div class="col-lg-4 mb-3">
             <label for="appSecret" class="form-label">App Secret</label>
             <input type="text" class="form-control form-control-sm" name="appSecret" id="appSecret" required
                 [(ngModel)]="createAppDataModel.app_secret" #appSecret="ngModel">
@@ -20,10 +21,52 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
+
+        <div class="col-lg-4 mb-3">
+            <label for="appType" class="form-label">Type</label>
+            <input type="text" class="form-control form-control-sm" name="appType" id="appType" required
+                [(ngModel)]="createAppDataModel.type" #appType="ngModel">
+            <div *ngIf="appType.invalid && (appType.dirty || appType.touched)" class="invalid-feedback">
+                <div *ngIf="appType.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 input-group-sm mb-3">
+            <label for="appIcon" class="form-label">Application Icon</label>
+            <div class="app-icon-url" *ngIf="createAppDataModel.app_icon_url">
+                <img src="{{createAppDataModel.app_icon_url}}">
+            </div>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control form-control-sm" id="appIcon" name="appIcon"
+                    [(ngModel)]="createAppDataModel.app_icon" #appIcon="ngModel">
+                <!-- <label class="input-group-text" for="appIcon">Upload</label> -->
+            </div>
+        </div>
+
+        <div class="col-lg-4 input-group-sm mb-3">
+            <label for="appImage" class="form-label">Application Image</label>
+            <div class="app-icon-url" *ngIf="createAppDataModel.app_image_url">
+                <img src="{{createAppDataModel.app_image_url}}">
+            </div>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control form-control-sm" id="appImage" name="appImage"
+                    [(ngModel)]="createAppDataModel.app_image" #appImage="ngModel">
+                <!-- <label class="input-group-text" for="appImage">Upload</label> -->
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 mb-3">
             <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control form-control-sm" name="description" id="description" required
+            <textarea class="form-control form-control-sm" style="resize: none;"
+            name="description" id="description" required
                 [(ngModel)]="createAppDataModel.description" #description="ngModel">
+
+            </textarea>
+            <!-- <input type="text" class="form-control form-control-sm" name="description" id="description" required
+                [(ngModel)]="createAppDataModel.description" #description="ngModel"> -->
             <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
                 <div *ngIf="description.errors?.['required']">
                     {{errorMsgs.required}}
@@ -31,7 +74,7 @@
             </div>
         </div>
 
-        <div class="col-lg-6 mb-3">
+        <div class="col-lg-4 mb-3">
             <label for="vendorAppfqdn" class="form-label">Vendor App FQDN</label>
             <input type="text" class="form-control form-control-sm" name="vendorAppfqdn" id="vendorAppfqdn" required
                 [(ngModel)]="createAppDataModel.vendor_app_fqdn" #vendorAppfqdn="ngModel">
@@ -43,19 +86,8 @@
             </div>
         </div>
 
-        <div class="col-lg-6 mb-3">
-            <label for="appType" class="form-label">Type</label>
-            <input type="text" class="form-control form-control-sm" name="appType" id="appType" required
-                [(ngModel)]="createAppDataModel.type" #appType="ngModel">
-            <div *ngIf="appType.invalid && (appType.dirty || appType.touched)" class="invalid-feedback">
-                <div *ngIf="appType.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
-            </div>
-        </div>
 
-
-        <div class="col-lg-6 mb-3">
+        <div class="col-lg-4 mb-3">
             <label for="authType" class="form-label">Auth Type</label>
             <input type="text" class="form-control form-control-sm" name="authType" id="authType" required
                 [(ngModel)]="createAppDataModel.authType" #authType="ngModel">
@@ -65,8 +97,8 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-6 mb-3">
+
+        <div class="col-lg-4 mb-3">
             <label for="geospec" class="form-label">Geo Spec</label>
             <input type="text" class="form-control form-control-sm" name="geospec" id="geospec" required
                 [(ngModel)]="createAppDataModel.geospec" #geospec="ngModel">
@@ -76,27 +108,41 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-6 mb-3">
-            <label for="userTier" class="form-label">User Tiers</label>
-            <select class="form-select form-select-sm" name="userTier" id="userTier" required
-                [(ngModel)]="createAppDataModel.userTier" #userTier="ngModel">
-                <option *ngFor="let tier of userTiers">
-                    {{tier.value}}
-                </option>
-            </select>
-            <div *ngIf="userTier.invalid && (userTier.dirty || userTier.touched)" class="invalid-feedback">
-                <div *ngIf="userTier.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
+
+        <div class="col-lg-4 mb-3">
+            <label for="userTier" class="form-label">&nbsp;</label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="userManagament" name="userManagament"
+                    [(ngModel)]="createAppDataModel.userManagament" #userManagament="ngModel"
+                    (change)="userMngmntSwitchChange($event)">
+                <label class="form-check-label" for="userManagament">User Management</label>
             </div>
         </div>
+
+        <div class="col-lg-4 mb-3" *ngIf="createAppDataModel.userManagament">
+            <label for="userTier" class="form-label">&nbsp;</label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="userTiers" name="userTiers"
+                    [(ngModel)]="createAppDataModel.userTiers" #userTiers="ngModel">
+                <label class="form-check-label" for="userTiers">User Tiers</label>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-3" *ngIf="createAppDataModel.userTiers">
+            <label class="form-label">Tiers</label>
+            <div>
+                <app-tiers-list [rowData]="createAppDataModel.tiersArr"
+                    (rowActionEvent)="onRowAction($event)"></app-tiers-list>
+            </div>
+        </div>
+
+
         <!-- <div class="col-lg-6 mb-3">
             <label for="uploadFile" class="form-label">Upload File</label>
             <div class="input-group">
                 <input type="file" class="form-control form-control-sm" id="uploadFile" aria-label="Upload">
             </div>
         </div> -->
-       
+
     </div>
 </form>
