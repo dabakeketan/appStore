@@ -9,23 +9,24 @@ export const mngAPIUrlAppender = '/mngAPIUrl';
 
 export const APIUrls = {
     baseUrl: baseUrl,
-    createPartner: baseUrl + 'partner',
     authenticatePartner: baseUrl + 'oauth/partner/',
     loginPartner: baseUrl + 'oauth/partner?short-name=',
     authorisation: baseUrl + 'oauth/authorisation',
-    spotLightApps: baseUrl + 'app/apps?promoted=true',
-    listApps: baseUrl + 'app/apps',
+    // spotLightApps: baseUrl + 'app/apps?promoted=true',
+    
     partnerApps: baseUrl + 'partner/',
-    appDetails: baseUrl + 'app/',
+    // appDetails: baseUrl + 'app/',
     customerApps: baseUrl + 'customer/'
 }
 
 export const MNGUrls = {
-    baseUrl: mngAppBaseUrl,
+    registerPartner: baseUrl + 'manage/partner',
+    validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=',
+    appBase: mngAppBaseUrl + 'manage/app',
+    listApps: mngAppBaseUrl + 'manage/app/apps',
     mngAppAuthUrl: mngAppBaseUrl + 'manage/oauth/login' + mngAPIUrlAppender,
     mngAppAuthToken: mngAppBaseUrl + 'manage/oauth/token' + mngAPIUrlAppender,
     createPartnerInvite: mngAppBaseUrl + 'manage/invite-code' + mngAPIUrlAppender,
-    validateInviteCode: mngAppBaseUrl + 'manage/invite-code/validate?invite-code=',
     partnerBase: mngAppBaseUrl + 'manage/partner/' + mngAPIUrlAppender,
     partnerBaseA: mngAppBaseUrl + 'manage/partner' + mngAPIUrlAppender,
     getPartnersList: mngAppBaseUrl + 'manage/partner/partners' + mngAPIUrlAppender,
