@@ -65,7 +65,7 @@ export class PartnerRegComponent implements OnInit, OnDestroy {
   }
 
   registerPartner() {
-    this.accountService.registerPartner(this.createPartnerModel);
+    this.accountService.registerPartner(this.createPartnerModel, this.inviteCodeStr);
   }
 
   ngOnDestroy(): void {

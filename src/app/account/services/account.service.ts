@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, takeWhile } from 'rxjs';
-import { APIUrls } from 'src/app/constants';
+import { APIUrls, MNGUrls } from 'src/app/constants';
 import { SharedService } from 'src/app/shared/shared.service';
 import { CreatePartnerModel, PartnerDataModel } from '../models/accountModel';
 import { BaseService } from 'src/app/base.service';
@@ -63,8 +63,8 @@ export class AccountService implements OnDestroy {
       });
   }
 
-  registerPartner(createPartnerModel: CreatePartnerModel) {
-    this.sharedService.postRequest(createPartnerModel, APIUrls.createPartner)
+  registerPartner(createPartnerModel: CreatePartnerModel, inviteCodeStr: string) {
+    this.sharedService.postRequest(createPartnerModel, MNGUrls.registerPartner + '?invite-code=' + inviteCodeStr)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {

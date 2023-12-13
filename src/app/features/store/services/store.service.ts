@@ -4,7 +4,7 @@ import { Subject, takeWhile } from 'rxjs';
 import { PartnerDataModel } from 'src/app/account/models/accountModel';
 import { AccountService } from 'src/app/account/services/account.service';
 import { BaseService } from 'src/app/base.service';
-import { APIUrls, UserRoles } from 'src/app/constants';
+import { APIUrls, MNGUrls, UserRoles } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class StoreService {
   }
 
   getSpotlightApps() {
-    this.getRequest(APIUrls.spotLightApps)
+    this.getRequest(MNGUrls.listApps + '?promoted=true')
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -42,7 +42,7 @@ export class StoreService {
   }
 
   getAllApps() {
-    this.getRequest(APIUrls.listApps)
+    this.getRequest(MNGUrls.listApps)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -91,7 +91,7 @@ export class StoreService {
   }
 
   getAppDetails(app_Id: any) {
-    this.getRequest(APIUrls.appDetails + app_Id)
+    this.getRequest(MNGUrls + '/' + app_Id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {

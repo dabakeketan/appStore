@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { APIUrls, categoriesArr, headerTexts } from 'src/app/constants';
+import { APIUrls, MNGUrls, categoriesArr, headerTexts } from 'src/app/constants';
 import { StoreService } from '../../services/store.service';
 import { forkJoin, takeWhile } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -54,7 +54,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   appInit() {
-    const response = this.storeService.getRequest(APIUrls.appDetails + this.app_Id);
+    const response = this.storeService.getRequest(MNGUrls.appBase + '/' + this.app_Id);
     let checkEnableUrl = APIUrls.partnerApps + this.user.partner_id;
     if (this.isCustomerUser) {
       checkEnableUrl = checkEnableUrl + '/customer/' + this.user.customer_name +
@@ -84,7 +84,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   appInitA() {
-    this.storeService.getRequest(APIUrls.appDetails + this.app_Id)
+    this.storeService.getRequest(MNGUrls.appBase + '/' + this.app_Id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {

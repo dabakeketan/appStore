@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from 'src/environments/environment';
 import { ManagementService } from 'src/app/management/services/management.service';
 import { mngAPIUrlAppender } from 'src/app/constants';
+import { AccountService } from 'src/app/account/services/account.service';
 const TOKEN_HEADER_KEY = 'Authorization';
 
 @Injectable()
@@ -15,18 +16,19 @@ export class AuthInterceptor implements HttpInterceptor {
   service_count = 0;
 
   constructor(private alertService: AlertService,
-    private spinner: NgxSpinnerService, private managementService: ManagementService) { }
+    private spinner: NgxSpinnerService, private managementService: ManagementService,
+    private accountService: AccountService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.service_count++;
     let authReq = req;
-    const mngToken = this.managementService.getMngToken() ? this.managementService.getMngToken().access_token : null;
-    // const appToken = this.tokenStorageService.getToken();
+    const mngToken = (this.managementService.getMngToken() && this.managementService.getMngToken().access_token) ? this.managementService.getMngToken().access_token : null;
+    const appToken = (this.accountService.getUser() && this.accountService.getUser().access_token) ? this.accountService.getUser().access_token : null;
     let token;
     if (authReq.url.search(mngAPIUrlAppender) > 0) {
       authReq = authReq.clone({ url: authReq.url.replace(mngAPIUrlAppender, '') });
       token = mngToken;
-    } else {
-      // token = appToken;
+    } else if(appToken) {
+      token = appToken;
     }
 
     this.spinner.show();
