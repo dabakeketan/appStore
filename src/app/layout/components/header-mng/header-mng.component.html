@@ -8,43 +8,33 @@
                     </a>
                 </div>
             </a>
-            <button *ngIf="isLoggedIn" class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="justify-content-end float-end" *ngIf="isLoggedIn">
+            <div class="justify-content-end float-end" *ngIf="isMngLoggedIn">
                 <form class="form-inline nav-search">
                     <input class="form-control form-control-sm" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-light btn-sm nav-search-btn" type="submit">Go</button>
                 </form>
             </div>
-            <div *ngIf="isLoggedIn">
-
-
+            <div *ngIf="isMngLoggedIn">
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav pe-0">
+
                         <li class="nav-item dropdown user-profile">
                             <a class="nav-link dropdown-toggle pe-0" href="javascript:void(0)"
                                 id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
-                                <!-- <img src="assets/img/profile.jpeg"> -->
-                                <img src="assets/img/Partner_avatar.png" alt="User" *ngIf="!isCustomerUser">
-                                <img src="assets/img/Customer_avatar.png" alt="User" *ngIf="isCustomerUser">
+                                <i class="fa-solid fa-gear fa-fw" style="color: #fff;
+                                font-size: 20px;
+                                padding-top: 14px;
+                                float: right;"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-left-end pullDown "
                                 aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="javascript:void(0)">Settings</a> -->
+                                <!--  <a class="dropdown-item" href="javascript:void(0)">Settings</a> -->
                                 <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a>
                             </div>
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div *ngIf="!isLoggedIn && !isLoginScreen" class="logginBtn ms-3" title="Login">
-                <a href="javascript:void(0)" routerLink="/dashboard/login/">
-                    <img src="assets/img/loginIcon.png" width="35px" height="35px" alt="Login">
-                </a>
             </div>
         </div>
     </nav>

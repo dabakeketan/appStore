@@ -19,6 +19,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     this.subscriptions();
     const mngToken = this.managementService.getMngToken();
     if (mngToken) {
+      
       this.router.navigate(['/manage/partner']);
       // const route = user.short_name + '/store/home/';
       // const link = [`${user.short_name}/store/`];
@@ -60,7 +61,7 @@ export class ManageComponent implements OnInit, OnDestroy {
         next: (response: any) => {
           console.log('respoonse', response);
           this.managementService.saveMngToken(response.body);
-          // this.tokenStorageService.isLoggedIn.next(true);
+          this.managementService.isMngLoggedIn.next(true);
 
           this.router.navigate(['/manage/partner']);
         },

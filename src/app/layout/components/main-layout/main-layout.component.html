@@ -1,12 +1,14 @@
-<app-header [isLoggedIn]="isLoggedIn"></app-header>
+<app-header *ngIf="!isNavBarVisible" [isLoggedIn]="isLoggedIn"></app-header>
+
+<app-header-mng *ngIf="isNavBarVisible" [isMngLoggedIn]="isMngLoggedIn"></app-header-mng>
 
 <app-nav-side-bar *ngIf="isNavBarVisible"></app-nav-side-bar>
 
 <!-- <div id="main" class="main isSidebar" role="main" *ngIf="!isLoggedIn" 
 [ngClass]="{'isSidebar' : isLoggedIn}"> -->
-  <!-- <div class="container-fluid"> -->
-    <router-outlet> </router-outlet>
-  <!-- </div> -->
+<!-- <div class="container-fluid"> -->
+<router-outlet> </router-outlet>
+<!-- </div> -->
 <!-- </div> -->
 <div id="main" class="main" role="main" [ngClass]="{'isSidebar' : isNavBarVisible}">
   <!-- <div class="container-fluid"> -->

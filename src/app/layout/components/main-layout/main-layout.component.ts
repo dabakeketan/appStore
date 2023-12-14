@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, takeWhile } from 'rxjs';
 import { PartnerDataModel } from 'src/app/account/models/accountModel';
 import { AccountService } from 'src/app/account/services/account.service';
+import { ManagementService } from 'src/app/management/services/management.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -13,6 +14,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   isLoggedIn = false;
 
+  isMngLoggedIn = false;
+
   isNavBarVisible = false;
 
   user: PartnerDataModel;
@@ -21,25 +24,25 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   routerSubscription: any;
 
-  constructor(private accountService: AccountService, private router: Router) { 
+  constructor(private accountService: AccountService, private managementService: ManagementService, private router: Router) {
     this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe((event: any) => {
-      // console.log('event', event);
-      if (event && ((event.url.indexOf('manage/main') > -1)
-      || (event.url.indexOf('manage/partner') > -1)
-    || (event.url.indexOf('manage/vendor') > -1)
-    )) {
-        this.isNavBarVisible = true;
-      } else {
-        this.isNavBarVisible = false;
-      }
-    });
+      .subscribe((event: any) => {
+        // console.log('event', event);
+        if (event && ((event.url.indexOf('manage/main') > -1)
+          || (event.url.indexOf('manage/partner') > -1)
+          || (event.url.indexOf('manage/vendor') > -1)
+        )) {
+          this.isNavBarVisible = true;
+        } else {
+          this.isNavBarVisible = false;
+        }
+      });
   }
 
   ngOnInit(): void {
     const isAuthenticated = this.accountService.isAuthenticated();
     if (isAuthenticated) {
-     this.preInit();
+      this.preInit();
     }
     this.accountService.isLoggedIn.pipe(takeWhile(() => !this.destroySubscription))
       .subscribe((response: any) => {
@@ -49,9 +52,18 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
           this.isLoggedIn = false;
         }
       });
+
+    this.managementService.isMngLoggedIn.pipe(takeWhile(() => !this.destroySubscription))
+      .subscribe((response: any) => {
+        if (response) {
+          this.isMngLoggedIn = true;
+        } else {
+          this.isMngLoggedIn = false;
+        }
+      });
   }
 
-  
+
   preInit() {
     this.isLoggedIn = true;
     this.user = this.accountService.getUser() ? this.accountService.getUser() : null;

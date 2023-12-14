@@ -17,6 +17,8 @@ declare let bootstrap: any;
 })
 export class ManagementService implements OnDestroy {
 
+  isMngLoggedIn = new Subject();
+
   destroySubscription = false;
 
   inviteCodePopupSubject = new Subject();
@@ -413,6 +415,10 @@ export class ManagementService implements OnDestroy {
       });
     }
     return this.baseService.putData(reqObj, reqUrl + (urlData ? urlData : ''));
+  }
+
+  goHome() {
+    this.router.navigate(['/manage']);
   }
 
   navigateTo(path: string) {

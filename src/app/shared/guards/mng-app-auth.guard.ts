@@ -13,6 +13,7 @@ export class MngAppAuthGuard implements CanActivate, CanActivateChild {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const token = this.managementService.getMngToken();
         if (token) {
+            this.managementService.isMngLoggedIn.next(true);
             return true;
         } else {
            this.router.navigate(['/manage']);
