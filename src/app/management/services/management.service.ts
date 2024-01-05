@@ -54,6 +54,8 @@ export class ManagementService implements OnDestroy {
 
   tiersUpdateDataSub = new Subject();
 
+  deleteAppDataSub = new Subject();
+
 
   constructor(private baseService: BaseService, private alertService: AlertService,
     private router: Router, private spinner: NgxSpinnerService) { }
@@ -297,8 +299,8 @@ export class ManagementService implements OnDestroy {
     });
   }
 
-  getVendorAppsList() {
-    this.getRequest(MNGUrls.vendorAppBase + '/apps')
+  getVendorAppsList(vendor_id: string) {
+    this.getRequest(MNGUrls.vendorAppBase + '/apps?vendor-id=' + vendor_id)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
@@ -498,7 +500,7 @@ export class ManagementService implements OnDestroy {
                   icon: "success",
                   timer: 1000
                 });
-                this.getVendorAppsList();
+                this.deleteAppDataSub.next(true);
               }
             },
             error: (err: any) => {

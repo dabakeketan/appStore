@@ -47,7 +47,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscribtions();
-    this.managementService.getVendorAppsList();
+    this.managementService.getVendorAppsList(this.vendor_id);
     this.initializeCreateAppData();
   }
 
@@ -101,7 +101,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
     this.managementService.createVendorAppDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.createUpdateAppAction(response);
-        this.managementService.getVendorAppsList();
+        this.managementService.getVendorAppsList(this.vendor_id);
         // this.createAppPopup.hide();
         this.createAppDataModel.app_icon = this.createAppDataModel.app_image = this.createAppDataModel.app_icon_file = '';
         this.createAppDataModel.app_icon_file = this.createAppDataModel.app_image_file = this.createAppDataModel.app_image_upload_url = '';
@@ -149,7 +149,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
         if (this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled) {
           this.goToLastStep();
         } else {
-          this.managementService.getVendorAppsList();
+          this.managementService.getVendorAppsList(this.vendor_id);
           this.createAppPopupA.hide();
         }
       }
@@ -158,8 +158,14 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
     this.managementService.tiersUpdateDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         // console.log('abcd tiers response', response);
-        this.managementService.getVendorAppsList();
+        this.managementService.getVendorAppsList(this.vendor_id);
         this.createAppPopupB.hide();
+      }
+    });
+
+    this.managementService.deleteAppDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.managementService.getVendorAppsList(this.vendor_id);
       }
     });
   }
