@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
+import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent, CellEditingStoppedEvent } from 'ag-grid-community';
 import { TierNameRendererComponent } from '../../cell-renderers/tier-name-renderer/tier-name-renderer.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { TierNameRendererComponent } from '../../cell-renderers/tier-name-render
   templateUrl: './tiers-list.component.html',
   styleUrls: ['./tiers-list.component.scss']
 })
-export class TiersListComponent implements OnInit {
+export class TiersListComponent implements OnInit, OnChanges {
 
   @Input() rowData: any;
 
@@ -100,6 +100,10 @@ export class TiersListComponent implements OnInit {
     this.rowEditedEvent.emit(event.data);
   }
 
+  onCellEditingStopped(event: CellEditingStoppedEvent) {
+    console.log('cellEditingStopped', this.gridApi);
+  }
+
   OnRowDragEnd(event: any) {
     // console.log('abcd', this.gridApi.getModel());
 
@@ -123,6 +127,11 @@ export class TiersListComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit();
+    }
+  }
 
 }
 

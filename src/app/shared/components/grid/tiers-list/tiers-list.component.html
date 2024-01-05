@@ -1,9 +1,10 @@
 <div *ngIf="rowData">
-    <ag-grid-angular [ngStyle]="style" class="ag-theme-alpine compact" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+    <ag-grid-angular [ngStyle]="style" class="ag-theme-alpine normal" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
         [rowData]="rowData" [animateRows]="true" (gridReady)="onGridReady($event)"
         [components]="frameworkComponents" [paginationPageSize]="paginationPageSize"
         [alwaysShowHorizontalScroll]="false" [domLayout]="domLayout" (rowSelected)="onRowSelected($event)"
          [gridOptions]="gridOptions" (rowDoubleClicked)="onRowDoubleClicked($event)"
          [rowDragManaged]="true" (rowDragEnd)="OnRowDragEnd($event)"
+         (cellEditingStopped)="onCellEditingStopped($event)"
         [pagination]="false" ></ag-grid-angular>
 </div>

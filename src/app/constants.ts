@@ -13,7 +13,7 @@ export const APIUrls = {
     loginPartner: baseUrl + 'oauth/partner?short-name=',
     authorisation: baseUrl + 'oauth/authorisation',
     // spotLightApps: baseUrl + 'app/apps?promoted=true',
-    
+
     partnerApps: baseUrl + 'partner/',
     // appDetails: baseUrl + 'app/',
     customerApps: baseUrl + 'customer/'
@@ -34,6 +34,14 @@ export const MNGUrls = {
     vendorBase: mngAppBaseUrl + 'manage/vendor' + mngAPIUrlAppender,
     vendorAppBase: mngAppBaseUrl + 'manage/app' + mngAPIUrlAppender,
 }
+
+// export const AWSUrls = {
+//     imagesAwsBaseUrl: environment.imagesAwsUrl,
+//     imagesAwsBucket: environment.imagesAwsBucket,
+//     imagesAwsAccessKeyId: environment.imagesAwsAccessKeyId,
+//     imagesAwsSignature: environment.imagesAwsSignature,
+//     imagesAwsExpires: environment.imagesAwsExpires
+// }
 
 export const UserRoles = {
     basic: 'Basic'
@@ -88,4 +96,12 @@ export const FontAwsIcons = {
 export const AlertTypes = {
     success: 'success'
 }
+
+export const APP_TYPE_VALUES = ['Messaging', 'Analytics', 'AI', 'CRM', 'CallCenter', 'Provisioning',
+    'Compliance']
+
+export const AUTH_TYPE_VALUES = ['OAuth', 'API Key']
+
+export const GEOSPEC_VALUES = ['Global', 'US_ONLY', 'North America', 'South America', 'Europe',
+    'AsiaPAC', 'Africa']
 

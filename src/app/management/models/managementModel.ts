@@ -2,21 +2,27 @@ import { FormControl } from "@angular/forms";
 
 export interface CreateAppDataModel {
   app_icon_url: string;
-  app_image_url: string;
+  app_icon_file: any;
   app_icon: any;
+  app_icon_upload_url: string;
+  app_image_url: string;
+  app_image_file: any;
   app_image: any;
+  app_image_upload_url: string;
+  app_id?: string;
   app_name: string;
   app_secret: string;
   description: string;
+  short_description: string;
   // vendor_id: string;
   // vendor_name: string;
   vendor_app_fqdn: string;
   // price: string;
-  type: string;
-  authType: string;
+  app_type: string;
+  auth_type: string;
   geospec: string;
-  userManagament: boolean
-  userTiers: boolean;
+  user_mgmt_enabled: boolean
+  user_tiers_enabled: boolean;
   tiersArr: Array<TiersObj>;
 }
 

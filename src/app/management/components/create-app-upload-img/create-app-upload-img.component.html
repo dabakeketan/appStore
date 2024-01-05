@@ -1,0 +1,50 @@
+<form #createAppImgForm="ngForm" class="small-labels">
+    <div class="row" *ngIf="createAppDataModel">
+
+        <div class="col-lg-6 input-group-sm mb-3 text-center">
+            <label for="appIcon" class="form-label mb-3">Application Icon</label>
+            <div class="app-icon-url mb-3">
+                <img
+                    [src]="createAppDataModel.app_icon ? createAppDataModel.app_icon : createAppDataModel.app_icon_url">
+            </div>
+            <div style="width: 75%; margin: 0 auto;">
+                <div class="input-group mb-3">
+                    <input type="file" #uploadIcon class="form-control form-control-sm" id="appIcon" name="appIcon"
+                        accept=".jpg, .jpeg, .png, .bmp" (change)="addEditIcon($event)">
+                    <button *ngIf="createAppDataModel.app_icon_file" class="btn btn-outline-secondary btn-sm"
+                        type="button" (click)="clearIconUpload()">&nbsp;X&nbsp;</button>
+                </div>
+                <!-- <div *ngIf="!iconErrMsg" class="valid-feedback mb-3">
+                    Size should be greater than or equal to<br>300 px by 300 px
+                </div> -->
+                <div [ngClass]="iconErrMsg ? 'invalid-feedback' : 'valid-feedback'"
+                style="display: block;">
+                    Size should be greater than or equal to<br>300 px by 300 px
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 input-group-sm mb-3 text-center">
+            <label for="appImage" class="form-label mb-3">Application Image</label>
+            <div class="app-icon-url mb-3">
+                <img
+                    [src]="createAppDataModel.app_image ? createAppDataModel.app_image : createAppDataModel.app_image_url">
+            </div>
+            <div style="width: 75%; margin: 0 auto;">
+                <div class="input-group mb-3">
+                    <input type="file" #uploadImage class="form-control form-control-sm" id="appImage" name="appImage"
+                        accept=".jpg, .jpeg, .png, .bmp" (change)="addEditImg($event)">
+                    <button *ngIf="createAppDataModel.app_image_file" class="btn btn-outline-secondary
+                    btn-sm" type="button" (click)="clearImageUpload()">&nbsp;X&nbsp;</button>
+                </div>
+                <!-- <div *ngIf="!appImgErrMsg" class="valid-feedback mb-3">
+                    Size should be greater than or equal to<br>310 px by 210 px
+                </div> -->
+                <div [ngClass]="appImgErrMsg ? 'invalid-feedback' : 'valid-feedback'"
+                style="display: block;">
+                    Size should be greater than or equal to<br>310 px by 210 px
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -14,26 +14,87 @@
         </div>
 
         <div class="modal" id="createAppModal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <span *ngIf="isCreateApp">Create</span>
                             <span *ngIf="!isCreateApp">Update</span> Application
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <app-create-app [createAppDataModel]="createAppDataModel"
                             (onFormChange)="onCreateAppFormChange($event)"></app-create-app>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-custom-pri"
-                            [disabled]="createAppForm && (createAppForm.invalid || !createAppForm.dirty)"
+                        <button class="btn btn-sm btn-custom-pri" [disabled]="createAppForm && (createAppForm.invalid)"
                             (click)="createVendorApp()">
-                            <span *ngIf="isCreateApp">Create</span>
-                            <span *ngIf="!isCreateApp">Update</span></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <!-- <span *ngIf="isCreateApp">Create</span>
+                            <span *ngIf="!isCreateApp">Update</span> -->
+                            Next
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="createAppModalA" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Upload Icon/Image
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <app-create-app-upload-img [createAppDataModel]="createAppDataModel"
+                            [clearImgSelection]="clearImgSelection"
+                            (onFormChange)="onCreateAppImgFormChange($event)"></app-create-app-upload-img>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button class="btn btn-sm btn-custom-pri"
+                            [disabled]="!createAppDataModel.app_icon_file || !createAppDataModel.app_image_file"
+                            (click)="createVendorAppImg()">
+                            <span>Upload</span></button> -->
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="goToFirstStep()">Back</button>
+                        <!-- <button type="button" class="btn btn-sm btn-secondary"
+                            [disabled]="!createAppDataModel.app_icon_url || !createAppDataModel.app_image_url"
+                            (click)="goToLastStep()">Next</button> -->
+                        <button type="button" class="btn btn-sm btn-custom-pri" (click)="createVendorAppImg()"
+                            *ngIf="this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled">
+                            Next
+                        </button>
+                        <button type="button" class="btn btn-sm btn-custom-pri" (click)="finishAppCreation()"
+                            *ngIf="!this.createAppDataModel.user_mgmt_enabled || !this.createAppDataModel.user_tiers_enabled">
+                            Finish
+                        </button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="createAppModalB" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Manage Tiers
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" *ngIf="createAppDataModel.user_tiers_enabled">
+                        <!-- <app-create-app-manage-users [createAppDataModel]="createAppDataModel"
+                            (onFormChange)="onCreateAppMngUserFormChange($event)"></app-create-app-manage-users> -->
+                        <app-tiers-list [rowData]="createAppDataModel.tiersArr"
+                            (rowActionEvent)="onRowAction($event)"></app-tiers-list>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="goToSecondStep()">Back</button>
+                        <button class="btn btn-sm btn-custom-pri" (click)="postTiers()">
+                            <span>Finish</span></button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

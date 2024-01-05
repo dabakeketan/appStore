@@ -84,6 +84,22 @@ export class BaseService {
     );
   }
 
+  putDataForkJoinSkipIntercept(reqObj: any, url: string): Observable<any> {
+    const headers = new HttpHeaders().set('Anonymous', '');
+    return this.http.put<any>(url, reqObj, { headers, observe: 'response' }).pipe(
+      tap({
+        next: x => {
+        },
+        error: err => {
+          if (err.error.message) {
+          } else if (err.error.data) {
+            ;
+          }
+        }
+      })
+    );
+  }
+
   postDataWithoutAuth(url: string, reqObj: any): Observable<any> {
     // this.spinner.show();
     const httpOptions = {
@@ -126,6 +142,25 @@ export class BaseService {
             console.log(err.error.data);
           }
         }
+      })
+    );
+  }
+
+  poutRequestWithFormData(contentType: any, reqObject: any, URL: any): Observable<any> {
+    if (contentType) {
+      const headers = new HttpHeaders({ 'Content-Type': contentType });
+    }
+    return this.http.put<Blob>(URL, reqObject, {
+      withCredentials: true
+    }).pipe(
+      tap(data => {
+        if (data) {
+          // console.log('Error Message');
+        } else {
+          // console.log('Data at base', data);
+        }
+      }, error => {
+        console.log('Error at base service post request with form data call', error);
       })
     );
   }

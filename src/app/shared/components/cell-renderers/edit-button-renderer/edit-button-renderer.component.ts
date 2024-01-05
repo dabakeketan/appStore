@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { ManagementService } from 'src/app/management/services/management.service';
 
 @Component({
   selector: 'app-edit-button-renderer',
@@ -11,12 +12,20 @@ export class EditButtonRendererComponent implements ICellRendererAngularComp {
 
   private params: any;
 
+  constructor(private managementService: ManagementService) {
+
+  }
+
   agInit(params: any): void {
     this.params = params;
   }
 
+  // handleActionClickEvent(event: any) {
+  //   this.params.clicked(this.params.value);
+  // }
+
   handleActionClickEvent(event: any) {
-    this.params.clicked(this.params.value);
+    this.managementService.vendorEditClickSub.next(this.params);
   }
 
   refresh(): boolean {

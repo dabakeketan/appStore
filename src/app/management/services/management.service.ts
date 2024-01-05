@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeWhile } from 'rxjs';
+import { Subject, forkJoin, takeWhile } from 'rxjs';
 import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
 import { AlertTypes, MNGUrls, successMsgs } from 'src/app/constants';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { CreateAppDataModel, CreateVendorDataModel, PartnerListDataModel } from '../models/managementModel';
 const MNG_USER_KEY = 'mng-user-details-auth';
 const MNG_TOKEN_KEY = 'mng-app-token';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare let bootstrap: any;
 
@@ -39,13 +40,23 @@ export class ManagementService implements OnDestroy {
 
   createVendorAppDataSub = new Subject();
 
+  appImageUrlsDataSub = new Subject();
+
   singleVendorAppDataSub = new Subject();
 
+  singleVendorAppDataSubA = new Subject();
 
+  vendorEditClickSub = new Subject();
+
+  tiersDataSub = new Subject();
+
+  uploadImgDataSub = new Subject();
+
+  tiersUpdateDataSub = new Subject();
 
 
   constructor(private baseService: BaseService, private alertService: AlertService,
-    private router: Router) { }
+    private router: Router, private spinner: NgxSpinnerService) { }
 
   mngAuthLogin() {
     window.location.href = JSON.parse(JSON.stringify(MNGUrls.mngAppAuthUrl));
@@ -314,26 +325,150 @@ export class ManagementService implements OnDestroy {
       });
   }
 
-  createVendorApp(createAppDataModel: CreateAppDataModel, isCreateApp: boolean) {
+  getVendorAppDetailsA(app_id: any) {
+    this.getRequest(MNGUrls.vendorAppBase + '/' + app_id)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.singleVendorAppDataSubA.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.singleVendorAppDataSubA.next(null);
+        }
+      });
+  }
+
+  createVendorApp(createAppDataModel: CreateAppDataModel, vendor_id: string, isCreateApp: boolean) {
+    // console.log('abcd reqobj', createAppDataModel);
+
+    const reqObj = {
+      app_id: createAppDataModel.app_id,
+      app_name: createAppDataModel.app_name,
+      app_secret: createAppDataModel.app_secret,
+      description: createAppDataModel.description,
+      short_description: createAppDataModel.short_description,
+      vendor_id: vendor_id,
+      vendor_app_fqdn: createAppDataModel.vendor_app_fqdn,
+      user_mgmt_enabled: createAppDataModel.user_mgmt_enabled,
+      user_tiers_enabled: createAppDataModel.user_tiers_enabled,
+      app_type: createAppDataModel.app_type,
+      auth_type: createAppDataModel.auth_type,
+      geospec: createAppDataModel.geospec
+    }
     if (isCreateApp) {
-      this.postRequest(createAppDataModel, MNGUrls.vendorAppBase)
+      delete reqObj.app_id;
+      this.postRequest(reqObj, MNGUrls.vendorAppBase)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
           next: (response: any) => {
             if (response && response.status === 200) {
-              this.createVendorAppPosAction();
+              this.createVendorAppDataSub.next(response.body);
             }
           }
         });
     } else {
-      this.putRequest(createAppDataModel, MNGUrls.vendorAppBase)
+      this.putRequest(reqObj, MNGUrls.vendorAppBase)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
           next: (response: any) => {
             if (response && response.status === 200) {
-              this.createVendorAppPosAction();
+              this.createVendorAppDataSub.next(response.body);
             }
           }
         });
     }
+  }
+
+  getImageUploadUrls(app_id: any) {
+    const url = MNGUrls.vendorAppBase + '/' + app_id + '/image-urls';
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.appImageUrlsDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.appImageUrlsDataSub.next(null);
+        }
+      });
+  }
+
+  createVendorAppImg(createAppDataModel: CreateAppDataModel) {
+    if (createAppDataModel.app_icon_file && createAppDataModel.app_image_file) {
+      this.spinner.show();
+      const response = this.putDataForkJoinSkipIntercept(createAppDataModel.app_icon_file, createAppDataModel.app_icon_upload_url);
+      const responseA = this.putDataForkJoinSkipIntercept(createAppDataModel.app_image_file, createAppDataModel.app_image_upload_url);
+
+      forkJoin([response, responseA])
+        .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
+          if (forkResponse && forkResponse.length) {
+            this.spinner.hide();
+            this.uploadImgDataSub.next(true);
+          }
+        }, (error) => {
+          console.log('error at service', error);
+          this.spinner.hide();
+          const obj = {
+            type: 'error',
+            text: 'Upload Failed'
+          }
+          this.alertService.alertSubject.next(obj);
+        });
+    } else if (createAppDataModel.app_icon_file) {
+      this.uploadVendorAppImages(createAppDataModel.app_icon_file, createAppDataModel.app_icon_upload_url);
+    } else if (createAppDataModel.app_image_file) {
+      this.uploadVendorAppImages(createAppDataModel.app_image_file, createAppDataModel.app_image_upload_url);
+    } else {
+
+    }
+  }
+
+  uploadVendorAppImages(file: any, uploadUrl: any) {
+    this.putRequest(file, uploadUrl)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.uploadImgDataSub.next(true);
+          }
+        }
+      });
+  }
+
+  getTiers(app_id: any) {
+    const url = MNGUrls.vendorAppBase + '/' + app_id + '/tiers';
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.tiersDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.tiersDataSub.next(null);
+        }
+      });
+  }
+
+  postTiers(createAppDataModel: CreateAppDataModel) {
+    let tiersArr: any = [];
+    if (createAppDataModel.tiersArr && createAppDataModel.tiersArr.length) {
+      createAppDataModel.tiersArr.forEach(item => {
+        if (item.name) {
+          tiersArr.push(item.name);
+        }
+      })
+    } else {
+      tiersArr = [];
+    }
+    const tiersUpdateUrl = MNGUrls.vendorAppBase + '/' + createAppDataModel.app_id + '/tiers';
+    this.putRequest(tiersArr, tiersUpdateUrl)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.tiersUpdateDataSub.next(true);
+          }
+        }
+      });
   }
 
   createVendorAppPosAction() {
@@ -341,9 +476,8 @@ export class ManagementService implements OnDestroy {
       type: AlertTypes.success,
       text: 'Success'
     }
-    this.getVendorAppsList();
-    this.alertService.alertSubject.next(obj);
-    this.createVendorAppDataSub.next(true);
+    // this.getVendorAppsList();
+    // this.alertService.alertSubject.next(obj);
   }
 
   deleteVendorApp(selectedVendorAppsData: any) {
@@ -397,6 +531,7 @@ export class ManagementService implements OnDestroy {
     return this.baseService.postData(reqObj, reqUrl + (urlData ? urlData : ''));
   }
 
+
   deleteRequest(deleteUrl: string, urlParams?: any, id?: any) {
     let urlData = '';
     if (urlParams && urlParams.length) {
@@ -415,6 +550,16 @@ export class ManagementService implements OnDestroy {
       });
     }
     return this.baseService.putData(reqObj, reqUrl + (urlData ? urlData : ''));
+  }
+
+  putDataForkJoinSkipIntercept(reqObj: any, reqUrl: string, urlParams?: any) {
+    let urlData = '';
+    if (urlParams && urlParams.length) {
+      urlParams.forEach((val: any) => {
+        urlData += '&' + val.paramLabel + '=' + val.paramValue
+      });
+    }
+    return this.baseService.putDataForkJoinSkipIntercept(reqObj, reqUrl + (urlData ? urlData : ''));
   }
 
   goHome() {

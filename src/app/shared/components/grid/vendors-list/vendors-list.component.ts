@@ -52,14 +52,15 @@ export class VendorsListComponent implements OnInit {
       headerName: 'Action',
       headerClass: 'header-label-center',
       cellRenderer: 'editButtonRenderer',
-      cellRendererParams: {
-        clicked: (params: any) => {
-          const obj = {
-            action: 'edit'
-          }
-          this.rowActionEvent.emit(obj);
-        }
-      }
+      // cellRendererParams: {
+      //   clicked: (params: any) => {
+      //     console.log('abcd aa', this.gridApi.getSelectedRows())
+      //     const obj = {
+      //       action: 'edit'
+      //     }
+      //     this.rowActionEvent.emit(obj);
+      //   }
+      // }
     }
   ];
 
@@ -78,7 +79,8 @@ export class VendorsListComponent implements OnInit {
     height: '100%'
   };
 
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit(): void {
     this.frameworkComponents = {

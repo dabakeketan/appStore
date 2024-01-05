@@ -58,7 +58,7 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
         this.createVendorForm.form.reset();
         this.createVendorPopup.hide();
       }
-    })
+    });
 
     this.managementService.singleVendorDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
@@ -74,6 +74,15 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
         this.createVendorForm.form.markAllAsTouched();
       }
     });
+
+    this.managementService.vendorEditClickSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        console.log('abcd vendor edit click', response);
+        if (response && response.data && response.data.vendor_id) {
+          this.managementService.navigateTo('/manage/vendor/' + response.data.vendor_id);
+        }
+      }
+    })
   }
 
   receiveVendorsData(event: any) {
@@ -87,11 +96,12 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
   }
 
   rowAction(event: any) {
-    if (event) {
-      if (event.action === 'edit') {
-        this.managementService.navigateTo('/manage/vendor/1234');
-      }
-    }
+    // if (event) {
+    //   console.log('abcd vendor id', event);
+    //   if (event.action === 'edit') {
+    //     this.managementService.navigateTo('/manage/vendor/1234');
+    //   }
+    // }
   }
 
   openCreateVendorPopup() {

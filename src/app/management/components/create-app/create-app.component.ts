@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CreateAppDataModel } from '../../models/managementModel';
-import { RegExPatterns, errorMsgs } from 'src/app/constants';
+import { APP_TYPE_VALUES, AUTH_TYPE_VALUES, GEOSPEC_VALUES, RegExPatterns, errorMsgs } from 'src/app/constants';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -24,6 +24,12 @@ export class CreateAppComponent implements OnInit, OnChanges, OnDestroy {
 
   createAppFormSubscriber: any;
 
+  APP_TYPE_VALUES = APP_TYPE_VALUES;
+
+  AUTH_TYPE_VALUES = AUTH_TYPE_VALUES;
+
+  GEOSPEC_VALUES = GEOSPEC_VALUES;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -37,31 +43,16 @@ export class CreateAppComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-
   userMngmntSwitchChange(event: any) {
     const val = event.target.checked
     if (!val) {
-      this.createAppDataModel.userTiers = false;
-    }
-  }
-
-  onRowAction(event: any) {
-    if (event) {
-      if (event.action === 'tiersDrag') {
-        // this.createAppDataModel.tiersArr = [];
-        console.log('abcd event data', event.data);
-        this.createAppDataModel.tiersArr = [];
-        event.data.forEach((element: any) => {
-          this.createAppDataModel.tiersArr.push(element);
-        });
-        console.log('abcd createdatamodel', this.createAppDataModel);
-      }
+      this.createAppDataModel.user_tiers_enabled = false;
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.createAppDataModel) {
-      this.createAppForm.form.markAsUntouched();
+      // this.createAppForm.form.markAsUntouched();
     }
   }
 
