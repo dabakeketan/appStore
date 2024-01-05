@@ -126,7 +126,7 @@ export class ManagePartnerComponent implements OnInit, OnDestroy {
   }
 
   receivePartnersData(event: any) {
-    console.log('abcd', event);
+    // console.log('abcd', event);
     this.selectedPartnersData = event;
   }
 

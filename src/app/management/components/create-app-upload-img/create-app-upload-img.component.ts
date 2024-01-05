@@ -80,7 +80,7 @@ export class CreateAppUploadImgComponent implements OnInit, OnDestroy, AfterView
     } else {
       this.clearIconUpload();
     }
-    console.log('abcd img upload', this.createAppDataModel);
+    // console.log('abcd img upload', this.createAppDataModel);
   }
 
   clearIconUpload() {
@@ -112,7 +112,7 @@ export class CreateAppUploadImgComponent implements OnInit, OnDestroy, AfterView
     } else {
       this.clearImageUpload();
     }
-    console.log('abcd img upload', this.createAppDataModel);
+    // console.log('abcd img upload', this.createAppDataModel);
   }
 
   clearImageUpload() {
@@ -122,10 +122,7 @@ export class CreateAppUploadImgComponent implements OnInit, OnDestroy, AfterView
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if (this.createAppDataModel) {
-    //   this.createAppImgForm.form.markAsUntouched();
-    // }
-
+  
     if (this.clearImgSelection) {
       this.uploadIcon.nativeElement.value = '';
       this.uploadImage.nativeElement.value = '';

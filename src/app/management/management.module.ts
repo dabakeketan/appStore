@@ -10,12 +10,11 @@ import { AppManageMainComponent } from './components/app-manage-main/app-manage-
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { VendorDetailsComponent } from './components/vendor-details/vendor-details.component';
 import { CreateAppUploadImgComponent } from './components/create-app-upload-img/create-app-upload-img.component';
-import { CreateAppManageUsersComponent } from './components/create-app-manage-users/create-app-manage-users.component';
 
 
 
 @NgModule({
-  declarations: [ManageComponent, ManagePartnerComponent, CreateAppComponent, AppManageMainComponent, VendorDetailsComponent, CreateAppUploadImgComponent, CreateAppManageUsersComponent],
+  declarations: [ManageComponent, ManagePartnerComponent, CreateAppComponent, AppManageMainComponent, VendorDetailsComponent, CreateAppUploadImgComponent],
   imports: [
     CommonModule,
     ManagementRoutingModule,

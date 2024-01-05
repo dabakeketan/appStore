@@ -1,6 +1,5 @@
 <form #createAppImgForm="ngForm" class="small-labels">
     <div class="row" *ngIf="createAppDataModel">
-
         <div class="col-lg-6 input-group-sm mb-3 text-center">
             <label for="appIcon" class="form-label mb-3">Application Icon</label>
             <div class="app-icon-url mb-3">
@@ -14,11 +13,7 @@
                     <button *ngIf="createAppDataModel.app_icon_file" class="btn btn-outline-secondary btn-sm"
                         type="button" (click)="clearIconUpload()">&nbsp;X&nbsp;</button>
                 </div>
-                <!-- <div *ngIf="!iconErrMsg" class="valid-feedback mb-3">
-                    Size should be greater than or equal to<br>300 px by 300 px
-                </div> -->
-                <div [ngClass]="iconErrMsg ? 'invalid-feedback' : 'valid-feedback'"
-                style="display: block;">
+                <div [ngClass]="iconErrMsg ? 'invalid-feedback' : 'valid-feedback'" style="display: block;">
                     Size should be greater than or equal to<br>300 px by 300 px
                 </div>
             </div>
@@ -37,11 +32,7 @@
                     <button *ngIf="createAppDataModel.app_image_file" class="btn btn-outline-secondary
                     btn-sm" type="button" (click)="clearImageUpload()">&nbsp;X&nbsp;</button>
                 </div>
-                <!-- <div *ngIf="!appImgErrMsg" class="valid-feedback mb-3">
-                    Size should be greater than or equal to<br>310 px by 210 px
-                </div> -->
-                <div [ngClass]="appImgErrMsg ? 'invalid-feedback' : 'valid-feedback'"
-                style="display: block;">
+                <div [ngClass]="appImgErrMsg ? 'invalid-feedback' : 'valid-feedback'" style="display: block;">
                     Size should be greater than or equal to<br>310 px by 210 px
                 </div>
             </div>

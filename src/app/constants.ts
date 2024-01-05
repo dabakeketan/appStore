@@ -35,14 +35,6 @@ export const MNGUrls = {
     vendorAppBase: mngAppBaseUrl + 'manage/app' + mngAPIUrlAppender,
 }
 
-// export const AWSUrls = {
-//     imagesAwsBaseUrl: environment.imagesAwsUrl,
-//     imagesAwsBucket: environment.imagesAwsBucket,
-//     imagesAwsAccessKeyId: environment.imagesAwsAccessKeyId,
-//     imagesAwsSignature: environment.imagesAwsSignature,
-//     imagesAwsExpires: environment.imagesAwsExpires
-// }
-
 export const UserRoles = {
     basic: 'Basic'
 }

@@ -30,7 +30,7 @@ export class ManageComponent implements OnInit, OnDestroy {
         console.log('event', event);
         if (event && event.url && event.url.indexOf('?code=') > -1) {
           const authCode = event.url.substring(event.url.indexOf('=') + 1);
-          console.log('abc', authCode);
+          // console.log('abc', authCode);
           this.authLoginB(authCode);
         } else if (event && ((event.url.indexOf('/manage/oauth/login') > -1)
           || (event.url.indexOf('/manage') > -1))) {

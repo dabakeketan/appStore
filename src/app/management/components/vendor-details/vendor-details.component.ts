@@ -113,7 +113,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
 
     this.managementService.appImageUrlsDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
-        console.log('abcd image urls', response);
+        // console.log('abcd image urls', response);
         this.createAppPopup.hide();
         this.createAppDataModel.app_icon_upload_url = response.app_icon_url;
         this.createAppDataModel.app_image_upload_url = response.app_image_url;
@@ -123,14 +123,12 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
 
     this.managementService.tiersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
-        console.log('abcd tiers', response);
+        // console.log('abcd tiers', response);
         let tiersPendingLength = 0;
-        // let tiersArr = [];
         this.createAppDataModel.tiersArr = [];
         if (!response.length) {
           this.updateTiers(5);
         } else if (response.length) {
-          // tiersLength = response.length;
           for (let index = 0; index < response.length; index++) {
             let tempObj = {
               name: response[index]
@@ -140,8 +138,6 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
           tiersPendingLength = 5 - response.length;
           this.updateTiers(tiersPendingLength);
         }
-
-        // this.createAppDataModel.tiersArr = tiersArr;
         this.createAppPopupA.hide();
         this.openCreateAppPopupActionB();
       }
@@ -161,7 +157,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
 
     this.managementService.tiersUpdateDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
-        console.log('abcd tiers response', response);
+        // console.log('abcd tiers response', response);
         this.managementService.getVendorAppsList();
         this.createAppPopupB.hide();
       }
@@ -232,7 +228,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   }
 
   openCreateAppPopupActionA() {
-    console.log('abcd createdatamodel', this.createAppDataModel);
+    // console.log('abcd createdatamodel', this.createAppDataModel);
     this.createAppPopupA = new bootstrap.Modal(document.getElementById("createAppModalA"), {
       backdrop: 'static', keyboard: false
     });
@@ -240,7 +236,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   }
 
   openCreateAppPopupActionB() {
-    console.log('abcd createdatamodel', this.createAppDataModel);
+    // console.log('abcd createdatamodel', this.createAppDataModel);
     this.createAppPopupB = new bootstrap.Modal(document.getElementById("createAppModalB"), {
       backdrop: 'static', keyboard: false
     });
@@ -266,7 +262,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   onCreateAppImgFormChange(event: any) {
     if (event && event.formData) {
       this.createAppImgForm = event.formData;
-      console.log('abcd d create app data model', this.createAppDataModel);
+      // console.log('abcd d create app data model', this.createAppDataModel);
     }
   }
 
@@ -289,27 +285,21 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   onCreateAppMngUserFormChange(event: any) {
     if (event && event.formData) {
       this.createAppMngUserForm = event.formData;
-      console.log('abcd d create app data model', this.createAppDataModel);
+      // console.log('abcd d create app data model', this.createAppDataModel);
     }
   }
 
   onRowAction(event: any) {
     if (event) {
       if (event.action === 'tiersDrag') {
-        // this.createAppDataModel.tiersArr = [];
-        // console.log('abcd event data', event.data);
-        // this.createAppDataModel.tiersArr = event.data;
-        // event.data.forEach((element: any) => {
-        //   this.createAppDataModel.tiersArr.push(element);
-        // });
         this.createAppDataModel.tiersArr = event.data;
-        console.log('abcd createdatamodel', this.createAppDataModel);
+        // console.log('abcd createdatamodel', this.createAppDataModel);
       }
     }
   }
 
   postTiers() {
-    console.log('abcd tiersarr', this.createAppDataModel.tiersArr);
+    // console.log('abcd tiersarr', this.createAppDataModel.tiersArr);
     this.managementService.postTiers(this.createAppDataModel);
   }
 

@@ -77,7 +77,7 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
 
     this.managementService.vendorEditClickSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
-        console.log('abcd vendor edit click', response);
+        // console.log('abcd vendor edit click', response);
         if (response && response.data && response.data.vendor_id) {
           this.managementService.navigateTo('/manage/vendor/' + response.data.vendor_id);
         }
@@ -86,12 +86,12 @@ export class AppManageMainComponent implements OnInit, OnDestroy {
   }
 
   receiveVendorsData(event: any) {
-    console.log('abcd', event);
+    // console.log('abcd', event);
     this.selectedVendorsData = event;
   }
 
   receiveVendorsEditedData(event: any) {
-    console.log('abcd d', event);
+    // console.log('abcd d', event);
     this.managementService.getVendor(event.vendor_name);
   }
 

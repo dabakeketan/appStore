@@ -16,7 +16,7 @@ export class RegStatusRendererComponent implements ILoadingCellRendererAngularCo
 
   agInit(params: ILoadingCellRendererParams & { loadingMessage: string }): void {
       this.params = params;
-      console.log('abcd', this.params);
+      // console.log('abcd', this.params);
       if(this.params.data.registration_status === 'COMPLETE') {
         this.complete = true;
       }

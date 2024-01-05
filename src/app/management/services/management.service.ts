@@ -476,8 +476,6 @@ export class ManagementService implements OnDestroy {
       type: AlertTypes.success,
       text: 'Success'
     }
-    // this.getVendorAppsList();
-    // this.alertService.alertSubject.next(obj);
   }
 
   deleteVendorApp(selectedVendorAppsData: any) {
