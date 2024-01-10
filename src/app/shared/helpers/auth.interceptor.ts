@@ -33,6 +33,40 @@ export class AuthInterceptor implements HttpInterceptor {
           }
         })
       );
+    } else if (req.headers.get('Anonymouswithtoken') === '') {
+      let newRequest = req;
+      let newHeaders;
+      newHeaders = newRequest.headers.delete('Anonymouswithtoken');
+      const mngToken = (this.managementService.getMngToken() && this.managementService.getMngToken().access_token) ? this.managementService.getMngToken().access_token : null;
+      const appToken = (this.accountService.getUser() && this.accountService.getUser().access_token) ? this.accountService.getUser().access_token : null;
+      let token;
+      if (newRequest.url.search(mngAPIUrlAppender) > 0) {
+        newRequest = newRequest.clone({ url: newRequest.url.replace(mngAPIUrlAppender, '') });
+        token = mngToken;
+      } else if (appToken) {
+        token = appToken;
+      }
+
+
+      newHeaders = new HttpHeaders({
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        // 'ns-dest-server': serverProfile.url
+      });
+
+      if (token != null) {
+        newRequest = req.clone({ headers: newHeaders });
+      }
+      return next.handle(newRequest).pipe(
+        tap({
+          next: (evt) => {
+            // console.log('forkjoin success', evt);
+          },
+          error: (error: HttpErrorResponse) => {
+            // console.log('forkjoin error', error);
+          }
+        })
+      );
     } else {
       this.service_count++;
       let authReq = req;

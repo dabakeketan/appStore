@@ -12,6 +12,7 @@ import { CreateAppComponent } from './components/create-app/create-app.component
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { StoreWrapperComponent } from './components/store-wrapper/store-wrapper.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { StoreWrapperComponent } from './components/store-wrapper/store-wrapper.
     StoreRoutingModule,
     CarouselModule,
     SharedModule,
+    FormsModule
     
     // SweetAlert2Module.forRoot()
   ],

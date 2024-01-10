@@ -11,6 +11,10 @@ import { VendorAppPromotedRendererComponent } from './components/cell-renderers/
 import { EditButtonRendererComponent } from './components/cell-renderers/edit-button-renderer/edit-button-renderer.component';
 import { TiersListComponent } from './components/grid/tiers-list/tiers-list.component';
 import { TierNameRendererComponent } from './components/cell-renderers/tier-name-renderer/tier-name-renderer.component';
+import { CustomersListComponent } from './components/grid-store/customers-list/customers-list.component';
+import { EnabledCustomerUsersComponent } from './components/grid-store/enabled-customer-users/enabled-customer-users.component';
+import { UserConfigValueRendererComponent } from './components/grid-store-cell-renderers/user-config-value-renderer/user-config-value-renderer.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,14 +28,20 @@ import { TierNameRendererComponent } from './components/cell-renderers/tier-name
        VendorAppPromotedRendererComponent,
        EditButtonRendererComponent,
        TiersListComponent,
-       TierNameRendererComponent
+       TierNameRendererComponent,
+       CustomersListComponent,
+       EnabledCustomerUsersComponent,
+       UserConfigValueRendererComponent
   ],
   imports: [
     CommonModule,
-    AgGridModule
+    AgGridModule,
+    FormsModule
   ],
   exports: [CategoriesComponent, VendorAppListComponent,
-    ProductsComponent, PartnerListComponent, VendorsListComponent, TiersListComponent],
+    ProductsComponent, PartnerListComponent, VendorsListComponent, TiersListComponent,
+    CustomersListComponent,
+    EnabledCustomerUsersComponent],
   // providers: [authInterceptorProviders],
 })
 export class SharedModule { }

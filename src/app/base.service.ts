@@ -30,7 +30,7 @@ export class BaseService {
   getDataText(url: string): Observable<any> {
     // this.spinner.show();
     const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
-    return this.http.get(url,{ headers, responseType: 'text', observe: 'response'});
+    return this.http.get(url, { headers, responseType: 'text', observe: 'response' });
   }
 
   getDataA(url: string): Observable<any> {
@@ -100,6 +100,22 @@ export class BaseService {
     );
   }
 
+  postDataForkJoinWithToken(reqObj: any, url: string): Observable<any> {
+    const headers = new HttpHeaders().set('Anonymouswithtoken', '');
+    return this.http.post<any>(url, reqObj, { headers, observe: 'response' }).pipe(
+      tap({
+        next: x => {
+        },
+        error: err => {
+          if (err.error.message) {
+          } else if (err.error.data) {
+            ;
+          }
+        }
+      })
+    );
+  }
+
   postDataWithoutAuth(url: string, reqObj: any): Observable<any> {
     // this.spinner.show();
     const httpOptions = {
@@ -129,6 +145,74 @@ export class BaseService {
     // const headers = new HttpHeaders({ 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
     // 'Content-Type': 'text/plain' });
     return this.http.delete<any>(url, { observe: 'response' }).pipe(
+      tap({
+        next: x => {
+          // this.spinner.hide();
+        },
+        error: err => {
+          // this.spinner.hide();
+          console.error(err);
+          if (err.error.message) {
+            // alert(err.error.message);
+          } else if (err.error.data) {
+            console.log(err.error.data);
+          }
+        }
+      })
+    );
+  }
+
+  deleteRequestForkJoinWithToken(url: string): Observable<any> {
+    const headers = new HttpHeaders().set('Anonymouswithtoken', '');
+    return this.http.delete<any>(url, { observe: 'response' }).pipe(
+      tap({
+        next: x => {
+          // this.spinner.hide();
+        },
+        error: err => {
+          // this.spinner.hide();
+          console.error(err);
+          if (err.error.message) {
+            // alert(err.error.message);
+          } else if (err.error.data) {
+            console.log(err.error.data);
+          }
+        }
+      })
+    );
+  }
+
+  deleteRequestA(reqObject: any, url: string): Observable<any> {
+    const options: { headers: any; observe: any; body: any; } = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: reqObject,
+      observe: 'response'
+    }
+    return this.http.delete<any>(url, options).pipe(
+      tap({
+        next: x => {
+          // this.spinner.hide();
+        },
+        error: err => {
+          // this.spinner.hide();
+          console.error(err);
+          if (err.error.message) {
+            // alert(err.error.message);
+          } else if (err.error.data) {
+            console.log(err.error.data);
+          }
+        }
+      })
+    );
+  }
+
+  deleteRequestForkJoinWithTokenA(reqObject: any, url: string): Observable<any> {
+    const options: { headers: any; observe: any; body: any; } = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Anonymouswithtoken': '' }),
+      body: reqObject,
+      observe: 'response'
+    }
+    return this.http.delete<any>(url, options).pipe(
       tap({
         next: x => {
           // this.spinner.hide();

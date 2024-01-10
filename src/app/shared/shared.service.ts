@@ -10,8 +10,28 @@ export class SharedService implements OnDestroy {
   destroySubscription = false;
 
   constructor(private baseService: BaseService, private router: Router) {
-    
+
   }
+
+  textComparator = (valueA: any, valueB: any, nodeA: any, nodeB: any) => {
+    const valA = valueA ? valueA.toLowerCase() : '';
+    const valB = valueB ? valueB.toLowerCase() : '';
+    // if (valA === valB) {
+    //   return 0;
+    // }
+    if (!valA) {
+      return 1;
+    }
+    if (!valB) {
+      return -1;
+    }
+    return valA.toLowerCase().localeCompare(valB.toLowerCase());
+  }
+
+  numberComparator = (valueA: any, valueB: any, nodeA: any, nodeB: any) => {
+    return Number(valueA) - Number(valueB) // valA.toLowerCase().localeCompare(valB.toLowerCase());
+  }
+
 
   getRequest(reqUrl: string, urlParams?: any) {
     let urlData = '';

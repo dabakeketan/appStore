@@ -1,0 +1,19 @@
+<div *ngIf="params">
+    <!-- <input type="text" class="form-control form-control-sm" placeholder="Tier name..." value="{{params.data.name}}">
+
+     -->
+    <div *ngIf="user_mgmt_enabled && user_tiers_enabled && tiersArr.length">
+        <select [(ngModel)]="params.data.config_value" class="form-select form-select-sm"
+            style="width: 80%; margin: 0 auto;" id="configSelect_{{params.rowIndex}}">
+            <option *ngFor="let value of tiersArr">
+                {{value}}
+            </option>
+        </select>
+    </div>
+    <div *ngIf="user_mgmt_enabled && !user_tiers_enabled" class="text-center" style="padding-top: 5px;">
+        <div class="form-check form-switch" style="display: inline-block;">
+            <input class="form-check-input" [(ngModel)]="params.data.status" type="checkbox" role="switch"
+                id="configSwitch_{{params.rowIndex}}">
+        </div>
+    </div>
+</div>
