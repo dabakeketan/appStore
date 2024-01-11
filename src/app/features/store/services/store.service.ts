@@ -288,7 +288,7 @@ export class StoreService {
         user_role: null
       }
 
-      this.postRequest(reqObj ? reqObj : '', finalURL)
+      this.postRequest(reqObj ? [reqObj] : '', finalURL)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
           next: (response: any) => {
             if (response && response.status === 200) {
