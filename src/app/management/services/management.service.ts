@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subject, forkJoin, takeWhile } from 'rxjs';
 import { AlertService } from 'src/app/alert/services/alert.service';
 import { BaseService } from 'src/app/base.service';
-import { AlertTypes, MNGUrls, successMsgs } from 'src/app/constants';
+import { AlertTypes, MNGAuthUrls, MNGUrls, successMsgs } from 'src/app/constants';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { CreateAppDataModel, CreateVendorDataModel, PartnerListDataModel } from '../models/managementModel';
 const MNG_USER_KEY = 'mng-user-details-auth';
@@ -511,6 +511,21 @@ export class ManagementService implements OnDestroy {
     });
   }
 
+  logout() {
+    this.getDataText(MNGAuthUrls.logout)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.removeMngToken();
+            window.location.href = MNGAuthUrls.logout;
+          }
+        },
+        error: (err: any) => {
+          alert('Logout Failed');
+        }
+      });
+  }
+
   getRequest(reqUrl: string, urlParams?: any) {
     let urlData = '';
     if (urlParams && urlParams.length) {
@@ -560,6 +575,16 @@ export class ManagementService implements OnDestroy {
       });
     }
     return this.baseService.putDataForkJoinSkipIntercept(reqObj, reqUrl + (urlData ? urlData : ''));
+  }
+
+  getDataText(reqUrl: string, urlParams?: any) {
+    let urlData = '';
+    if (urlParams && urlParams.length) {
+      urlParams.forEach((val: any) => {
+        urlData += '&' + val.paramLabel + '=' + val.paramValue
+      });
+    }
+    return this.baseService.getDataText(reqUrl + (urlData ? urlData : ''));
   }
 
   goHome() {

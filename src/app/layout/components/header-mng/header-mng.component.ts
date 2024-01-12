@@ -24,8 +24,9 @@ export class HeaderMngComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.managementService.removeMngToken();
-    location.reload();
+    // this.managementService.removeMngToken();
+    // location.reload();
+    this.managementService.logout();
   }
 
   ngOnDestroy(): void {

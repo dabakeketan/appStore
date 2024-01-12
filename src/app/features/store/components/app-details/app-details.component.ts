@@ -66,6 +66,8 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
   tiersArr = ['Disabled'];
 
+  defaultTierConfigValue = '';
+
   constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService,
     private accountService: AccountService) {
     this.app_Id = String(this.route.snapshot.paramMap.get('id'));
@@ -170,6 +172,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
           response.forEach((element: any) => {
             this.tiersArr.push(element);
           });
+          this.defaultTierConfigValue = this.tiersArr[1];
           this.enabledUsersconfigOptionsOnChanges = {
             isClearSelection: false,
             user_mgmt_enabled: this.appDetailsData.user_mgmt_enabled,
@@ -212,6 +215,9 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   manageUsers() {
     console.log('user mngm on');
     this.openManageUsersPopup();
+    if(this.tiersArr && this.tiersArr.length) {
+      this.defaultTierConfigValue = this.tiersArr[1];
+    }
   }
 
   openManageUsersPopup() {
@@ -253,7 +259,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
       this.selectedUsers.forEach((user: any) => {
         const tempObj = {
           config_name: this.appDetailsData.ns_config_name,
-          config_value: this.tiersArr[0],
+          config_value: this.defaultTierConfigValue,
           domain: this.user.customer_name,
           user: user.user,
           status: false
@@ -283,6 +289,12 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     if (this.customerEnabledUsers.length) {
       console.log('abcd enabaled users', this.customerEnabledUsers);
       this.storeService.enableDisableUsers(this.customerEnabledUsers, this.user, this.appDetailsData);
+    }
+  }
+
+  disableWithUsers() {
+    if (this.customerEnabledUsers.length) {
+      this.storeService.disableWithUsers(this.customerEnabledUsers, this.user, this.appDetailsData);
     }
   }
 

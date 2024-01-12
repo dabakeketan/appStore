@@ -299,7 +299,7 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
     if (event) {
       if (event.action === 'tiersDrag') {
         this.createAppDataModel.tiersArr = event.data;
-        // console.log('abcd createdatamodel', this.createAppDataModel);
+        console.log('abcd createdatamodel', this.createAppDataModel);
       }
     }
   }

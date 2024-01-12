@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent, ITooltipParams } from 'ag-grid-community';
 import { RegStatusRendererComponent } from '../../cell-renderers/reg-status-renderer/reg-status-renderer.component';
 
 @Component({
@@ -24,7 +24,7 @@ export class PartnerListComponent implements OnInit {
 
   gridOptions: GridOptions;
 
- rowSelection: "single" | "multiple" = "single";
+  rowSelection: "single" | "multiple" = "single";
 
   selectedRows: any;
 
@@ -53,7 +53,16 @@ export class PartnerListComponent implements OnInit {
       headerName: 'Registration Status',
       field: 'registration_status',
       cellRenderer: 'regStatusRenderer',
-      headerClass: 'header-label-center'
+      headerClass: 'header-label-center',
+      tooltipValueGetter: (params: ITooltipParams) => {
+        let status = '';
+        if (params.data.registration_status === 'PENDING') {
+          status = 'Registration Pending'
+        } else {
+          status = 'Registration Complete'
+        }
+        return status;
+      }
     }
   ];
 
@@ -81,7 +90,7 @@ export class PartnerListComponent implements OnInit {
 
     // this.gridOptions = {
     //   rowMultiSelectWithClick: true,
-      
+
     //   // rowDeselection: true,
     //   context: { componentParent: this }
     // }
@@ -91,7 +100,7 @@ export class PartnerListComponent implements OnInit {
     this.gridApi = params.api;
     // this.rowData = this.tableData;
     // setTimeout(() => {
-      params.api.sizeColumnsToFit();
+    params.api.sizeColumnsToFit();
     // }, 500);
   }
 

@@ -52,6 +52,7 @@
                             <!-- <p class="whiteClr mb-0">Lorem Ispum Text Lorem Ipsum Text Lorem Ispum Text Lorem Ipsum Text
                             </p> -->
                             <div class="mt-4">
+                                <button class="btn btn-light me-3" (click)="goBack()">Go Back</button>
                                 <button class="btn btn-custom-danger" *ngIf="(isCustomerUser && isAppEnabled && !appDetailsData.user_mgmt_enabled) ||
                                     (!isCustomerUser && isAppEnabled)" (click)="disableApp()">
                                     Disable
@@ -60,13 +61,18 @@
                                     (!isCustomerUser && !isAppEnabled)">
                                     Enable
                                 </button>
-                                <button class="btn btn-custom-pri"
+                                <button class="btn btn-custom-pri me-3"
                                     *ngIf="isCustomerUser && appDetailsData.user_mgmt_enabled" (click)="manageUsers()"
                                     [disabled]="!user">
                                     Manage Users
                                 </button>
+                                <button class="btn btn-custom-danger"
+                                    *ngIf="isCustomerUser && appDetailsData.user_mgmt_enabled && customerEnabledUsers.length"
+                                    (click)="disableWithUsers()" [disabled]="!user">
+                                    Disable
+                                </button>
 
-                                <button class="btn btn-light ms-3" (click)="goBack()">Go Back</button>
+
                             </div>
                             <div class="mt-5">
                                 <div class="overview-section">
@@ -261,7 +267,7 @@
                     <button class="btn btn-sm btn-custom-pri" (click)="openAllUsersPopup()">
                         Add</button>
                     <button class="btn btn-sm btn-custom-pri" (click)="enableDisableUsers()">
-                        Update</button>
+                        Submit</button>
                     <!-- <button class="btn btn-sm btn-custom-danger" (click)="diableUsers()"
                     [disabled]="!selectedEnabledUsers.length">
                         Disable</button> -->
@@ -278,6 +284,19 @@
                     <h5 class="modal-title" *ngIf="appDetailsData && appDetailsData.app_name">
                         Users - {{appDetailsData.app_name}}
                     </h5>
+
+                    <div *ngIf="appDetailsData.user_mgmt_enabled && appDetailsData.user_tiers_enabled && tiersArr.length
+                        && selectedUsers.length">
+                        <span style="display: inline-block;"> <label class="form-label">Select Tier&nbsp;&nbsp;</label>
+                        </span>
+                        <span style="display: inline-block;">
+                            <select [(ngModel)]="defaultTierConfigValue" class="form-select" id="defaultTierConfig">
+                                <option *ngFor="let value of tiersArr">
+                                    {{value}}
+                                </option>
+                            </select>
+                        </span>
+                    </div>
                     <div>
                         <input type="text" placeholder="Search..." class="form-control" id="customerUsersSearch"
                             [(ngModel)]="allUsersSearchText">

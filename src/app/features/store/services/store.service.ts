@@ -276,6 +276,44 @@ export class StoreService {
       });
   }
 
+  disableWithUsers(customerEnabledUsers: Array<CustomerEnabledUsersDataModel>, user: PartnerDataModel, appDetailsData: AppDataModel) {
+    this.spinner.show();
+    let disableReqObj: any = {};
+    let userConfigObjToDisable: any = [];
+    let usersToDisable: any = [];
+    customerEnabledUsers.forEach(item => {
+      usersToDisable.push(item.user + '@' + user.customer_name);
+      const tempObjA = {
+        user: item.user,
+        config_value: item.config_value
+      };
+
+      userConfigObjToDisable.push(tempObjA);
+    });
+    disableReqObj = {
+      'users': usersToDisable
+    };
+    const disableUrl = APIUrls.partnerApps + user.partner_id + '/customer/' + user.customer_name + '/app/' + appDetailsData.app_id;
+    const deleteConfigUrl = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/customer/' + user.customer_name + '/user-config/configs';
+    const requestC = this.deleteRequestForkJoinWithTokenA(disableReqObj, disableUrl);
+    const requestD = this.deleteRequestForkJoinWithTokenA(userConfigObjToDisable, deleteConfigUrl);
+    forkJoin(requestC, requestD)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
+        if (forkResponse && forkResponse.length) {
+          this.spinner.hide();
+          this.accountService.goHome();
+        }
+      }, (error) => {
+        console.log('error at service', error);
+        this.spinner.hide();
+        const obj = {
+          type: 'error',
+          text: 'Something went wrong'
+        }
+        this.alertService.alertSubject.next(obj);
+      });
+  }
+
   enableApp(isCustomerUser: boolean, appDetailsData: AppDataModel, user: PartnerDataModel) {
     if (isCustomerUser) {
       const finalURL = APIUrls.partnerApps + user.partner_id + '/customer/' +
