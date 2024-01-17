@@ -38,7 +38,7 @@ export const MNGUrls = {
 }
 
 export const MNGAuthUrls = {
-    logout: mngAppAuthUrl + 'logout'
+    logout: mngAppAuthUrl + 'logout?federated'
 }
 
 export const UserRoles = {

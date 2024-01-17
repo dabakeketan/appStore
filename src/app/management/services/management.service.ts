@@ -517,6 +517,7 @@ export class ManagementService implements OnDestroy {
         next: (response: any) => {
           if (response && response.status === 200) {
             this.removeMngToken();
+            // location.reload();
             window.location.href = MNGAuthUrls.logout;
           }
         },
