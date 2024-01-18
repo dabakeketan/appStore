@@ -255,7 +255,7 @@
                     </div>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" *ngIf="appDetailsData">
                     <app-enabled-customer-users [rowData]="customerEnabledUsers" [anyChange]="anyChangeA"
                         [configOptionsOnChanges]="enabledUsersconfigOptionsOnChanges" [tiersArr]="tiersArr"
                         [allUsersSearchText]="enabledUsersSearchText"
@@ -285,7 +285,7 @@
                         Users - {{appDetailsData.app_name}}
                     </h5>
 
-                    <div *ngIf="appDetailsData.user_mgmt_enabled && appDetailsData.user_tiers_enabled && tiersArr.length
+                    <div *ngIf="appDetailsData && appDetailsData.user_mgmt_enabled && appDetailsData.user_tiers_enabled && tiersArr.length
                         && selectedUsers.length">
                         <span style="display: inline-block;"> <label class="form-label">Select Tier&nbsp;&nbsp;</label>
                         </span>
@@ -305,8 +305,8 @@
                 </div>
                 <div class="modal-body">
 
-                    <app-customers-list [rowData]="customerUsers" [anyChange]="anyChange"
-                        [configOptionsOnChanges]="allUsersconfigOptionsOnChanges"
+                    <app-customers-list [rowData]="customerUsers" [customerEnabledUsers]="customerEnabledUsers"
+                        [anyChange]="anyChange" [configOptionsOnChanges]="allUsersconfigOptionsOnChanges"
                         [allUsersSearchText]="allUsersSearchText"
                         (rowSelectedEvent)="customerUsersSelectedEvent($event)"></app-customers-list>
                 </div>

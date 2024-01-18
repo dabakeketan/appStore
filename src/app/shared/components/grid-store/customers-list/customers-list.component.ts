@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent, IRowNode } from 'ag-grid-community';
+import { CustomerEnabledUsersDataModel } from 'src/app/features/store/models/storeModel';
 import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
@@ -16,6 +17,8 @@ export class CustomersListComponent implements OnInit, OnChanges {
   @Input() allUsersSearchText: string;
 
   @Input() configOptionsOnChanges: any;
+
+  @Input() customerEnabledUsers: CustomerEnabledUsersDataModel[];
 
   gridApi: GridApi;
 
@@ -72,6 +75,16 @@ export class CustomersListComponent implements OnInit, OnChanges {
       defaultColDef: this.defaultColDef,
       animateRows: true,
       rowSelection: this.rowSelection,
+      isRowSelectable: (rowNode: IRowNode) => {
+        const abcd = this.customerEnabledUsers.some(item => {
+          return item.user === rowNode.data.user;
+        });
+        if (abcd) {
+          return false
+        } else {
+          return true;
+        }
+      },
       suppressRowClickSelection: true,
       pagination: true,
       paginationPageSize: 10,
@@ -132,6 +145,10 @@ export class CustomersListComponent implements OnInit, OnChanges {
     if (this.anyChange && this.gridApi) {
       this.gridApi.sizeColumnsToFit();
       this.anyChange = false;
+    }
+
+    if (this.customerEnabledUsers && this.gridApi) {
+      this.gridApi.setRowData(this.rowData);
     }
 
     if (this.allUsersSearchText && this.gridApi) {
