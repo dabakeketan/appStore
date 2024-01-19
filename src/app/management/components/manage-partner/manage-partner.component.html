@@ -61,7 +61,7 @@
                     <div class="modal-body">
                         <form #updatePartnerForm="ngForm" class="small-labels">
                             <div class="row">
-                                <div class="col-lg-4 mb-3">
+                                <!-- <div class="col-lg-4 mb-3">
                                     <label for="partner_name" class="form-label">Partner Name</label>
                                     <input type="text" class="form-control form-control-sm" name="partner_name"
                                         id="partner_name" required [(ngModel)]="updatePartnerDataModel.partner_name"
@@ -72,10 +72,10 @@
                                             {{errorMsgs.required}}
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-lg-4 mb-3">
-                                    <label for="short_name" class="form-label">Short Name</label>
+                                    <label for="short_name" class="form-label">Partner Name</label>
                                     <input type="text" class="form-control form-control-sm" name="short_name"
                                         id="short_name" required [(ngModel)]="updatePartnerDataModel.short_name"
                                         #short_name="ngModel">
