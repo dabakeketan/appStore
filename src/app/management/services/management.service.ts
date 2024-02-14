@@ -512,19 +512,21 @@ export class ManagementService implements OnDestroy {
   }
 
   logout() {
-    this.getDataText(MNGAuthUrls.logout)
-      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
-        next: (response: any) => {
-          if (response && response.status === 200) {
-            this.removeMngToken();
-            // location.reload();
-            window.location.href = MNGAuthUrls.logout;
-          }
-        },
-        error: (err: any) => {
-          alert('Logout Failed');
-        }
-      });
+    this.removeMngToken();
+    window.location.href = MNGAuthUrls.logout;
+    // this.getDataText(MNGAuthUrls.logout)
+    //   .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+    //     next: (response: any) => {
+    //       if (response && response.status === 200) {
+    //         this.removeMngToken();
+    //         // location.reload();
+    //         window.location.href = MNGAuthUrls.logout;
+    //       }
+    //     },
+    //     error: (err: any) => {
+    //       alert('Logout Failed');
+    //     }
+    //   });
   }
 
   getRequest(reqUrl: string, urlParams?: any) {
