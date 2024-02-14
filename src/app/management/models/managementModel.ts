@@ -71,6 +71,7 @@ export interface AppListDataModel {
   vendor_app_fqdn: string;
   vendor_id: string;
   vendor_name: string;
+  app_status: string;
 }
 
 export interface CreateVendorDataModel {

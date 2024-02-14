@@ -418,6 +418,18 @@ textarea {
     }
 }
 
+.text-custom-pri {
+    color: $crexBgPrimary;
+}
+
+.text-custom-danger {
+    color: $crexBgDanger;
+}
+
+.text-custom-info {
+    color: $crexClrInfo;
+}
+
 // .store-top {
 //     background: linear-gradient(150deg,#7795f8 15%,#6772e5 70%,#555abf 94%);
 // } 

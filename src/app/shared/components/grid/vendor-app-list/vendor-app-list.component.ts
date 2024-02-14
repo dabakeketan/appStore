@@ -39,7 +39,32 @@ export class VendorAppListComponent implements OnInit {
     },
     {
       headerName: 'Application Status',
-      headerClass: 'header-label-center'
+      headerClass: 'header-label-center',
+      cellRenderer: (params: any) => {
+        let divOuter = document.createElement('div');
+        divOuter.classList.add('text-center');
+        let divInner = document.createElement('div');
+        divInner.classList.add('badge');
+        if (params.data && params.data.app_status) {
+          if (params.data.app_status === 'IN_REVIEW') {
+            divInner.innerHTML = 'In Review';
+            divInner.classList.add('btn-custom-info');
+          } else if (params.data.app_status === 'PUBLISHED') {
+            divInner.innerHTML = 'Published';
+            divInner.classList.add('btn-custom-pri');
+          }
+          else if (params.data.app_status === 'REVOKED') {
+            divInner.innerHTML = 'Revoked';
+            divInner.classList.add('btn-custom-danger');
+          } else {
+            divInner.innerHTML = '';
+          }
+        } else {
+          divInner.innerHTML = '';
+        }
+        divOuter.appendChild(divInner);
+        return divOuter;
+      }
     },
     {
       headerName: 'Promoted Status',
@@ -83,7 +108,7 @@ export class VendorAppListComponent implements OnInit {
     this.gridApi = params.api;
     // this.rowData = this.tableData;
     // setTimeout(() => {
-      params.api.sizeColumnsToFit();
+    params.api.sizeColumnsToFit();
     // }, 500);
   }
 
