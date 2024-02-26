@@ -95,8 +95,10 @@ export const AlertTypes = {
     success: 'success'
 }
 
-export const APP_TYPE_VALUES = ['Messaging', 'Analytics', 'AI', 'CRM', 'CallCenter', 'Provisioning',
-    'Compliance']
+export const APP_TYPE_VALUES = ['MESSAGING', 'ANALYTICS', 'AI', 'CRM', 'CALLCENTER', 'PROVISIONING',
+    'COMPLIANCE']
+
+export const APP_STATUS_VALUES = ['IN_REVIEW', 'PUBLISHED', 'REVOKED']
 
 export const AUTH_TYPE_VALUES = ['OAuth', 'API Key']
 

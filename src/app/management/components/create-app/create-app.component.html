@@ -35,6 +35,21 @@
         </div>
 
         <div class="col-lg-4 mb-3">
+            <label for="appStatus" class="form-label">Application Status</label>
+            <select class="form-select form-select-sm" name="appStatus" id="appStatus" required
+                [(ngModel)]="createAppDataModel.app_status" #appStatus="ngModel" [disabled]="isCreateApp">
+                <option *ngFor="let item of APP_STATUS_VALUES">
+                    {{item}}
+                </option>
+            </select>
+            <div *ngIf="appStatus.invalid && (appStatus.dirty || appStatus.touched)" class="invalid-feedback">
+                <div *ngIf="appStatus.errors?.['required']">
+                    {{errorMsgs.required}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-3">
             <label for="appType" class="form-label">Application Type</label>
             <select class="form-select form-select-sm" name="appType" id="appType" required
                 [(ngModel)]="createAppDataModel.app_type" #appType="ngModel">
@@ -65,37 +80,99 @@
         </div>
 
 
+        <div class="col-lg-8 mb-3">
+            <div class="row">
 
-        <div class="col-lg-4 mb-3">
-            <label for="authType" class="form-label">Auth Type</label>
-            <select class="form-select form-select-sm" name="authType" id="authType" required
-                [(ngModel)]="createAppDataModel.auth_type" #authType="ngModel">
-                <option *ngFor="let item of AUTH_TYPE_VALUES">
-                    {{item}}
-                </option>
-            </select>
-            <div *ngIf="authType.invalid && (authType.dirty || authType.touched)" class="invalid-feedback">
-                <div *ngIf="authType.errors?.['required']">
-                    {{errorMsgs.required}}
+
+                <div class="col-lg-6 mb-3">
+                    <label for="authType" class="form-label">Auth Type</label>
+                    <select class="form-select form-select-sm" name="authType" id="authType" required
+                        [(ngModel)]="createAppDataModel.auth_type" #authType="ngModel">
+                        <option *ngFor="let item of AUTH_TYPE_VALUES">
+                            {{item}}
+                        </option>
+                    </select>
+                    <div *ngIf="authType.invalid && (authType.dirty || authType.touched)" class="invalid-feedback">
+                        <div *ngIf="authType.errors?.['required']">
+                            {{errorMsgs.required}}
+                        </div>
+                    </div>
                 </div>
+
+                <div class="col-lg-6 mb-3">
+                    <label for="short_description" class="form-label">Short Description</label>
+                    <input type="text" class="form-control form-control-sm" name="short_description"
+                        id="short_description" required [(ngModel)]="createAppDataModel.short_description"
+                        #short_description="ngModel">
+                    <div *ngIf="short_description.invalid && (short_description.dirty || short_description.touched)"
+                        class="invalid-feedback">
+                        <div *ngIf="short_description.errors?.['required']">
+                            {{errorMsgs.required}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <div class="card p-0">
+                        <!-- <div class="card-header">User Management</div> -->
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Domain Management
+                                <label class="switch ">
+                                    <!-- <input type="checkbox" class="primary"> -->
+                                    <input class="primary" type="checkbox" id="domainManagament" name="domainManagament"
+                                        [(ngModel)]="createAppDataModel.domain_mgmt_enabled" #domainManagament="ngModel"
+                                        (change)="domainMngmntSwitchChange($event)">
+                                    <span class="slider"></span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                Domain Tiers
+                                <label class="switch ">
+                                    <!-- <input type="checkbox" class="primary"> -->
+                                    <input class="primary" type="checkbox" id="domainTiers" name="domainTiers"
+                                        [(ngModel)]="createAppDataModel.domain_tiers_enabled" #domainTiers="ngModel"
+                                        [disabled]="!createAppDataModel.domain_mgmt_enabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <div class="card p-0">
+                        <!-- <div class="card-header">User Management</div> -->
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                User Management
+                                <label class="switch ">
+                                    <!-- <input type="checkbox" class="primary"> -->
+                                    <input class="primary" type="checkbox" id="userManagament" name="userManagament"
+                                        [(ngModel)]="createAppDataModel.user_mgmt_enabled" #userManagament="ngModel"
+                                        (change)="userMngmntSwitchChange($event)">
+                                    <span class="slider"></span>
+                                </label>
+                            </li>
+                            <li class="list-group-item">
+                                User Tiers
+                                <label class="switch ">
+                                    <!-- <input type="checkbox" class="primary"> -->
+                                    <input class="primary" type="checkbox" id="userTiers" name="userTiers"
+                                        [(ngModel)]="createAppDataModel.user_tiers_enabled" #userTiers="ngModel"
+                                        [disabled]="!createAppDataModel.user_mgmt_enabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+               
             </div>
         </div>
 
-        <div class="col-lg-4 mb-3">
-            <label for="short_description" class="form-label">Short Description</label>
-            <input type="text" class="form-control form-control-sm" name="short_description" id="short_description"
-                required [(ngModel)]="createAppDataModel.short_description" #short_description="ngModel">
-            <div *ngIf="short_description.invalid && (short_description.dirty || short_description.touched)"
-                class="invalid-feedback">
-                <div *ngIf="short_description.errors?.['required']">
-                    {{errorMsgs.required}}
-                </div>
-            </div>
-        </div>
 
         <div class="col-lg-4 mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control form-control-sm" style="resize: none; height: 100px;" name="description"
+            <textarea class="form-control form-control-sm" style="resize: none; height: 108px;" name="description"
                 id="description" required [(ngModel)]="createAppDataModel.description" #description="ngModel">
 
             </textarea>
@@ -106,27 +183,30 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
+        <!-- <div class="col-lg-4">
+
             <div class="mb-3">
                 <label for="userTier" class="form-label">&nbsp;</label>
                 <div class="form-check form-switch">
+                    <label class="form-check-label" for="userManagament">User Management</label>
                     <input class="form-check-input" type="checkbox" id="userManagament" name="userManagament"
                         [(ngModel)]="createAppDataModel.user_mgmt_enabled" #userManagament="ngModel"
                         (change)="userMngmntSwitchChange($event)">
-                    <label class="form-check-label" for="userManagament">User Management</label>
+
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="userTier" class="form-label">&nbsp;</label>
                 <div class="form-check form-switch">
+                    <label class="form-check-label" for="userTiers">User Tiers</label>
                     <input class="form-check-input" type="checkbox" id="userTiers" name="userTiers"
                         [(ngModel)]="createAppDataModel.user_tiers_enabled" #userTiers="ngModel"
                         [disabled]="!createAppDataModel.user_mgmt_enabled">
-                    <label class="form-check-label" for="userTiers">User Tiers</label>
+
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="col-lg-6 mb-3">
             <label for="uploadFile" class="form-label">Upload File</label>

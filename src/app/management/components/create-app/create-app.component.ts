@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CreateAppDataModel } from '../../models/managementModel';
-import { APP_TYPE_VALUES, AUTH_TYPE_VALUES, GEOSPEC_VALUES, RegExPatterns, errorMsgs } from 'src/app/constants';
+import { APP_STATUS_VALUES, APP_TYPE_VALUES, AUTH_TYPE_VALUES, GEOSPEC_VALUES, RegExPatterns, errorMsgs } from 'src/app/constants';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -11,6 +11,8 @@ import { NgForm } from '@angular/forms';
 export class CreateAppComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() createAppDataModel: CreateAppDataModel;
+
+  @Input() isCreateApp: boolean;
 
   errorMsgs = errorMsgs;
 
@@ -29,6 +31,8 @@ export class CreateAppComponent implements OnInit, OnChanges, OnDestroy {
   AUTH_TYPE_VALUES = AUTH_TYPE_VALUES;
 
   GEOSPEC_VALUES = GEOSPEC_VALUES;
+
+  APP_STATUS_VALUES = APP_STATUS_VALUES;
 
   constructor() { }
 
@@ -50,7 +54,15 @@ export class CreateAppComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  domainMngmntSwitchChange(event: any) {
+    const val = event.target.checked
+    if (!val) {
+      this.createAppDataModel.domain_tiers_enabled = false;
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('create app boolean', this.isCreateApp);
     if (this.createAppDataModel) {
       // this.createAppForm.form.markAsUntouched();
     }

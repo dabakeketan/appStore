@@ -3,7 +3,7 @@ import { ManagementService } from '../../services/management.service';
 import { takeWhile } from 'rxjs';
 import { AppListDataModel, CreateAppDataModel } from '../../models/managementModel';
 import { NgForm } from '@angular/forms';
-import { APP_TYPE_VALUES, AUTH_TYPE_VALUES, GEOSPEC_VALUES } from 'src/app/constants';
+import { APP_STATUS_VALUES, APP_TYPE_VALUES, AUTH_TYPE_VALUES, GEOSPEC_VALUES } from 'src/app/constants';
 import { ActivatedRoute } from '@angular/router';
 
 declare let bootstrap: any;
@@ -20,6 +20,8 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   createAppPopupA: any;
 
   createAppPopupB: any;
+
+  createAppPopupC: any;
 
   appsListData: AppListDataModel[];
 
@@ -69,10 +71,14 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
       vendor_app_fqdn: '',
       app_type: APP_TYPE_VALUES[0],
       auth_type: AUTH_TYPE_VALUES[0],
+      app_status: APP_STATUS_VALUES[0],
       geospec: GEOSPEC_VALUES[0],
       user_tiers_enabled: false,
       user_mgmt_enabled: false,
+      domain_mgmt_enabled: false,
+      domain_tiers_enabled: false,
       tiersArr: [],
+      tiersArrDomain: []
     };
   }
 
@@ -121,32 +127,34 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.managementService.domaintiersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        // console.log('abcd tiers', response);
+        const tier_names = (response.tier_names && response.tier_names.length) ? response.tier_names : [];
+        this.createAppDataModel.tiersArrDomain = [];
+        this.operateDomainTiers(tier_names);
+        this.createAppPopupA.hide();
+        this.openCreateAppPopupActionB();
+      }
+    });
+
     this.managementService.tiersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         // console.log('abcd tiers', response);
-        let tiersPendingLength = 0;
+        const tier_names = (response.tier_names && response.tier_names.length) ? response.tier_names : [];
         this.createAppDataModel.tiersArr = [];
-        if (!response.length) {
-          this.updateTiers(5);
-        } else if (response.length) {
-          for (let index = 0; index < response.length; index++) {
-            let tempObj = {
-              name: response[index]
-            }
-            this.createAppDataModel.tiersArr.push(tempObj);
-          }
-          tiersPendingLength = 5 - response.length;
-          this.updateTiers(tiersPendingLength);
-        }
+        this.operateTiers(tier_names);
         this.createAppPopupA.hide();
-        this.openCreateAppPopupActionB();
+        this.createAppPopupB.hide();
+        this.openCreateAppPopupActionC();
       }
     });
 
     this.managementService.uploadImgDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.managementService.getVendorAppDetailsA(this.createAppDataModel.app_id);
-        if (this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled) {
+        if ((this.createAppDataModel.domain_mgmt_enabled && this.createAppDataModel.domain_tiers_enabled)
+          || (this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled)) {
           this.goToLastStep();
         } else {
           this.managementService.getVendorAppsList(this.vendor_id);
@@ -155,11 +163,31 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.managementService.domainTiersUpdateDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        const tempArr: any = [];
+        this.createAppDataModel.tiersArrDomain.forEach(item => {
+          if (item.name) {
+            tempArr.push(item.name);
+          }
+        });
+        this.createAppDataModel.tiersArrDomain = [];
+        this.operateDomainTiers(tempArr);
+        console.log('abcd post tiers', this.createAppDataModel);
+        if (this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled) {
+          this.managementService.getTiers(this.createAppDataModel.app_id);
+        } else {
+          this.managementService.getVendorAppsList(this.vendor_id);
+          this.createAppPopupB.hide();
+        }
+      }
+    });
+
     this.managementService.tiersUpdateDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         // console.log('abcd tiers response', response);
         this.managementService.getVendorAppsList(this.vendor_id);
-        this.createAppPopupB.hide();
+        this.createAppPopupC.hide();
       }
     });
 
@@ -168,6 +196,47 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
         this.managementService.getVendorAppsList(this.vendor_id);
       }
     });
+  }
+
+  operateDomainTiers(tier_names: Array<string>) {
+    let tiersPendingLength = 0;
+    if (!tier_names.length) {
+      this.updateTiersDomain(5);
+    } else if (tier_names.length) {
+      for (let index = 0; index < tier_names.length; index++) {
+        let tempObj = {
+          name: tier_names[index]
+        }
+        this.createAppDataModel.tiersArrDomain.push(tempObj);
+      }
+      tiersPendingLength = 5 - tier_names.length;
+      this.updateTiersDomain(tiersPendingLength);
+    }
+  }
+
+  updateTiersDomain(length: any) {
+    for (let index = 0; index < length; index++) {
+      let tempObj = {
+        name: ''
+      }
+      this.createAppDataModel.tiersArrDomain.push(tempObj);
+    }
+  }
+
+  operateTiers(tier_names: Array<string>) {
+    let tiersPendingLength = 0;
+    if (!tier_names.length) {
+      this.updateTiers(5);
+    } else if (tier_names.length) {
+      for (let index = 0; index < tier_names.length; index++) {
+        let tempObj = {
+          name: tier_names[index]
+        }
+        this.createAppDataModel.tiersArr.push(tempObj);
+      }
+      tiersPendingLength = 5 - tier_names.length;
+      this.updateTiers(tiersPendingLength);
+    }
   }
 
   updateTiers(length: any) {
@@ -202,10 +271,14 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
       vendor_app_fqdn: response.vendor_app_fqdn ? response.vendor_app_fqdn : '',
       app_type: response.app_type ? response.app_type : '',
       auth_type: response.auth_type ? response.auth_type : '',
+      app_status: response.app_status ? response.app_status : '',
       geospec: response.geospec ? response.geospec : '',
       user_tiers_enabled: response.user_tiers_enabled ? response.user_tiers_enabled : false,
       user_mgmt_enabled: response.user_mgmt_enabled ? response.user_mgmt_enabled : false,
-      tiersArr: this.createAppDataModel.tiersArr ? this.createAppDataModel.tiersArr : []
+      domain_mgmt_enabled: response.domain_mgmt_enabled ? response.domain_mgmt_enabled : false,
+      domain_tiers_enabled: response.domain_tiers_enabled ? response.domain_tiers_enabled : false,
+      tiersArr: this.createAppDataModel.tiersArr ? this.createAppDataModel.tiersArr : [],
+      tiersArrDomain: this.createAppDataModel.tiersArrDomain ? this.createAppDataModel.tiersArrDomain : []
     }
   }
 
@@ -247,6 +320,14 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
       backdrop: 'static', keyboard: false
     });
     this.createAppPopupB.show();
+  }
+
+  openCreateAppPopupActionC() {
+    // console.log('abcd createdatamodel', this.createAppDataModel);
+    this.createAppPopupC = new bootstrap.Modal(document.getElementById("createAppModalC"), {
+      backdrop: 'static', keyboard: false
+    });
+    this.createAppPopupC.show();
   }
 
   deleteApps() {
@@ -295,6 +376,19 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRowActionDomain(event: any) {
+    if (event) {
+      if (event.action === 'tiersDrag') {
+        this.createAppDataModel.tiersArrDomain = event.data;
+        console.log('abcd createdatamodel', this.createAppDataModel);
+      }
+    }
+  }
+
+  postDomainTiers() {
+    this.managementService.postDomainTiers(this.createAppDataModel);
+  }
+
   onRowAction(event: any) {
     if (event) {
       if (event.action === 'tiersDrag') {
@@ -305,7 +399,6 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   }
 
   postTiers() {
-    // console.log('abcd tiersarr', this.createAppDataModel.tiersArr);
     this.managementService.postTiers(this.createAppDataModel);
   }
 
@@ -315,12 +408,26 @@ export class VendorDetailsComponent implements OnInit, OnDestroy {
   }
 
   goToLastStep() {
-    this.managementService.getTiers(this.createAppDataModel.app_id);
+    if (this.createAppDataModel.domain_mgmt_enabled && this.createAppDataModel.domain_tiers_enabled) {
+      this.managementService.getDomainTiers(this.createAppDataModel.app_id);
+    } else if (this.createAppDataModel.user_mgmt_enabled && this.createAppDataModel.user_tiers_enabled) {
+      this.managementService.getTiers(this.createAppDataModel.app_id);
+    }
   }
 
   goToSecondStep() {
     this.createAppPopupB.hide();
     this.openCreateAppPopupActionA();
+  }
+
+  goToThirdStep() {
+    this.createAppPopupC.hide();
+    if (this.createAppDataModel.domain_mgmt_enabled && this.createAppDataModel.domain_tiers_enabled) {
+      this.openCreateAppPopupActionB();
+    } else {
+      this.openCreateAppPopupActionA();
+    }
+
   }
 
   ngOnDestroy(): void {

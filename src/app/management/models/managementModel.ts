@@ -20,10 +20,14 @@ export interface CreateAppDataModel {
   // price: string;
   app_type: string;
   auth_type: string;
+  app_status?: string;
   geospec: string;
   user_mgmt_enabled: boolean
   user_tiers_enabled: boolean;
+  domain_mgmt_enabled: boolean;
+  domain_tiers_enabled: boolean;
   tiersArr: Array<TiersObj>;
+  tiersArrDomain: Array<TiersObj>
 }
 
 export interface TiersObj {

@@ -48,9 +48,13 @@ export class ManagementService implements OnDestroy {
 
   vendorEditClickSub = new Subject();
 
+  domaintiersDataSub = new Subject();
+
   tiersDataSub = new Subject();
 
   uploadImgDataSub = new Subject();
+
+  domainTiersUpdateDataSub = new Subject();
 
   tiersUpdateDataSub = new Subject();
 
@@ -354,12 +358,16 @@ export class ManagementService implements OnDestroy {
       vendor_app_fqdn: createAppDataModel.vendor_app_fqdn,
       user_mgmt_enabled: createAppDataModel.user_mgmt_enabled,
       user_tiers_enabled: createAppDataModel.user_tiers_enabled,
+      domain_mgmt_enabled: createAppDataModel.domain_mgmt_enabled,
+      domain_tiers_enabled: createAppDataModel.domain_tiers_enabled,
       app_type: createAppDataModel.app_type,
       auth_type: createAppDataModel.auth_type,
+      app_status: createAppDataModel.app_status,
       geospec: createAppDataModel.geospec
     }
     if (isCreateApp) {
       delete reqObj.app_id;
+      delete reqObj.app_status;
       this.postRequest(reqObj, MNGUrls.vendorAppBase)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
           next: (response: any) => {
@@ -436,8 +444,49 @@ export class ManagementService implements OnDestroy {
       });
   }
 
+  getDomainTiers(app_id: any) {
+    const url = MNGUrls.vendorAppBase + '/' + app_id + '/tiers?tier-level=DOMAIN';
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.domaintiersDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.domaintiersDataSub.next(null);
+        }
+      });
+  }
+
+  postDomainTiers(createAppDataModel: CreateAppDataModel) {
+    let tiersArr: any = [];
+    if (createAppDataModel.tiersArrDomain && createAppDataModel.tiersArrDomain.length) {
+      createAppDataModel.tiersArrDomain.forEach(item => {
+        if (item.name) {
+          tiersArr.push(item.name);
+        }
+      })
+    } else {
+      tiersArr = [];
+    }
+    const tempObj = {
+      tier_level: 'DOMAIN',
+      tier_names: tiersArr
+    }
+    const tiersUpdateUrl = MNGUrls.vendorAppBase + '/' + createAppDataModel.app_id + '/tiers';
+    this.putRequest(tempObj, tiersUpdateUrl)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.domainTiersUpdateDataSub.next(true);
+          }
+        }
+      });
+  }
+
   getTiers(app_id: any) {
-    const url = MNGUrls.vendorAppBase + '/' + app_id + '/tiers';
+    const url = MNGUrls.vendorAppBase + '/' + app_id + '/tiers?tier-level=USER';
     this.getRequest(url)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
@@ -462,8 +511,12 @@ export class ManagementService implements OnDestroy {
     } else {
       tiersArr = [];
     }
+    const tempObj = {
+      tier_level: 'USER',
+      tier_names: tiersArr
+    }
     const tiersUpdateUrl = MNGUrls.vendorAppBase + '/' + createAppDataModel.app_id + '/tiers';
-    this.putRequest(tiersArr, tiersUpdateUrl)
+    this.putRequest(tempObj, tiersUpdateUrl)
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
