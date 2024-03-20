@@ -15,7 +15,28 @@ export interface AppDataModel {
     short_description: string;
     user_mgmt_enabled: boolean;
     user_tiers_enabled: boolean;
+    domain_mgmt_enabled: boolean;
+    domain_tiers_enabled: boolean;
     ns_config_name: string;
+}
+
+export interface CustomerUsersForPartnersDataModel {
+    description: string;
+    domain: string;
+    email_sender: string;
+    policies: string;
+    residential: string;
+    subscriber_count: number;
+    territory: string;
+    time_zone: string;
+}
+
+export interface CustomerEnabledUsersForPartnerDataModel {
+    config_name: string;
+    config_value: string;
+    domain: string;
+    user: string;
+    status: boolean;
 }
 
 export interface CustomerUsersDataModel {

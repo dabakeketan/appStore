@@ -4,10 +4,12 @@ import { APIUrls, MNGUrls, categoriesArr, headerTexts } from 'src/app/constants'
 import { StoreService } from '../../services/store.service';
 import { forkJoin, takeWhile } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AppDataModel, CustomerEnabledUsersDataModel, CustomerUsersDataModel } from '../../models/storeModel';
+import { AppDataModel, CustomerEnabledUsersDataModel, CustomerEnabledUsersForPartnerDataModel, CustomerUsersDataModel, CustomerUsersForPartnersDataModel } from '../../models/storeModel';
 import { PartnerDataModel } from 'src/app/account/models/accountModel';
 import { AccountService } from 'src/app/account/services/account.service';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { AlertService } from 'src/app/alert/services/alert.service';
 
 declare let bootstrap: any;
 
@@ -33,6 +35,28 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   user: PartnerDataModel;
 
   isCustomerUser = false;
+
+  allDomainsPopup: any;
+
+  allDomainsSearchText = '';
+
+  allUsersconfigOptionsOnChangesA = {
+    isClearSelection: false
+  }
+
+  anyChangeC = false;
+
+  selectedDomains = [];
+
+  manageDomainsPopup: any;
+
+  customerUsersForPartner: Array<CustomerUsersForPartnersDataModel> = [];
+
+  anyChangeB = false;
+
+  enabledDomainsSearchText = '';
+
+  customerEnabledUsersForPartner: Array<CustomerEnabledUsersForPartnerDataModel> = [];
 
   manageUsersPopup: any;
 
@@ -60,6 +84,12 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     user_tiers_enabled: false
   }
 
+  enabledUsersconfigOptionsOnChangesA = {
+    isClearSelection: false,
+    domain_mgmt_enabled: false,
+    domain_tiers_enabled: false
+  }
+
   customerEnabledUsers: Array<CustomerEnabledUsersDataModel> = [];
 
   selectedEnabledUsers = [];
@@ -69,7 +99,8 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   defaultTierConfigValue = '';
 
   constructor(private router: Router, private route: ActivatedRoute, private storeService: StoreService,
-    private accountService: AccountService) {
+    private accountService: AccountService, private spinner: NgxSpinnerService,
+    private alertService: AlertService) {
     this.app_Id = String(this.route.snapshot.paramMap.get('id'));
     this.user = this.accountService.getUser();
     if (this.user) {
@@ -83,6 +114,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.user) {
+      this.subscriptions();
       this.appInit();
     } else {
       this.appInitA();
@@ -91,8 +123,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   appInit() {
-    this.subscriptions();
-    const response = this.storeService.getRequest(MNGUrls.appBase + '/' + this.app_Id);
+    const response = this.storeService.getDataForkJoinWithToken(MNGUrls.appBase + '/' + this.app_Id);
     let checkEnableUrl = APIUrls.partnerApps + this.user.partner_id;
     if (this.isCustomerUser) {
       checkEnableUrl = checkEnableUrl + '/customer/' + this.user.customer_name +
@@ -100,9 +131,11 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     } else {
       checkEnableUrl = checkEnableUrl + '/app/' + this.app_Id + '/check-enabled'
     }
-    const responseA = this.storeService.getRequest(checkEnableUrl);
+    const responseA = this.storeService.getDataForkJoinWithToken(checkEnableUrl);
+    this.spinner.show();
     forkJoin([response, responseA])
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
+        this.spinner.hide();
         if (forkResponse && forkResponse.length) {
           if (forkResponse[0] && forkResponse[0].status === 200 && forkResponse[0].body) {
             this.appDetailsData = forkResponse[0].body;
@@ -111,17 +144,29 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
               user_mgmt_enabled: this.appDetailsData.user_mgmt_enabled,
               user_tiers_enabled: false
             }
+            this.enabledUsersconfigOptionsOnChangesA = {
+              isClearSelection: false,
+              domain_mgmt_enabled: this.appDetailsData.domain_mgmt_enabled,
+              domain_tiers_enabled: false
+            }
+            if (this.appDetailsData && this.appDetailsData.domain_mgmt_enabled && !this.isCustomerUser) {
+              this.storeService.getCustomerUsersForPartner(this.appDetailsData.app_id, this.user);
+              this.storeService.getCustomerUserConfigsForPartner(this.appDetailsData.app_id, this.user);
+            }
             if (this.appDetailsData && this.appDetailsData.user_mgmt_enabled && this.isCustomerUser) {
               this.storeService.getCustomerUsers(this.appDetailsData.app_id, this.user);
               this.storeService.getCustomerUserConfigs(this.appDetailsData.app_id, this.user);
             }
-            if (this.appDetailsData && this.appDetailsData.user_mgmt_enabled && this.appDetailsData.user_tiers_enabled
-              && this.isCustomerUser) {
+            if (this.appDetailsData && (
+              (this.appDetailsData.domain_mgmt_enabled && this.appDetailsData.domain_tiers_enabled)
+              ||
+              (this.appDetailsData.user_mgmt_enabled && this.appDetailsData.user_tiers_enabled)
+            )) {
               this.storeService.getAppTiers(this.appDetailsData.app_id);
             }
           }
           if (forkResponse[1] && forkResponse[1].status === 200 && forkResponse[1].body) {
-            console.log(forkResponse[1].body);
+            // console.log(forkResponse[1].body);
             const res = forkResponse[1].body;
             if (res && res.message && res.message === 'False') {
               this.isAppEnabled = false;
@@ -131,6 +176,24 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
           }
         }
+      }, (error) => {
+        // console.log('error at service', error);
+        this.spinner.hide();
+        Swal.fire({
+          title: "Session Expired!",
+          icon: "error",
+          confirmButtonColor: "#2dce89",
+          confirmButtonText: "Ok"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.accountService.logout();
+          }
+        });
+        // const obj = {
+        //   type: 'error',
+        //   text: 'Something went wrong'
+        // }
+        // this.alertService.alertSubject.next(obj);
       });
 
 
@@ -152,6 +215,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     this.storeService.customerUsersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.customerUsers = response;
+        // console.log('abcd cus', this.customerUsers);
       }
     });
 
@@ -166,25 +230,68 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.storeService.customerUsersForPertnerDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.customerUsersForPartner = response;
+        // console.log('abcd part', this.customerUsersForPartner);
+      }
+    });
+
+    this.storeService.customerEnabledForPartnerUsersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.customerEnabledUsersForPartner = response;
+        if (this.appDetailsData.domain_mgmt_enabled && !this.appDetailsData.domain_tiers_enabled) {
+          this.customerEnabledUsersForPartner.forEach(item => {
+            item.status = true;
+          });
+        }
+        // console.log('abcd enabled domains', this.customerEnabledUsersForPartner);
+      }
+    });
+
     this.storeService.tiersArrDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
-        if (response && response.length) {
-          response.forEach((element: any) => {
+        if (response) {
+          const tier_names = response.tier_names && response.tier_names.length ? response.tier_names : [];
+          tier_names.forEach((element: any) => {
             this.tiersArr.push(element);
           });
           this.defaultTierConfigValue = this.tiersArr[1];
-          this.enabledUsersconfigOptionsOnChanges = {
-            isClearSelection: false,
-            user_mgmt_enabled: this.appDetailsData.user_mgmt_enabled,
-            user_tiers_enabled: this.appDetailsData.user_tiers_enabled,
+          if (this.isCustomerUser) {
+            this.enabledUsersconfigOptionsOnChanges = {
+              isClearSelection: false,
+              user_mgmt_enabled: this.appDetailsData.user_mgmt_enabled,
+              user_tiers_enabled: this.appDetailsData.user_tiers_enabled,
+            }
+          } else {
+            this.enabledUsersconfigOptionsOnChangesA = {
+              isClearSelection: false,
+              domain_mgmt_enabled: this.appDetailsData.domain_mgmt_enabled,
+              domain_tiers_enabled: this.appDetailsData.domain_tiers_enabled,
+            }
           }
+
         }
+        // console.log('abcd tiers', this.tiersArr);
       }
     });
 
     this.storeService.updateUsersDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
       next: (response: any) => {
         this.handleEnableUsers();
+      }
+    });
+
+    this.storeService.updateDomainsDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.handleEnableDomains();
+      }
+    });
+
+
+    this.storeService.enableAppDataSub.pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+      next: (response: any) => {
+        this.appInit();
       }
     });
   }
@@ -204,6 +311,21 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  handleEnableDomains() {
+    this.manageDomainsPopup.hide();
+    Swal.fire({
+      title: "Success",
+      icon: "success",
+      confirmButtonColor: "#2dce89",
+      confirmButtonText: "Ok"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.storeService.getCustomerUsersForPartner(this.appDetailsData.app_id, this.user);
+        this.storeService.getCustomerUserConfigsForPartner(this.appDetailsData.app_id, this.user);
+      }
+    });
+  }
+
   disableApp() {
     this.storeService.disableApp(this.isCustomerUser, this.appDetailsData, this.user);
   }
@@ -212,10 +334,81 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
     this.storeService.enableApp(this.isCustomerUser, this.appDetailsData, this.user);
   }
 
+  manageDomains() {
+    this.openManageDomainsPopup();
+    if (this.tiersArr && this.tiersArr.length) {
+      this.defaultTierConfigValue = this.tiersArr[1];
+    }
+  }
+
+  openManageDomainsPopup() {
+    this.manageDomainsPopup = new bootstrap.Modal(document.getElementById("manageDomainsPopup"), {
+      backdrop: 'static', keyboard: false
+    });
+    this.manageDomainsPopup.show();
+    this.anyChangeB = true;
+  }
+
+  openAllDomainsPopup() {
+    this.allDomainsPopup = new bootstrap.Modal(document.getElementById("allDomainsPopup"), {
+      backdrop: 'static', keyboard: false
+    });
+    this.allDomainsPopup.show();
+    this.anyChangeC = true;
+  }
+
+  customerDominsSelectedEvent(event: any) {
+    // console.log('abcd selected domains', event);
+    this.selectedDomains = event;
+  }
+
+  cancelAllDomainsPopup() {
+    this.allUsersconfigOptionsOnChangesA = {
+      isClearSelection: true
+    }
+  }
+
+  addToEnableDomains() {
+    if (this.appDetailsData.domain_mgmt_enabled && this.appDetailsData.domain_tiers_enabled) {
+      this.selectedDomains.forEach((user: any) => {
+        const tempObj = {
+          config_name: '',
+          config_value: this.defaultTierConfigValue,
+          domain: user.domain,
+          user: user.user,
+          status: false
+        };
+        this.customerEnabledUsersForPartner.push(tempObj);
+      });
+      this.customerEnabledUsersForPartner = [...this.customerEnabledUsersForPartner];
+      this.cancelAllDomainsPopup();
+      this.allDomainsPopup.hide();
+    } else if (this.appDetailsData.domain_mgmt_enabled && !this.appDetailsData.domain_tiers_enabled) {
+      this.selectedDomains.forEach((user: any) => {
+        const tempObj = {
+          config_name: '',
+          config_value: '1',
+          domain: user.domain,
+          user: user.user,
+          status: true
+        };
+        this.customerEnabledUsersForPartner.push(tempObj);
+      });
+      this.customerEnabledUsersForPartner = [...this.customerEnabledUsersForPartner];
+      this.allDomainsPopup.hide();
+    }
+  }
+
+  enableDisableUsersForPartner() {
+    if (this.customerEnabledUsersForPartner.length) {
+      // console.log('abcd enabaled users', this.customerEnabledUsersForPartner);
+      this.storeService.enableDisableUsersForPartner(this.customerEnabledUsersForPartner, this.user, this.appDetailsData);
+    }
+  }
+
   manageUsers() {
-    console.log('user mngm on');
     this.openManageUsersPopup();
-    if(this.tiersArr && this.tiersArr.length) {
+    if (this.tiersArr && this.tiersArr.length) {
       this.defaultTierConfigValue = this.tiersArr[1];
     }
   }
@@ -237,7 +430,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   customerUsersSelectedEvent(event: any) {
-    console.log('abcd selected users', event);
+    // console.log('abcd selected users', event);
     this.selectedUsers = event;
   }
 
@@ -249,7 +442,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
   }
 
   customerEnabledUsersSelectedEvent(event: any) {
-    console.log('abcd selected enabled users', event);
+    // console.log('abcd selected enabled users', event);
     this.selectedEnabledUsers = event;
   }
 
@@ -287,7 +480,7 @@ export class AppDetailsComponent implements OnInit, OnDestroy {
 
   enableDisableUsers() {
     if (this.customerEnabledUsers.length) {
-      console.log('abcd enabaled users', this.customerEnabledUsers);
+      // console.log('abcd enabaled users', this.customerEnabledUsers);
       this.storeService.enableDisableUsers(this.customerEnabledUsers, this.user, this.appDetailsData);
     }
   }

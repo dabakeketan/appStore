@@ -1,0 +1,4 @@
+<div class="custom-ag-table-a" *ngIf="rowData">
+    <ag-grid-angular [ngStyle]="style" class="ag-theme-alpine normal" [rowData]="rowData" [columnDefs]="columnDefs"
+        (gridReady)="onGridReady($event)" [gridOptions]="gridOptions"></ag-grid-angular>
+</div>

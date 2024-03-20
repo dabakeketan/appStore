@@ -1,14 +1,14 @@
-import { Component, DoCheck, EventEmitter, Input, IterableDiffers, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { SharedService } from 'src/app/shared/shared.service';
-import { UserConfigValueRendererComponent } from '../../grid-store-cell-renderers/user-config-value-renderer/user-config-value-renderer.component';
+import { DomainConfigValueRendererComponent } from '../../grid-store-cell-renderers/domain-config-value-renderer/domain-config-value-renderer.component';
 
 @Component({
-  selector: 'app-enabled-customer-users',
-  templateUrl: './enabled-customer-users.component.html',
-  styleUrls: ['./enabled-customer-users.component.scss']
+  selector: 'app-enabled-domain-users',
+  templateUrl: './enabled-domain-users.component.html',
+  styleUrls: ['./enabled-domain-users.component.scss']
 })
-export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
+export class EnabledDomainUsersComponent implements OnInit, OnChanges {
 
   @Input() rowData: any;
 
@@ -36,10 +36,10 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
 
   public columnDefs: ColDef[] = [
     {
-      headerName: 'User',
-      field: 'user',
+      headerName: 'Domain',
+      field: 'domain',
       sort: 'asc',
-      comparator: this.sharedService.numberComparator
+      comparator: this.sharedService.textComparator
     },
     {
       headerName: 'Value',
@@ -71,7 +71,7 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
   compInit() {
     this.gridOptions = {
       components: {
-        confgValueRenderer: UserConfigValueRendererComponent
+        confgValueRenderer: DomainConfigValueRendererComponent
       },
       columnDefs: this.columnDefs,
       defaultColDef: this.defaultColDef,
@@ -143,5 +143,4 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
       this.clearRowSelection();
     }
   }
-
 }

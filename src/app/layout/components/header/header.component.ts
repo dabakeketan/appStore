@@ -65,8 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.accountServie.removeUser();
-    location.reload();
+    this.accountServie.logout();
   }
 
   ngOnDestroy(): void {

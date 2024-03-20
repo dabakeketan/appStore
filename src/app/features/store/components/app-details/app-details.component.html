@@ -53,11 +53,11 @@
                             </p> -->
                             <div class="mt-4">
                                 <button class="btn btn-light me-3" (click)="goBack()">Go Back</button>
-                                <button class="btn btn-custom-danger" *ngIf="(isCustomerUser && isAppEnabled && !appDetailsData.user_mgmt_enabled) ||
+                                <button class="btn btn-custom-danger me-3" *ngIf="(isCustomerUser && isAppEnabled && !appDetailsData.user_mgmt_enabled) ||
                                     (!isCustomerUser && isAppEnabled)" (click)="disableApp()">
                                     Disable
                                 </button>
-                                <button class="btn btn-custom-pri" (click)="enableApp()" [disabled]="!user" *ngIf="(isCustomerUser && !isAppEnabled && !appDetailsData.user_mgmt_enabled) ||
+                                <button class="btn btn-custom-pri me-3" (click)="enableApp()" [disabled]="!user" *ngIf="(isCustomerUser && !isAppEnabled && !appDetailsData.user_mgmt_enabled) ||
                                     (!isCustomerUser && !isAppEnabled)">
                                     Enable
                                 </button>
@@ -66,13 +66,16 @@
                                     [disabled]="!user">
                                     Manage Users
                                 </button>
-                                <button class="btn btn-custom-danger"
+                                <button class="btn btn-custom-danger me-3"
                                     *ngIf="isCustomerUser && appDetailsData.user_mgmt_enabled && customerEnabledUsers.length"
                                     (click)="disableWithUsers()" [disabled]="!user">
                                     Disable
                                 </button>
-
-
+                                <button class="btn btn-custom-pri me-3"
+                                    *ngIf="!isCustomerUser && appDetailsData.domain_mgmt_enabled && isAppEnabled"
+                                    [disabled]="!user" (click)="manageDomains()">
+                                    Manage Domains
+                                </button>
                             </div>
                             <div class="mt-5">
                                 <div class="overview-section">
@@ -315,6 +318,85 @@
                         [disabled]="!selectedUsers.length">
                         Add</button>
                     <button type="button" (click)="cancelAllUsersPopup()" class="btn btn-sm btn-secondary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="manageDomainsPopup" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" *ngIf="appDetailsData && appDetailsData.app_name">
+                        Enabled Domains - {{appDetailsData.app_name}}
+                    </h5>
+                    <div>
+                        <input type="text" placeholder="Search..." class="form-control"
+                            id="customerEnabledDomainsSearch" [(ngModel)]="enabledDomainsSearchText">
+                    </div>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body" *ngIf="appDetailsData">
+                    <app-enabled-domain-users [rowData]="customerEnabledUsersForPartner" [anyChange]="anyChangeB"
+                        [configOptionsOnChanges]="enabledUsersconfigOptionsOnChangesA" [tiersArr]="tiersArr"
+                        [allUsersSearchText]="enabledDomainsSearchText"></app-enabled-domain-users>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-custom-pri" (click)="openAllDomainsPopup()">
+                        Add</button>
+                    <button class="btn btn-sm btn-custom-pri" (click)="enableDisableUsersForPartner()"
+                        [disabled]="!customerEnabledUsersForPartner.length">
+                        Submit</button>
+                    <!-- <button class="btn btn-sm btn-custom-danger" (click)="diableUsers()"
+                    [disabled]="!selectedEnabledUsers.length">
+                        Disable</button> -->
+
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="allDomainsPopup">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" *ngIf="appDetailsData && appDetailsData.app_name">
+                        Domains - {{appDetailsData.app_name}}
+                    </h5>
+
+                    <div *ngIf="appDetailsData && appDetailsData.domain_mgmt_enabled && appDetailsData.domain_tiers_enabled && tiersArr.length
+                        && selectedDomains.length">
+                        <span style="display: inline-block;"> <label class="form-label">Select Tier&nbsp;&nbsp;</label>
+                        </span>
+                        <span style="display: inline-block;">
+                            <select [(ngModel)]="defaultTierConfigValue" class="form-select" id="defaultTierConfigA">
+                                <option *ngFor="let value of tiersArr">
+                                    {{value}}
+                                </option>
+                            </select>
+                        </span>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Search..." class="form-control" id="customerDomainSearch"
+                            [(ngModel)]="allDomainsSearchText">
+                    </div>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+
+                    <app-domain-list [rowData]="customerUsersForPartner"
+                        [customerEnabledUsers]="customerEnabledUsersForPartner" [anyChange]="anyChangeC"
+                        [configOptionsOnChanges]="allUsersconfigOptionsOnChangesA"
+                        [allUsersSearchText]="allDomainsSearchText"
+                        (rowSelectedEvent)="customerDominsSelectedEvent($event)"></app-domain-list>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-custom-pri" (click)="addToEnableDomains()"
+                        [disabled]="!selectedDomains.length">
+                        Add</button>
+                    <button type="button" (click)="cancelAllDomainsPopup()" class="btn btn-sm btn-secondary"
                         data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>

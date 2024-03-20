@@ -1,14 +1,14 @@
-import { Component, DoCheck, EventEmitter, Input, IterableDiffers, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { GridApi, GridOptions, ColDef, DomLayoutType, GridReadyEvent } from 'ag-grid-community';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ColDef, DomLayoutType, GridApi, GridOptions, GridReadyEvent, IRowNode } from 'ag-grid-community';
+import { CustomerEnabledUsersDataModel } from 'src/app/features/store/models/storeModel';
 import { SharedService } from 'src/app/shared/shared.service';
-import { UserConfigValueRendererComponent } from '../../grid-store-cell-renderers/user-config-value-renderer/user-config-value-renderer.component';
 
 @Component({
-  selector: 'app-enabled-customer-users',
-  templateUrl: './enabled-customer-users.component.html',
-  styleUrls: ['./enabled-customer-users.component.scss']
+  selector: 'app-domain-list',
+  templateUrl: './domain-list.component.html',
+  styleUrls: ['./domain-list.component.scss']
 })
-export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
+export class DomainListComponent implements OnInit, OnChanges {
 
   @Input() rowData: any;
 
@@ -18,7 +18,7 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
 
   @Input() configOptionsOnChanges: any;
 
-  @Input() tiersArr: Array<string>;
+  @Input() customerEnabledUsers: CustomerEnabledUsersDataModel[];
 
   gridApi: GridApi;
 
@@ -36,22 +36,16 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
 
   public columnDefs: ColDef[] = [
     {
-      headerName: 'User',
-      field: 'user',
+      headerName: 'Domain',
+      field: 'domain',
       sort: 'asc',
-      comparator: this.sharedService.numberComparator
-    },
-    {
-      headerName: 'Value',
-      field: 'config_value',
-      sortable: false,
-      cellRenderer: 'confgValueRenderer',
-      headerClass: 'header-label-center',
+      comparator: this.sharedService.textComparator,
+      checkboxSelection: true,
     }
   ];
 
   public defaultColDef: ColDef = {
-    sortable: true
+    sortable: true,
   };
 
   public domLayout: DomLayoutType = 'autoHeight';
@@ -61,8 +55,8 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
     height: '100%'
   };
 
-  constructor(private sharedService: SharedService) {
-  }
+
+  constructor(private sharedService: SharedService) { }
 
   ngOnInit(): void {
     this.compInit();
@@ -71,11 +65,22 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
   compInit() {
     this.gridOptions = {
       components: {
-        confgValueRenderer: UserConfigValueRendererComponent
+
       },
-      columnDefs: this.columnDefs,
       defaultColDef: this.defaultColDef,
       animateRows: true,
+      rowSelection: this.rowSelection,
+      isRowSelectable: (rowNode: IRowNode) => {
+        const abcd = this.customerEnabledUsers.some(item => {
+          return item.domain === rowNode.data.domain;
+        });
+        if (abcd) {
+          return false
+        } else {
+          return true;
+        }
+      },
+      suppressRowClickSelection: true,
       pagination: true,
       paginationPageSize: 10,
       alwaysShowHorizontalScroll: false,
@@ -86,9 +91,6 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
       },
       onRowDoubleClicked: ($event) => {
         this.onRowDoubleClicked($event);
-      },
-      onGridReady: ($event) => {
-        this.onGridReady($event);
       },
       onSortChanged: () => {
         // const sortModel = this.gridApi.getSortModel()[0];
@@ -104,6 +106,7 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.gridApi.setColumnDefs(this.columnDefs);
     params.api.sizeColumnsToFit();
   }
 
@@ -118,7 +121,7 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
   }
 
   onRowDoubleClicked(event: any) {
-    this.rowEditedEvent.emit(event.data);
+    // this.rowEditedEvent.emit(event.data);
   }
 
   clearRowSelection() {
@@ -127,12 +130,22 @@ export class EnabledCustomerUsersComponent implements OnInit, OnChanges {
     }
   }
 
+  onResize(event: any) {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit();
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log('abcd enabled row data on change', this.rowData);
-    if ((this.anyChange) && this.gridApi) {
+    if (this.anyChange && this.gridApi) {
       this.gridApi.sizeColumnsToFit();
       this.anyChange = false;
     }
+
+    if (this.customerEnabledUsers && this.gridApi) {
+      this.gridApi.setRowData(this.rowData);
+    }
+
     if (this.allUsersSearchText && this.gridApi) {
       this.gridApi.setQuickFilter(this.allUsersSearchText)
     } else if (!this.allUsersSearchText && this.gridApi) {

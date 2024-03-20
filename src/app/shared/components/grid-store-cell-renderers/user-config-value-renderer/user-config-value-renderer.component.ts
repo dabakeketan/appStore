@@ -23,7 +23,7 @@ export class UserConfigValueRendererComponent implements ICellRendererAngularCom
     this.user_mgmt_enabled = this.params.context.componentParent.configOptionsOnChanges.user_mgmt_enabled;
     this.user_tiers_enabled = this.params.context.componentParent.configOptionsOnChanges.user_tiers_enabled;
     this.tiersArr = this.params.context.componentParent.tiersArr;
-    console.log('abcd config renderer', params);
+    // console.log('abcd config renderer', params);
     // console.log('abcd config', this.user_mgmt_enabled, this.user_tiers_enabled)
   }
 

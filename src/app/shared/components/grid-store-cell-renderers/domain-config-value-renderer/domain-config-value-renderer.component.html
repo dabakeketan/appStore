@@ -1,0 +1,17 @@
+<div *ngIf="params">
+   
+    <div *ngIf="domain_mgmt_enabled && domain_tiers_enabled && tiersArr.length">
+        <select [(ngModel)]="params.data.config_value" class="form-select form-select-sm"
+            style="width: 80%; margin: 0 auto;" id="domainconfigSelect_{{params.rowIndex}}">
+            <option *ngFor="let value of tiersArr">
+                {{value}}
+            </option>
+        </select>
+    </div>
+    <div *ngIf="domain_mgmt_enabled && !domain_tiers_enabled" class="text-center" style="padding-top: 5px;">
+        <div class="form-check form-switch" style="display: inline-block;">
+            <input class="form-check-input" [(ngModel)]="params.data.status" type="checkbox" role="switch"
+                id="domainconfigSwitch_{{params.rowIndex}}">
+        </div>
+    </div>
+</div>

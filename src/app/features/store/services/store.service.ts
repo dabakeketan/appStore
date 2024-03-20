@@ -28,6 +28,10 @@ export class StoreService {
 
   customerEnabledUsersDataSub = new Subject();
 
+  customerUsersForPertnerDataSub = new Subject();
+
+  customerEnabledForPartnerUsersDataSub = new Subject();
+
   destroySubscription = false;
 
   imagePath: any;
@@ -35,6 +39,10 @@ export class StoreService {
   tiersArrDataSub = new Subject();
 
   updateUsersDataSub = new Subject();
+
+  updateDomainsDataSub = new Subject();
+
+  enableAppDataSub = new Subject();
 
   constructor(private baseService: BaseService, private router: Router, private alertService: AlertService,
     private accountService: AccountService, private spinner: NgxSpinnerService) {
@@ -45,7 +53,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('at login main spotlight apps', response.body);
+            // console.log('at login main spotlight apps', response.body);
             this.spotlightApps.next(response.body);
           }
         }
@@ -57,7 +65,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('at login main all apps', response.body);
+            // console.log('at login main all apps', response.body);
             this.allApps.next(response.body);
           }
         }
@@ -76,7 +84,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('at login main partner enabled apps', response.body);
+            // console.log('at login main partner enabled apps', response.body);
             this.enabledApps.next(response.body);
           }
         }
@@ -94,7 +102,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('at login main partner avail apps', response.body);
+            // console.log('at login main partner avail apps', response.body);
             this.availApps.next(response.body);
           }
         }
@@ -106,7 +114,7 @@ export class StoreService {
       .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            console.log('app details', response.body);
+            // console.log('app details', response.body);
             this.appDetailsSubject.next(response.body);
           }
         },
@@ -129,6 +137,114 @@ export class StoreService {
         error: (err: any) => {
           this.tiersArrDataSub.next(null);
         }
+      });
+  }
+
+  getCustomerUsersForPartner(app_id: string, user: PartnerDataModel) {
+    let url = APIUrls.partnerApps + user.partner_id + '/customers';
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.customerUsersForPertnerDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.customerUsersForPertnerDataSub.next(null);
+        }
+      });
+  }
+
+  getCustomerUserConfigsForPartner(app_id: string, user: PartnerDataModel) {
+    let url = APIUrls.partnerApps + user.partner_id + '/app/' + app_id + '/customer/all/user-config/configs';
+    this.getRequest(url)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.customerEnabledForPartnerUsersDataSub.next(response.body);
+          }
+        },
+        error: (err: any) => {
+          this.customerEnabledForPartnerUsersDataSub.next(null);
+        }
+      });
+  }
+
+  enableDisableUsersForPartner(customerEnabledUsersForPartner: Array<CustomerEnabledUsersDataModel>, user: PartnerDataModel, appDetailsData: AppDataModel) {
+    const enabledDomains: any = [];
+    const enabaledDomainsWithTiers: any = [];
+    const disabledDomains: any = [];
+    // console.log('abcd data at submit', customerEnabledUsersForPartner);
+    if (appDetailsData.domain_mgmt_enabled && appDetailsData.domain_tiers_enabled) {
+
+      customerEnabledUsersForPartner.forEach(item => {
+        if (item.config_value !== 'Disabled') {
+          const tempObj = {
+            customer_name: item.domain,
+            tier_name: item.config_value
+          }
+          enabaledDomainsWithTiers.push(tempObj);
+        } else {
+          const tempObj = {
+            customer_name: item.domain
+          }
+          disabledDomains.push(tempObj);
+        }
+
+      });
+
+    } else if (appDetailsData.domain_mgmt_enabled && !appDetailsData.domain_tiers_enabled) {
+
+      customerEnabledUsersForPartner.forEach(item => {
+        if (item.status) {
+          const tempObj = {
+            customer_name: item.domain,
+            enabled: item.status
+          }
+          enabledDomains.push(tempObj);
+        } else {
+          const tempObj = {
+            customer_name: item.domain
+          }
+          disabledDomains.push(tempObj);
+        }
+
+      });
+
+    }
+
+    const enableDisableWithManageURL = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/customers';
+    let requestA: any = '';
+    if (appDetailsData.domain_mgmt_enabled && appDetailsData.domain_tiers_enabled) {
+      requestA = this.putDataForkJoinWithToken(enabaledDomainsWithTiers, enableDisableWithManageURL);
+    } else if (appDetailsData.domain_mgmt_enabled && !appDetailsData.domain_tiers_enabled) {
+      requestA = this.putDataForkJoinWithToken(enabledDomains, enableDisableWithManageURL);
+    }
+
+    const requestB = this.deleteRequestForkJoinWithTokenA(disabledDomains, enableDisableWithManageURL);
+
+    const forkArray = [];
+    if ((enabaledDomainsWithTiers && enabaledDomainsWithTiers.length) || (enabledDomains && enabledDomains.length)) {
+      forkArray.push(requestA);
+    }
+    if (disabledDomains && disabledDomains.length) {
+      forkArray.push(requestB);
+    }
+    this.spinner.show();
+    forkJoin(forkArray)
+      .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
+        if (forkResponse && forkResponse.length) {
+          this.spinner.hide();
+          this.updateDomainsDataSub.next(true);
+        }
+      }, (error) => {
+        // console.log('error at service', error);
+        this.spinner.hide();
+        const obj = {
+          type: 'error',
+          text: 'Something went wrong'
+        }
+        this.alertService.alertSubject.next(obj);
       });
   }
 
@@ -266,7 +382,7 @@ export class StoreService {
           this.updateUsersDataSub.next(true);
         }
       }, (error) => {
-        console.log('error at service', error);
+        // console.log('error at service', error);
         this.spinner.hide();
         const obj = {
           type: 'error',
@@ -304,7 +420,7 @@ export class StoreService {
           this.accountService.goHome();
         }
       }, (error) => {
-        console.log('error at service', error);
+        // console.log('error at service', error);
         this.spinner.hide();
         const obj = {
           type: 'error',
@@ -338,21 +454,22 @@ export class StoreService {
       this.spinner.show();
       let forKJoinArr = [];
       const finalURL = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id;
-      const createConfigUrl = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/config-definition';
-      const response = this.postDataForkJoinWithToken('', finalURL);
-      const responseA = this.postDataForkJoinWithToken('', createConfigUrl);
+      // const createConfigUrl = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/config-definition';
+      const response = this.putDataForkJoinWithToken('', finalURL);
+      // const responseA = this.postDataForkJoinWithToken('', createConfigUrl);
       forKJoinArr.push(response);
-      if (appDetailsData.user_mgmt_enabled) {
-        forKJoinArr.push(responseA);
-      }
+      // if (appDetailsData.user_mgmt_enabled) {
+      //   forKJoinArr.push(responseA);
+      // }
       forkJoin(forKJoinArr)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
           if (forkResponse && forkResponse.length) {
             this.spinner.hide();
-            this.accountService.goHome();
+            // this.accountService.goHome();
+            this.enableAppDataSub.next(true);
           }
         }, (error) => {
-          console.log('error at service', error);
+          // console.log('error at service', error);
           this.spinner.hide();
           const obj = {
             type: 'error',
@@ -383,13 +500,13 @@ export class StoreService {
       this.spinner.show();
       let forKJoinArr = [];
       const finalURL = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id;
-      const deleteConfigUrl = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/config-definition';
+      // const deleteConfigUrl = APIUrls.partnerApps + user.partner_id + '/app/' + appDetailsData.app_id + '/config-definition';
       const response = this.deleteRequestForkJoinWithToken(finalURL);
-      const responseA = this.deleteRequestForkJoinWithToken(deleteConfigUrl)
+      // const responseA = this.deleteRequestForkJoinWithToken(deleteConfigUrl)
       forKJoinArr.push(response);
-      if (appDetailsData.user_mgmt_enabled) {
-        forKJoinArr.push(responseA);
-      }
+      // if (appDetailsData.user_mgmt_enabled) {
+      //   forKJoinArr.push(responseA);
+      // }
       forkJoin(forKJoinArr)
         .pipe(takeWhile(() => !this.destroySubscription)).subscribe((forkResponse: any) => {
           if (forkResponse && forkResponse.length) {
@@ -397,7 +514,7 @@ export class StoreService {
             this.accountService.goHome();
           }
         }, (error) => {
-          console.log('error at service', error);
+          // console.log('error at service', error);
           this.spinner.hide();
           const obj = {
             type: 'error',
@@ -443,8 +560,16 @@ export class StoreService {
     return this.baseService.deleteRequestA(reqObj, deleteUrl);
   }
 
+  getDataForkJoinWithToken(reqUrl: string) {
+    return this.baseService.getDataForkJoinWithToken(reqUrl);
+  }
+  
   postDataForkJoinWithToken(reqObj: any, reqUrl: string) {
     return this.baseService.postDataForkJoinWithToken(reqObj, reqUrl);
+  }
+
+  putDataForkJoinWithToken(reqObj: any, reqUrl: string) {
+    return this.baseService.putDataForkJoinWithToken(reqObj, reqUrl);
   }
 
   deleteRequestForkJoinWithToken(reqUrl: string) {

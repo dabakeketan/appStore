@@ -26,6 +26,11 @@ export class AccountService implements OnDestroy {
     this.partnerDataModel = {} as PartnerDataModel;
   }
 
+  logout() {
+    this.removeUser();
+    location.reload();
+  }
+
   public saveUser(user: any): void {
     this.removeUser()
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));

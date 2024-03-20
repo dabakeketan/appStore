@@ -77,7 +77,7 @@ export class BaseService {
         error: err => {
           if (err.error.message) {
           } else if (err.error.data) {
-            ;
+            
           }
         }
       })
@@ -93,11 +93,32 @@ export class BaseService {
         error: err => {
           if (err.error.message) {
           } else if (err.error.data) {
-            ;
+            
           }
         }
       })
     );
+  }
+
+  putDataForkJoinWithToken(reqObj: any, url: string): Observable<any> {
+    const headers = new HttpHeaders().set('Anonymouswithtoken', '');
+    return this.http.put<any>(url, reqObj, { headers, observe: 'response' }).pipe(
+      tap({
+        next: x => {
+        },
+        error: err => {
+          if (err.error.message) {
+          } else if (err.error.data) {
+            
+          }
+        }
+      })
+    );
+  }
+
+  getDataForkJoinWithToken(url: string): Observable<any> {
+    const headers = new HttpHeaders().set('Anonymouswithtoken', '');
+    return this.http.get<any>(url, { headers, observe: 'response' });
   }
 
   postDataForkJoinWithToken(reqObj: any, url: string): Observable<any> {
@@ -109,7 +130,7 @@ export class BaseService {
         error: err => {
           if (err.error.message) {
           } else if (err.error.data) {
-            ;
+            
           }
         }
       })

@@ -103,7 +103,7 @@ export class AuthInterceptor implements HttpInterceptor {
               }
 
 
-              console.log('interc response success', evt);
+              // console.log('interc response success', evt);
 
               if (evt && evt.ok && evt.status === 204) {
                 // const location = evt.headers.get('Location');
@@ -131,7 +131,7 @@ export class AuthInterceptor implements HttpInterceptor {
               if (this.service_count === 0) {
                 this.spinner.hide();
               }
-              console.log('interc response error', error);
+              // console.log('interc response error', error);
               if (error.error && error.error.metadata) {
                 const errorData = error.error.data ? error.error.data : '';
                 if (errorData) {

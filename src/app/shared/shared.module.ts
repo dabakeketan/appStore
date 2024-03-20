@@ -15,6 +15,9 @@ import { CustomersListComponent } from './components/grid-store/customers-list/c
 import { EnabledCustomerUsersComponent } from './components/grid-store/enabled-customer-users/enabled-customer-users.component';
 import { UserConfigValueRendererComponent } from './components/grid-store-cell-renderers/user-config-value-renderer/user-config-value-renderer.component';
 import { FormsModule } from '@angular/forms';
+import { EnabledDomainUsersComponent } from './components/grid-store/enabled-domain-users/enabled-domain-users.component';
+import { DomainConfigValueRendererComponent } from './components/grid-store-cell-renderers/domain-config-value-renderer/domain-config-value-renderer.component';
+import { DomainListComponent } from './components/grid-store/domain-list/domain-list.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { FormsModule } from '@angular/forms';
        TierNameRendererComponent,
        CustomersListComponent,
        EnabledCustomerUsersComponent,
-       UserConfigValueRendererComponent
+       UserConfigValueRendererComponent,
+       EnabledDomainUsersComponent,
+       DomainConfigValueRendererComponent,
+       DomainListComponent
   ],
   imports: [
     CommonModule,
@@ -40,8 +46,8 @@ import { FormsModule } from '@angular/forms';
   ],
   exports: [CategoriesComponent, VendorAppListComponent,
     ProductsComponent, PartnerListComponent, VendorsListComponent, TiersListComponent,
-    CustomersListComponent,
-    EnabledCustomerUsersComponent],
+    CustomersListComponent, DomainListComponent,
+    EnabledCustomerUsersComponent, EnabledDomainUsersComponent],
   // providers: [authInterceptorProviders],
 })
 export class SharedModule { }
